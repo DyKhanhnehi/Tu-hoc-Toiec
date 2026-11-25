@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Bậc Thang TOEIC</title>
+<meta name="description" content="Học tiếng Anh theo lộ trình TOEIC 6 bậc, từ cơ bản đến nâng cao. Có bài kiểm tra, đạt mới được lên bậc.">
+<meta name="theme-color" content="#f5f1e8">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="TOEIC">
+<style>
+:root{
+  --ink:#13233f; --ink2:#34445f; --muted:#76829a; --paper:#f5f1e8; --card:#fffdf9; --line:#e5ded0;
+  --accent:#f2a541; --accent-ink:#5a3600; --ok:#1f9e89; --ok-bg:#e3f4ef; --bad:#d9533f; --bad-bg:#fbe7e3;
+  --r:18px; --shadow:0 1px 2px rgba(19,35,63,.06),0 6px 18px rgba(19,35,63,.06);
+  --safe-b:env(safe-area-inset-bottom,0px); --safe-t:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+a{color:inherit;text-decoration:none}
+#app{max-width:620px;margin:0 auto;padding:0 16px calc(96px + var(--safe-b))}
+.quiz-mode #app{padding-bottom:calc(24px + var(--safe-b))}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:20;margin:0 -16px 14px;padding:calc(10px + var(--safe-t)) 16px 10px;background:rgba(245,241,232,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;align-items:center;gap:10px;border-bottom:1px solid transparent}
+.top.scrolled{border-color:var(--line)}
+.top h2{margin:0;font-size:17px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--card);box-shadow:var(--shadow);flex:none}
+.icon-btn svg{width:20px;height:20px}
+.brand{display:flex;align-items:center;gap:10px;flex:1}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--ink);display:grid;place-items:center}
+.brand-mark svg{width:20px;height:20px}
+.brand b{font-size:17px;letter-spacing:-.01em}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:-2px}
+.streak{display:flex;align-items:center;gap:4px;font-weight:700;font-size:14px;background:var(--card);padding:7px 11px;border-radius:12px;box-shadow:var(--shadow)}
+
+/* hero */
+.hero{background:var(--ink);color:#fff;border-radius:24px;padding:20px;position:relative;overflow:hidden;margin-bottom:16px}
+.hero:after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(242,165,65,.35),transparent 70%)}
+.hero-top{display:flex;gap:14px;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#f8c77e;font-weight:700}
+.hero h1{margin:4px 0 2px;font-size:23px;line-height:1.2;letter-spacing:-.02em}
+.hero p{margin:0;color:#b9c3d6;font-size:14px}
+.ring{--p:0;width:78px;height:78px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(var(--accent) calc(var(--p)*360deg),rgba(255,255,255,.12) 0)}
+.ring b{width:62px;height:62px;border-radius:50%;background:var(--ink);display:grid;place-items:center;font-size:17px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 16px;position:relative;z-index:1}
+.stats div{background:rgba(255,255,255,.07);border-radius:12px;padding:9px 6px;text-align:center}
+.stats b{display:block;font-size:16px}
+.stats span{display:block;font-size:10.5px;color:#a9b4c9;line-height:1.25;margin-top:2px}
+.hero .btn{position:relative;z-index:1}
+
+/* buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 18px;border-radius:14px;font-weight:700;font-size:16px;background:var(--card);box-shadow:var(--shadow);transition:transform .08s}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);box-shadow:0 4px 14px rgba(242,165,65,.35)}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.ghost{background:transparent;box-shadow:none;border:1.5px solid var(--line)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn-row{display:flex;gap:10px}
+.btn-row .btn{flex:1}
+.btn.sm{padding:9px 12px;font-size:14px;border-radius:11px;width:auto}
+
+/* section titles */
+.sec-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:22px 4px 10px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+.card h3{margin:0 0 6px;font-size:17px}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+
+/* placement */
+.placement{display:flex;gap:12px;align-items:center;border:1.5px dashed #d8cdb7;background:#fbf7ef;box-shadow:none}
+.placement .pi{width:44px;height:44px;border-radius:12px;background:#fde9c8;display:grid;place-items:center;flex:none;font-size:22px}
+.placement b{display:block}
+
+/* ladder */
+.ladder{position:relative}
+.ladder:before{content:"";position:absolute;left:31px;top:30px;bottom:30px;width:3px;background:repeating-linear-gradient(var(--line) 0 6px,transparent 6px 11px);border-radius:3px}
+.lv{position:relative;display:flex;gap:14px;align-items:stretch;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;margin-bottom:12px;cursor:pointer}
+.lv-badge{width:36px;height:36px;border-radius:12px;background:var(--c);color:#fff;font-weight:800;display:grid;place-items:center;flex:none;margin-top:2px;box-shadow:0 0 0 5px var(--paper)}
+.lv-badge svg{width:18px;height:18px}
+.lv.locked{background:#f0ebe1;box-shadow:none}
+.lv.locked .lv-badge{background:#c9c1b2}
+.lv.locked .lv-title,.lv.locked .lv-meta{color:#9a917f}
+.lv.current{outline:2.5px solid var(--c);outline-offset:-2.5px}
+.lv-body{flex:1;min-width:0}
+.lv-title{font-weight:800;font-size:16.5px;letter-spacing:-.01em}
+.lv-title small{font-weight:600;color:var(--muted);font-size:12.5px;margin-left:4px}
+.lv-meta{font-size:13px;color:var(--muted);margin:1px 0 9px}
+.bar{height:7px;border-radius:7px;background:#ece5d8;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c,var(--accent));border-radius:7px;transition:width .4s}
+.lv-foot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;margin-top:7px;color:var(--ink2);gap:8px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:#efe9dd;color:var(--ink2);white-space:nowrap}
+.chip.ok{background:var(--ok-bg);color:#11705f}
+.chip.bad{background:var(--bad-bg);color:#a3392a}
+.chip.go{background:#fde9c8;color:var(--accent-ink)}
+
+/* level page */
+.lv-hero{border-radius:24px;padding:20px;color:#fff;background:var(--c);margin-bottom:6px;position:relative;overflow:hidden}
+.lv-hero:after{content:"";position:absolute;inset:auto -40px -80px auto;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.12)}
+.lv-hero .eyebrow{color:rgba(255,255,255,.8)}
+.lv-hero h1{margin:4px 0;font-size:24px;letter-spacing:-.02em}
+.lv-hero p{margin:6px 0 0;font-size:14px;opacity:.92;position:relative;z-index:1}
+.unit{display:flex;gap:12px;align-items:center;cursor:pointer}
+.unit-num{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;background:#efe9dd;flex:none}
+.unit.done .unit-num{background:var(--ok);color:#fff}
+.unit-body{flex:1;min-width:0}
+.unit-body b{display:block;font-size:15.5px}
+.unit-body span{font-size:13px;color:var(--muted)}
+.chev{color:#b8ae9b;font-size:22px;line-height:1}
+.test-card{border:2px solid var(--c);background:#fff}
+.test-card .req{display:flex;gap:8px;align-items:flex-start;font-size:14px;margin:6px 0}
+.test-card .req i{font-style:normal;width:20px;flex:none;text-align:center}
+
+/* tabs */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);background:#ebe4d6;border-radius:14px;padding:4px;margin-bottom:14px;position:sticky;top:calc(60px + var(--safe-t));z-index:10}
+.tabs button{padding:9px 4px;border-radius:11px;font-weight:700;font-size:14px;color:var(--ink2)}
+.tabs button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+
+/* grammar */
+.g-title{font-size:19px;margin:0 0 10px;letter-spacing:-.01em}
+.rules{margin:0;padding:0;list-style:none;counter-reset:r}
+.rules li{position:relative;padding:0 0 12px 34px;counter-increment:r}
+.rules li:before{content:counter(r);position:absolute;left:0;top:1px;width:23px;height:23px;border-radius:8px;background:var(--ink);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center}
+.rules b{color:#0e5d8f}
+.ex{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line)}
+.ex:first-of-type{border-top:0}
+.ex .en{font-weight:600}
+.ex .vi{font-size:14px;color:var(--muted)}
+.say{width:34px;height:34px;border-radius:10px;background:#eef3fb;color:#2f63b8;display:grid;place-items:center;flex:none}
+.say svg{width:17px;height:17px}
+.tip{background:#fff6e6;border-left:4px solid var(--accent);border-radius:12px;padding:12px 14px;font-size:14.5px}
+.tip b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#9a6200;margin-bottom:2px}
+
+/* vocab */
+.word{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.word:first-child{border-top:0;padding-top:2px}
+.word-main{flex:1;min-width:0}
+.word-main .w{font-weight:800;font-size:16.5px}
+.word-main .ipa{color:var(--muted);font-size:13.5px;margin-left:4px}
+.word-main .pos{font-size:11.5px;font-weight:700;color:#7a5bc2;background:#f0ebfb;border-radius:6px;padding:1px 6px;margin-left:4px}
+.word-main .mean{font-size:14.5px;margin-top:2px}
+.word-main .exs{font-size:13.5px;color:var(--ink2);font-style:italic;margin-top:2px}
+.star{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#f3efe6;color:#b8ae9b;flex:none}
+.star.on{background:#fde9c8;color:#d38200}
+.star svg{width:18px;height:18px}
+
+/* flashcard */
+.fc-wrap{perspective:1200px;margin:6px 0 14px}
+.fc{position:relative;height:300px;transform-style:preserve-3d;transition:transform .45s;cursor:pointer}
+.fc.flip{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:24px;background:var(--card);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.fc-back{transform:rotateY(180deg);background:var(--ink);color:#fff}
+.fc-face .w{font-size:32px;font-weight:800;letter-spacing:-.02em}
+.fc-face .ipa{color:var(--muted);margin-top:4px}
+.fc-back .mean{font-size:22px;font-weight:700}
+.fc-back .exs{color:#b9c3d6;font-style:italic;margin-top:10px}
+.fc-hint{position:absolute;bottom:14px;font-size:12px;color:var(--muted)}
+.fc-count{text-align:center;font-weight:700;color:var(--muted);font-size:14px}
+
+/* quiz */
+.qtop{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.qtop .title{flex:1;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.timer{font-variant-numeric:tabular-nums;font-weight:800;background:var(--ink);color:#fff;border-radius:10px;padding:6px 10px;font-size:14px}
+.timer.low{background:var(--bad)}
+.qprog{height:6px;border-radius:6px;background:#e6dfd1;overflow:hidden;margin-bottom:12px}
+.qprog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.dots button{width:30px;height:30px;border-radius:9px;background:#ebe4d6;font-size:12.5px;font-weight:700;color:var(--ink2)}
+.dots button.ans{background:#cfd8e8;color:var(--ink)}
+.dots button.cur{outline:2px solid var(--ink);outline-offset:1px}
+.tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.04em;color:#0e5d8f;background:#e4eef9;border-radius:8px;padding:3px 9px;margin-bottom:10px}
+.audio{display:flex;align-items:center;gap:12px;background:var(--ink);color:#fff;border-radius:16px;padding:12px 14px;margin-bottom:12px}
+.play{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;flex:none}
+.play svg{width:20px;height:20px}
+.play.on{animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(242,165,65,.6)}100%{box-shadow:0 0 0 14px rgba(242,165,65,0)}}
+.audio b{display:block;font-size:15px}
+.audio span{font-size:12.5px;color:#b9c3d6}
+.passage{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;font-size:14.5px;line-height:1.6;margin-bottom:12px;max-height:46vh;overflow:auto;font-family:Georgia,"Times New Roman",serif}
+.blank{display:inline-block;min-width:44px;border-bottom:2px solid var(--accent);color:#9a6200;font-weight:700;font-family:-apple-system,sans-serif;text-align:center}
+.qtext{font-size:18px;font-weight:600;line-height:1.45;margin:2px 0 14px}
+.opts{display:grid;gap:9px}
+.opt{display:flex;align-items:center;gap:12px;text-align:left;padding:13px 14px;border-radius:14px;background:var(--card);box-shadow:var(--shadow);border:2px solid transparent;font-size:15.5px;line-height:1.35}
+.opt .k{width:28px;height:28px;border-radius:9px;background:#efe9dd;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.opt.sel{border-color:var(--ink)}
+.opt.sel .k{background:var(--ink);color:#fff}
+.opt.right{border-color:var(--ok);background:var(--ok-bg)}
+.opt.right .k{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+.opt.wrong .k{background:var(--bad);color:#fff}
+.opt.dim{opacity:.55}
+.fb{margin-top:14px;border-radius:16px;padding:14px 16px;font-size:14.5px}
+.fb.ok{background:var(--ok-bg)}
+.fb.no{background:var(--bad-bg)}
+.fb h4{margin:0 0 4px;font-size:15.5px}
+.tr{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(0,0,0,.15);font-size:13.5px;color:var(--ink2)}
+.qnav{display:flex;gap:10px;margin-top:16px}
+.qnav .btn{flex:1}
+
+/* result */
+.res{text-align:center;padding:24px 18px}
+.big-ring{--p:0;--c:var(--ok);width:150px;height:150px;border-radius:50%;margin:4px auto 14px;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*360deg),#ebe4d6 0)}
+.big-ring div{width:122px;height:122px;border-radius:50%;background:var(--card);display:grid;place-items:center;align-content:center}
+.big-ring b{font-size:34px;letter-spacing:-.03em;line-height:1}
+.big-ring span{font-size:13px;color:var(--muted)}
+.res h2{margin:0 0 6px;font-size:23px}
+.res p{margin:0 0 4px;color:var(--ink2)}
+.unlock{background:linear-gradient(135deg,#fff3dc,#fde3b5);border-radius:16px;padding:14px;margin:14px 0 4px;font-weight:700;color:var(--accent-ink)}
+.rv{border-left:4px solid var(--ok)}
+.rv.no{border-left-color:var(--bad)}
+.rv .q{font-weight:600;margin-bottom:6px}
+.rv .a{font-size:14px;margin:2px 0}
+.rv details{margin-top:8px;font-size:13.5px;color:var(--ink2)}
+.rv summary{cursor:pointer;color:#0e5d8f;font-weight:600}
+.pl-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+.pl-table td{padding:7px 4px;border-top:1px solid var(--line)}
+
+/* cert */
+.cert{background:radial-gradient(circle at 20% 0,#fff8ea,#fbeacb);border:2px solid #e3b866;border-radius:22px;padding:22px;text-align:center;margin-bottom:16px}
+.cert .seal{font-size:40px}
+.cert h2{margin:6px 0 4px;font-family:Georgia,serif;font-size:24px}
+
+/* settings */
+.set-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.set-row:first-child{border-top:0;padding-top:0}
+.set-row .lbl{flex:1}
+.set-row .lbl b{display:block;font-size:15px}
+.set-row .lbl span{font-size:13px;color:var(--muted)}
+input[type=range]{width:100%;accent-color:var(--ink)}
+
+/* tabbar */
+#tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(255,253,249,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 8px calc(6px + var(--safe-b))}
+#tabbar .in{display:flex;max-width:620px;width:100%}
+#tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 0;font-size:11.5px;font-weight:700;color:#9a917f;position:relative}
+#tabbar a svg{width:23px;height:23px}
+#tabbar a.on{color:var(--ink)}
+#tabbar .badge{position:absolute;top:0;left:calc(50% + 6px);background:var(--bad);color:#fff;font-size:10px;font-weight:800;border-radius:99px;padding:0 5px;min-width:17px;height:17px;line-height:17px;text-align:center}
+.quiz-mode #tabbar{display:none}
+
+/* toast & modal */
+#toast{position:fixed;left:50%;bottom:calc(90px + var(--safe-b));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:11px 16px;border-radius:14px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:88vw;text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.modal-bg{position:fixed;inset:0;background:rgba(19,35,63,.45);z-index:70;display:grid;place-items:center;padding:20px}
+.modal{background:var(--card);border-radius:20px;padding:20px;max-width:380px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.modal p{margin:0 0 16px;font-size:15.5px}
+.confetti{position:fixed;top:-12px;width:9px;height:14px;z-index:80;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.empty{text-align:center;padding:30px 10px;color:var(--muted)}
+.empty .e{font-size:44px}
+@media (min-width:700px){ .qtext{font-size:19px} .fc{height:340px} }
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="tabbar"></nav>
+<div id="toast" role="status"></div>
+<div id="modal"></div>
+<script>
+/* Bậc Thang TOEIC — Nội dung Bậc 1–2
+   Quy ước câu hỏi: o[0] luôn là đáp án đúng (app tự xáo trộn khi hiển thị).
+   p: Part TOEIC · q: câu hỏi · s: lời đọc (nghe) · r: đoạn văn · e: giải thích */
+(window.TOEIC_LEVELS = window.TOEIC_LEVELS || []).push({
+  n: 1, name: "Nền tảng", en: "Starter", band: "10–250", cefr: "A1", color: "#1f9e89",
+  goal: "Nắm câu cơ bản: to be, hiện tại đơn, mạo từ, giới từ. Đọc được thông báo ngắn ở công sở.",
+  units: [
+    {
+      t: "Giới thiệu bản thân & công việc", topic: "Động từ to be",
+      g: {
+        title: "Động từ TO BE: am / is / are",
+        rules: [
+          "<b>I</b> → am · <b>He / She / It / danh từ số ít</b> → is · <b>You / We / They / danh từ số nhiều</b> → are.",
+          "Phủ định: thêm <b>not</b> → isn't, aren't, I'm not.",
+          "Câu hỏi: đưa to be lên đầu → <b>Are</b> you…? <b>Is</b> she…?",
+          "To be + nghề nghiệp / tính từ / nơi chốn: She <b>is</b> an engineer. The office <b>is</b> on the 3rd floor."
+        ],
+        ex: [
+          ["I am a technician at ABC Factory.", "Tôi là kỹ thuật viên ở nhà máy ABC."],
+          ["Mr. Kim is the plant manager.", "Ông Kim là giám đốc nhà máy."],
+          ["They aren't in the meeting room.", "Họ không ở trong phòng họp."],
+          ["Is the report ready?", "Báo cáo đã xong chưa?"]
+        ],
+        tip: "Part 5 hay kiểm tra sự hòa hợp chủ ngữ – động từ: tìm đúng chủ ngữ (số ít hay số nhiều) trước khi chọn is/are."
+      },
+      v: [
+        ["employee", "/ɪmˈplɔɪiː/", "n.", "nhân viên", "Every employee has an ID card."],
+        ["manager", "/ˈmænɪdʒər/", "n.", "người quản lý", "The manager is in her office."],
+        ["colleague", "/ˈkɑːliːɡ/", "n.", "đồng nghiệp", "My colleague is from Korea."],
+        ["department", "/dɪˈpɑːrtmənt/", "n.", "phòng ban", "She works in the sales department."],
+        ["company", "/ˈkʌmpəni/", "n.", "công ty", "The company is very large."],
+        ["engineer", "/ˌendʒɪˈnɪr/", "n.", "kỹ sư", "He is an electrical engineer."],
+        ["office", "/ˈɔːfɪs/", "n.", "văn phòng", "Our office is on the second floor."],
+        ["schedule", "/ˈskedʒuːl/", "n.", "lịch trình", "What is your schedule today?"]
+      ],
+      quiz: [
+        { p: "5", q: "Ms. Lee ___ the new sales manager.", o: ["is", "am", "are", "be"], e: "Ms. Lee là chủ ngữ số ít (= she) → is." },
+        { p: "5", q: "The workers ___ in the factory now.", o: ["are", "is", "am", "be"], e: "The workers là số nhiều → are." },
+        { p: "5", q: "I ___ not a manager. I am an engineer.", o: ["am", "is", "are", "be"], e: "Chủ ngữ I luôn đi với am." },
+        { p: "5", q: "___ your office on the first floor?", o: ["Is", "Are", "Am", "Be"], e: "Your office là số ít → câu hỏi bắt đầu bằng Is." },
+        { p: "2", s: "Are you a new employee?", o: ["Yes, I started this week.", "It's on the third floor.", "No, it's a new computer.", "At nine o'clock."], e: "Câu hỏi Yes/No về bản thân → trả lời Yes + thông tin bổ sung. Các đáp án khác nói về nơi chốn, đồ vật, thời gian." },
+        { p: "7", r: "Hana Park\nQuality Control Department\nPhone: 555-0142\nRoom 305, Building B", q: "Which department does Hana Park work in?", o: ["Quality Control", "Sales", "Human Resources", "Accounting"], e: "Danh thiếp ghi rõ: Quality Control Department." }
+      ]
+    },
+    {
+      t: "Thói quen ở công sở", topic: "Thì hiện tại đơn",
+      g: {
+        title: "Thì HIỆN TẠI ĐƠN",
+        rules: [
+          "Dùng cho thói quen, sự thật, lịch cố định: I <b>start</b> work at 8 a.m.",
+          "He / She / It / danh từ số ít → động từ thêm <b>-s / -es</b>: works, watches, goes, <b>has</b>.",
+          "Phủ định & câu hỏi dùng <b>do / does</b> + động từ nguyên mẫu: She <b>doesn't work</b> on Sunday. <b>Does</b> he <b>check</b> email?",
+          "Dấu hiệu: every day, usually, always, often, sometimes, on Mondays."
+        ],
+        ex: [
+          ["The factory opens at 7 a.m. every day.", "Nhà máy mở cửa lúc 7 giờ sáng mỗi ngày."],
+          ["She usually checks her email first.", "Cô ấy thường kiểm tra email trước tiên."],
+          ["We don't work on Sundays.", "Chúng tôi không làm việc vào Chủ nhật."],
+          ["Does the bus stop here?", "Xe buýt có dừng ở đây không?"]
+        ],
+        tip: "Sau does / doesn't, động từ trở về nguyên mẫu: Does she work…? (không viết Does she works)."
+      },
+      v: [
+        ["arrive", "/əˈraɪv/", "v.", "đến nơi", "I usually arrive at the office at 7:45."],
+        ["check", "/tʃek/", "v.", "kiểm tra", "He checks the machines every morning."],
+        ["meeting", "/ˈmiːtɪŋ/", "n.", "cuộc họp", "We have a meeting on Mondays."],
+        ["lunch break", "/ˈlʌntʃ breɪk/", "n.", "giờ nghỉ trưa", "Our lunch break is one hour."],
+        ["shift", "/ʃɪft/", "n.", "ca làm việc", "He works the night shift."],
+        ["usually", "/ˈjuːʒuəli/", "adv.", "thường thường", "She usually takes the bus."],
+        ["finish", "/ˈfɪnɪʃ/", "v.", "kết thúc, hoàn thành", "We finish work at 5 p.m."],
+        ["report", "/rɪˈpɔːrt/", "n.", "báo cáo", "I write a report every Friday."]
+      ],
+      quiz: [
+        { p: "5", q: "Mr. Tanaka ___ the machines every morning.", o: ["checks", "check", "checking", "are check"], e: "Thói quen (every morning), chủ ngữ số ít → checks." },
+        { p: "5", q: "We ___ work on Sundays.", o: ["don't", "doesn't", "isn't", "aren't"], e: "We + don't + động từ nguyên mẫu." },
+        { p: "5", q: "___ the store open at 9 a.m.?", o: ["Does", "Do", "Is", "Are"], e: "Câu hỏi với động từ thường (open), chủ ngữ số ít → Does." },
+        { p: "5", q: "The night shift ___ at 10 p.m.", o: ["starts", "start", "starting", "is start"], e: "Lịch cố định, chủ ngữ số ít → starts." },
+        { p: "2", s: "What time do you usually arrive at work?", o: ["Around seven thirty.", "By bus.", "Yes, I usually do.", "In the meeting room."], e: "What time → hỏi giờ → trả lời bằng thời gian." },
+        { p: "7", r: "NOTICE\nThe cafeteria is open from 11:30 a.m. to 1:30 p.m., Monday to Friday. It is closed on weekends.", q: "When is the cafeteria closed?", o: ["On weekends", "On Mondays", "On Fridays", "At 12:00 p.m."], e: "Thông báo: It is closed on weekends." }
+      ]
+    },
+    {
+      t: "Đồ dùng văn phòng", topic: "Danh từ & mạo từ a / an / the",
+      g: {
+        title: "Danh từ số ít – số nhiều & mạo từ",
+        rules: [
+          "<b>a</b> + âm phụ âm (a desk, a uniform) · <b>an</b> + âm nguyên âm theo cách đọc (an email, <b>an hour</b>).",
+          "<b>the</b> cho vật đã xác định / đã nhắc trước: I bought a printer. <b>The</b> printer is fast.",
+          "Số nhiều: thêm -s / -es (desks, boxes); bất quy tắc: person → <b>people</b>, man → men.",
+          "Danh từ không đếm được không dùng a/an, không thêm -s: <b>information, equipment, furniture, advice</b>.",
+          "<b>There is</b> + số ít / không đếm được · <b>There are</b> + số nhiều."
+        ],
+        ex: [
+          ["There is a printer next to the door.", "Có một máy in cạnh cửa."],
+          ["It takes an hour to get there.", "Mất một tiếng để đến đó."],
+          ["There are twenty people in the meeting room.", "Có hai mươi người trong phòng họp."],
+          ["The new equipment is in the warehouse.", "Thiết bị mới ở trong kho."]
+        ],
+        tip: "Bẫy Part 5 kinh điển: equipment, furniture, information, advice KHÔNG có dạng số nhiều."
+      },
+      v: [
+        ["printer", "/ˈprɪntər/", "n.", "máy in", "The printer is out of paper."],
+        ["desk", "/desk/", "n.", "bàn làm việc", "Please leave the file on my desk."],
+        ["document", "/ˈdɑːkjumənt/", "n.", "tài liệu", "Sign the document at the bottom."],
+        ["supplies", "/səˈplaɪz/", "n.", "đồ dùng, vật tư", "Office supplies are in the cabinet."],
+        ["equipment", "/ɪˈkwɪpmənt/", "n.", "thiết bị (không đếm được)", "The safety equipment is new."],
+        ["cabinet", "/ˈkæbɪnət/", "n.", "tủ", "The files are in the gray cabinet."],
+        ["envelope", "/ˈenvəloʊp/", "n.", "phong bì", "Put the letter in an envelope."],
+        ["order", "/ˈɔːrdər/", "v./n.", "đặt hàng; đơn hàng", "Please order more paper."]
+      ],
+      quiz: [
+        { p: "5", q: "I need ___ hour to finish the report.", o: ["an", "a", "two", "many"], e: "hour đọc là /aʊər/, bắt đầu bằng âm nguyên âm → an." },
+        { p: "5", q: "There ___ three printers on this floor.", o: ["are", "is", "be", "am"], e: "three printers số nhiều → There are." },
+        { p: "5", q: "All new ___ must be checked before use.", o: ["equipment", "equipments", "an equipment", "equipmenting"], e: "equipment là danh từ không đếm được: không thêm -s, không dùng an." },
+        { p: "5", q: "We bought a new copier. ___ copier is very fast.", o: ["The", "A", "An", "Some"], e: "Chiếc máy đã được nhắc ở câu trước → dùng The." },
+        { p: "2", s: "Where are the envelopes?", o: ["In the top drawer.", "Yes, they are.", "I'll send it tomorrow.", "Twenty dollars."], e: "Where → hỏi nơi chốn → In the top drawer." },
+        { p: "5", q: "There ___ some information about the meeting on the board.", o: ["is", "are", "be", "were"], e: "information không đếm được → There is." }
+      ]
+    },
+    {
+      t: "Lịch hẹn & địa điểm", topic: "Giới từ in / on / at",
+      g: {
+        title: "Giới từ thời gian & nơi chốn",
+        rules: [
+          "<b>at</b> + giờ (at 9 a.m., at noon, at night) · at + điểm cụ thể (at the front desk).",
+          "<b>on</b> + thứ / ngày (on Monday, on May 5) · on + tầng (on the third floor).",
+          "<b>in</b> + tháng / năm / mùa (in June, in 2026) · in the morning · in + không gian (in the room, in Hanoi).",
+          "Vị trí: <b>next to</b> (bên cạnh), <b>between A and B</b> (giữa), <b>across from</b> (đối diện), <b>behind</b> (phía sau)."
+        ],
+        ex: [
+          ["The meeting is at 2 p.m. on Tuesday.", "Cuộc họp lúc 2 giờ chiều thứ Ba."],
+          ["Our office is on the fifth floor.", "Văn phòng chúng tôi ở tầng năm."],
+          ["The conference is in October.", "Hội nghị diễn ra vào tháng Mười."],
+          ["The bank is across from the post office.", "Ngân hàng nằm đối diện bưu điện."]
+        ],
+        tip: "Mẹo nhớ: at (điểm) → on (bề mặt/ngày) → in (không gian/khoảng lớn)."
+      },
+      v: [
+        ["appointment", "/əˈpɔɪntmənt/", "n.", "cuộc hẹn", "I have an appointment at 3 p.m."],
+        ["reception", "/rɪˈsepʃn/", "n.", "quầy lễ tân", "Please wait at reception."],
+        ["floor", "/flɔːr/", "n.", "tầng", "The cafeteria is on the first floor."],
+        ["building", "/ˈbɪldɪŋ/", "n.", "tòa nhà", "Building C is next to the parking lot."],
+        ["conference room", "/ˈkɑːnfərəns ruːm/", "n.", "phòng hội nghị", "The conference room is booked."],
+        ["available", "/əˈveɪləbl/", "adj.", "rảnh, có sẵn", "Are you available on Friday?"],
+        ["visitor", "/ˈvɪzɪtər/", "n.", "khách đến thăm", "Visitors must wear a badge."],
+        ["parking lot", "/ˈpɑːrkɪŋ lɑːt/", "n.", "bãi đỗ xe", "The parking lot is full."]
+      ],
+      quiz: [
+        { p: "5", q: "The training session starts ___ 9:30 a.m.", o: ["at", "on", "in", "to"], e: "at + giờ cụ thể." },
+        { p: "5", q: "Our new office is ___ the fourth floor.", o: ["on", "in", "at", "by"], e: "on + tầng." },
+        { p: "5", q: "The company was founded ___ 1998.", o: ["in", "on", "at", "for"], e: "in + năm." },
+        { p: "5", q: "Please wait for me ___ the reception desk.", o: ["at", "on", "to", "into"], e: "at + một điểm cụ thể (quầy lễ tân)." },
+        { p: "2", s: "When is your appointment with the doctor?", o: ["On Thursday afternoon.", "At the hospital.", "Yes, I am.", "Dr. Smith."], e: "When → hỏi thời gian. \"At the hospital\" trả lời cho Where." },
+        { p: "7", r: "VISITOR INFORMATION\nAll visitors must sign in at the reception desk on the first floor. Visitor parking is available in Lot C, next to Building 2.", q: "Where should visitors sign in?", o: ["At the reception desk", "In Lot C", "In Building 2", "On the second floor"], e: "\"must sign in at the reception desk on the first floor\"." }
+      ]
+    }
+  ],
+  test: [
+    { p: "5", q: "My colleagues ___ very friendly.", o: ["are", "is", "am", "be"], e: "My colleagues số nhiều → are." },
+    { p: "5", q: "The factory manager ___ to work by car every day.", o: ["drives", "drive", "driving", "is drive"], e: "Thói quen, chủ ngữ số ít → drives." },
+    { p: "5", q: "She ___ like coffee. She prefers tea.", o: ["doesn't", "don't", "isn't", "not"], e: "She + doesn't + động từ nguyên mẫu." },
+    { p: "5", q: "She is ___ engineer at a large company.", o: ["an", "a", "much", "two"], e: "engineer bắt đầu bằng âm nguyên âm → an." },
+    { p: "5", q: "There ___ a lot of furniture in the new office.", o: ["is", "are", "be", "have"], e: "furniture không đếm được → There is." },
+    { p: "5", q: "The meeting is ___ Monday morning.", o: ["on", "in", "at", "by"], e: "on + thứ trong tuần (kể cả Monday morning)." },
+    { p: "5", q: "I usually have lunch ___ noon.", o: ["at", "in", "on", "for"], e: "at noon (lúc giữa trưa)." },
+    { p: "5", q: "___ Mr. Chen work in the accounting department?", o: ["Does", "Do", "Is", "Are"], e: "Động từ thường work, chủ ngữ số ít → Does." },
+    { p: "5", q: "These documents ___ for the meeting tomorrow.", o: ["are", "is", "am", "was"], e: "These documents số nhiều → are." },
+    { p: "5", q: "The parking lot is ___ the main building and the warehouse.", o: ["between", "next", "across", "on"], e: "between A and B = ở giữa A và B. (next phải là next to, across phải là across from)." },
+    { p: "2", s: "Who is the new manager?", o: ["Ms. Garcia from the Seoul office.", "At ten o'clock.", "It's a new store.", "Yes, it is new."], e: "Who → hỏi người → Ms. Garcia." },
+    { p: "2", s: "Where do you work?", o: ["At a car factory.", "Every day.", "I work hard.", "With my colleagues."], e: "Where → nơi chốn → At a car factory." },
+    { p: "2", s: "How do you get to work?", o: ["I take the subway.", "At eight o'clock.", "For five years.", "It's my office."], e: "How do you get to… → hỏi phương tiện → I take the subway." },
+    { p: "7", r: "To: All Staff\nFrom: Office Manager\nSubject: Office Supplies\n\nThe supply room is on the second floor, next to the elevator. It is open every Monday and Thursday from 9 a.m. to 11 a.m. If you need paper, pens, or envelopes, please fill out a request form. Large orders take three days.", q: "Where is the supply room?", o: ["On the second floor", "On the first floor", "Next to the cafeteria", "In the warehouse"], e: "\"The supply room is on the second floor, next to the elevator.\"" },
+    { p: "7", r: "To: All Staff\nFrom: Office Manager\nSubject: Office Supplies\n\nThe supply room is on the second floor, next to the elevator. It is open every Monday and Thursday from 9 a.m. to 11 a.m. If you need paper, pens, or envelopes, please fill out a request form. Large orders take three days.", q: "What must employees do to get supplies?", o: ["Fill out a request form", "Call the office manager", "Go on Friday", "Pay three dollars"], e: "\"please fill out a request form\"." }
+  ]
+});
+
+(window.TOEIC_LEVELS = window.TOEIC_LEVELS || []).push({
+  n: 2, name: "Sơ cấp", en: "Elementary", band: "250–400", cefr: "A2", color: "#2f7ee6",
+  goal: "Dùng được hiện tại tiếp diễn, quá khứ đơn, so sánh, đại từ. Hiểu email và đối thoại ngắn.",
+  units: [
+    {
+      t: "Dự án đang thực hiện", topic: "Thì hiện tại tiếp diễn",
+      g: {
+        title: "Thì HIỆN TẠI TIẾP DIỄN: am / is / are + V-ing",
+        rules: [
+          "Hành động đang xảy ra lúc nói hoặc trong giai đoạn này: We <b>are installing</b> new machines this week.",
+          "Dấu hiệu: now, right now, at the moment, <b>currently</b>, this week, Look! / Listen!",
+          "Động từ trạng thái (<b>know, like, want, need, belong, seem</b>) thường KHÔNG dùng V-ing: I need help.",
+          "Còn dùng cho lịch hẹn đã sắp xếp trong tương lai gần: I'<b>m meeting</b> the client tomorrow."
+        ],
+        ex: [
+          ["The technicians are repairing the generator right now.", "Các kỹ thuật viên đang sửa máy phát điện."],
+          ["She is currently working on a new project.", "Hiện cô ấy đang làm một dự án mới."],
+          ["I'm flying to Busan next Monday.", "Thứ Hai tới tôi bay đi Busan (đã lên lịch)."],
+          ["He wants a new laptop.", "Anh ấy muốn một chiếc laptop mới. (không dùng is wanting)"]
+        ],
+        tip: "Thấy currently / at the moment trong câu Part 5 → nghĩ ngay đến be + V-ing."
+      },
+      v: [
+        ["project", "/ˈprɑːdʒekt/", "n.", "dự án", "The project will take six months."],
+        ["install", "/ɪnˈstɔːl/", "v.", "lắp đặt", "They are installing new lights."],
+        ["repair", "/rɪˈper/", "v.", "sửa chữa", "We need to repair the pump."],
+        ["currently", "/ˈkɜːrəntli/", "adv.", "hiện tại, hiện nay", "She is currently on vacation."],
+        ["client", "/ˈklaɪənt/", "n.", "khách hàng", "The client is waiting in the lobby."],
+        ["deadline", "/ˈdedlaɪn/", "n.", "hạn chót", "The deadline is next Friday."],
+        ["update", "/ʌpˈdeɪt/", "v.", "cập nhật", "Please update the schedule."],
+        ["team", "/tiːm/", "n.", "nhóm", "Our team has five members."]
+      ],
+      quiz: [
+        { p: "5", q: "Please be quiet. Mr. Han ___ on the phone with a client.", o: ["is talking", "talks", "talk", "talked"], e: "Hành động đang diễn ra lúc nói (Please be quiet) → is talking." },
+        { p: "5", q: "The engineers ___ the new system this week.", o: ["are testing", "tests", "is testing", "testing"], e: "Giai đoạn này (this week), chủ ngữ số nhiều → are testing." },
+        { p: "5", q: "I ___ more time to finish this report.", o: ["need", "am needing", "needing", "am need"], e: "need là động từ trạng thái → không dùng V-ing." },
+        { p: "5", q: "Look! The delivery truck ___ now.", o: ["is arriving", "arrives", "arrive", "arrived"], e: "Look! + now → hiện tại tiếp diễn." },
+        { p: "2", s: "What are you working on right now?", o: ["The monthly sales report.", "Yes, I'm working.", "In the next room.", "Tomorrow morning."], e: "What… working on → hỏi việc đang làm → The monthly sales report." },
+        { p: "7", r: "NOTICE\nThe elevator in Building A is currently being repaired. Please use the stairs or the elevator in Building B until Friday.", q: "Why should people use the stairs?", o: ["The elevator is being repaired.", "The stairs are new.", "Building B is closed.", "It is Friday."], e: "\"The elevator in Building A is currently being repaired\"." }
+      ]
+    },
+    {
+      t: "Chuyến công tác", topic: "Thì quá khứ đơn",
+      g: {
+        title: "Thì QUÁ KHỨ ĐƠN",
+        rules: [
+          "Hành động đã xảy ra và kết thúc: yesterday, last week, two days <b>ago</b>, in 2020.",
+          "Có quy tắc: thêm <b>-ed</b> (visited, stopped). Bất quy tắc: go → <b>went</b>, take → took, meet → met, buy → bought, send → sent.",
+          "Phủ định / câu hỏi: <b>did / didn't</b> + động từ nguyên mẫu: Did you send it? I didn't see him.",
+          "To be: <b>was</b> (I / he / she / it) · <b>were</b> (you / we / they)."
+        ],
+        ex: [
+          ["I went to Singapore for a conference last month.", "Tháng trước tôi đi Singapore dự hội nghị."],
+          ["We met the new client two days ago.", "Chúng tôi gặp khách hàng mới hai ngày trước."],
+          ["She didn't take the early flight.", "Cô ấy đã không đi chuyến bay sớm."],
+          ["Were the hotel rooms clean?", "Phòng khách sạn có sạch không?"]
+        ],
+        tip: "Sau did / didn't luôn là động từ nguyên mẫu: didn't see (không viết didn't saw)."
+      },
+      v: [
+        ["business trip", "/ˈbɪznəs trɪp/", "n.", "chuyến công tác", "He is on a business trip in Japan."],
+        ["flight", "/flaɪt/", "n.", "chuyến bay", "My flight leaves at 6 a.m."],
+        ["book", "/bʊk/", "v.", "đặt (vé, phòng)", "I booked a room for two nights."],
+        ["reservation", "/ˌrezərˈveɪʃn/", "n.", "sự đặt chỗ", "I have a reservation under Kim."],
+        ["conference", "/ˈkɑːnfərəns/", "n.", "hội nghị", "The conference was in Bangkok."],
+        ["receipt", "/rɪˈsiːt/", "n.", "biên lai", "Keep all your receipts."],
+        ["delay", "/dɪˈleɪ/", "n./v.", "sự trì hoãn; trì hoãn", "There was a two-hour delay."],
+        ["expense", "/ɪkˈspens/", "n.", "chi phí", "Travel expenses are paid by the company."]
+      ],
+      quiz: [
+        { p: "5", q: "Ms. Wong ___ to Tokyo last week for a trade fair.", o: ["went", "goes", "go", "going"], e: "last week → quá khứ đơn; go → went." },
+        { p: "5", q: "Our flight ___ late yesterday.", o: ["was", "were", "is", "be"], e: "yesterday + chủ ngữ số ít → was." },
+        { p: "5", q: "___ you book the hotel room yesterday?", o: ["Did", "Do", "Does", "Were"], e: "Câu hỏi quá khứ với động từ thường → Did + V nguyên mẫu." },
+        { p: "5", q: "We ___ the receipts to the accounting department two days ago.", o: ["sent", "send", "sends", "sending"], e: "two days ago → quá khứ; send → sent." },
+        { p: "2", s: "How was your business trip?", o: ["It went very well, thanks.", "By plane.", "Next Tuesday.", "I'll book it."], e: "How was…? → hỏi cảm nhận → It went very well. \"By plane\" là bẫy cho câu hỏi phương tiện." },
+        { p: "5", q: "I didn't ___ the manager at the conference.", o: ["see", "saw", "seen", "seeing"], e: "didn't + động từ nguyên mẫu → see." }
+      ]
+    },
+    {
+      t: "Sản phẩm & mua sắm", topic: "So sánh hơn & so sánh nhất",
+      g: {
+        title: "SO SÁNH: hơn – nhất – bằng",
+        rules: [
+          "Tính từ ngắn: <b>adj-er than</b> / <b>the adj-est</b>: cheaper than, the cheapest; big → bigger.",
+          "Tính từ dài: <b>more / most + adj</b>: more expensive than, the most popular.",
+          "Bất quy tắc: good → <b>better → best</b>; bad → worse → worst; far → farther / further.",
+          "So sánh bằng: <b>as + adj + as</b>: This model is as fast as the old one."
+        ],
+        ex: [
+          ["This printer is cheaper than that one.", "Máy in này rẻ hơn máy kia."],
+          ["It is the most popular product in our store.", "Đó là sản phẩm phổ biến nhất cửa hàng."],
+          ["The new model is better than the old one.", "Mẫu mới tốt hơn mẫu cũ."],
+          ["Our service is as good as theirs.", "Dịch vụ của chúng tôi tốt ngang của họ."]
+        ],
+        tip: "Thấy than → chọn dạng so sánh hơn; thấy the … in / of → so sánh nhất."
+      },
+      v: [
+        ["price", "/praɪs/", "n.", "giá", "The price includes delivery."],
+        ["discount", "/ˈdɪskaʊnt/", "n.", "giảm giá", "We offer a 10% discount."],
+        ["customer", "/ˈkʌstəmər/", "n.", "khách hàng", "The customer asked for a refund."],
+        ["product", "/ˈprɑːdʌkt/", "n.", "sản phẩm", "This product sells very well."],
+        ["quality", "/ˈkwɑːləti/", "n.", "chất lượng", "We check the quality of every item."],
+        ["affordable", "/əˈfɔːrdəbl/", "adj.", "giá phải chăng", "These chairs are affordable."],
+        ["popular", "/ˈpɑːpjələr/", "adj.", "phổ biến, được ưa chuộng", "This is our most popular model."],
+        ["warranty", "/ˈwɔːrənti/", "n.", "bảo hành", "The TV has a two-year warranty."]
+      ],
+      quiz: [
+        { p: "5", q: "This laptop is ___ than the one I bought last year.", o: ["lighter", "light", "lightest", "more light"], e: "light là tính từ ngắn + than → lighter." },
+        { p: "5", q: "It is the ___ expensive item in the catalog.", o: ["most", "more", "much", "many"], e: "the … in the catalog → so sánh nhất của tính từ dài → the most expensive." },
+        { p: "5", q: "Our new service is ___ than the old one.", o: ["better", "good", "best", "more good"], e: "good → better (bất quy tắc)." },
+        { p: "5", q: "The blue model is as ___ as the red one.", o: ["reliable", "more reliable", "most reliable", "reliably"], e: "as + tính từ nguyên dạng + as." },
+        { p: "2", s: "Which printer is the cheapest?", o: ["The one on the left.", "Yes, it's cheap.", "I printed it.", "At the store."], e: "Which → chọn một đối tượng → The one on the left." },
+        { p: "7", r: "SALE!\nGet 20% off all office chairs this weekend only. Every chair comes with a two-year warranty. Free delivery for orders over $200.", q: "How long is the warranty?", o: ["Two years", "20 days", "One weekend", "200 days"], e: "\"Every chair comes with a two-year warranty.\"" }
+      ]
+    },
+    {
+      t: "Yêu cầu lịch sự", topic: "Đại từ & can / could / would",
+      g: {
+        title: "ĐẠI TỪ – SỞ HỮU – YÊU CẦU LỊCH SỰ",
+        rules: [
+          "Chủ ngữ: I, you, he, she, it, we, they · Tân ngữ (sau động từ/giới từ): <b>me, you, him, her, it, us, them</b>.",
+          "Tính từ sở hữu + danh từ: my, your, his, <b>her, its, our, their</b> · Đại từ sở hữu đứng một mình: <b>mine, yours, his, hers, ours, theirs</b>.",
+          "Đại từ phản thân: myself, herself… · <b>by + oneself</b> = tự mình.",
+          "Yêu cầu lịch sự: <b>Could you</b> + V…? · <b>Would you mind</b> + V-ing…? · <b>Can I</b> + V…?"
+        ],
+        ex: [
+          ["Could you send me the file, please?", "Bạn gửi giúp tôi tập tin được không?"],
+          ["This is not my bag. Mine is black.", "Đây không phải túi của tôi. Túi tôi màu đen."],
+          ["Would you mind closing the window?", "Phiền bạn đóng cửa sổ giúp nhé?"],
+          ["She fixed the printer herself.", "Cô ấy tự sửa máy in."]
+        ],
+        tip: "Ô trống đứng trước danh từ → tính từ sở hữu (their office). Ô trống đứng một mình → đại từ sở hữu (theirs)."
+      },
+      v: [
+        ["request", "/rɪˈkwest/", "n./v.", "yêu cầu", "We received your request."],
+        ["borrow", "/ˈbɑːroʊ/", "v.", "mượn", "Can I borrow your pen?"],
+        ["lend", "/lend/", "v.", "cho mượn", "Could you lend me your pen?"],
+        ["assist", "/əˈsɪst/", "v.", "hỗ trợ", "Our staff will assist you."],
+        ["extension", "/ɪkˈstenʃn/", "n.", "số máy lẻ", "Call me at extension 204."],
+        ["message", "/ˈmesɪdʒ/", "n.", "tin nhắn", "Can I take a message?"],
+        ["favor", "/ˈfeɪvər/", "n.", "sự giúp đỡ", "Could you do me a favor?"],
+        ["call back", "/kɔːl bæk/", "phr. v.", "gọi lại", "I'll call you back in ten minutes."]
+      ],
+      quiz: [
+        { p: "5", q: "Mr. Davis asked ___ to call him back this afternoon.", o: ["me", "I", "my", "mine"], e: "Sau động từ asked cần tân ngữ → me." },
+        { p: "5", q: "The staff members are proud of ___ new office.", o: ["their", "they", "them", "theirs"], e: "Trước danh từ (new office) cần tính từ sở hữu → their." },
+        { p: "5", q: "This umbrella isn't mine. Is it ___?", o: ["yours", "your", "you", "yourself"], e: "Đứng một mình cuối câu → đại từ sở hữu yours." },
+        { p: "5", q: "Would you mind ___ the door for me?", o: ["opening", "open", "to open", "opened"], e: "Would you mind + V-ing." },
+        { p: "2", s: "Could you help me carry these boxes?", o: ["Sure, where should I put them?", "They're heavy boxes.", "Yes, I carried it.", "In the warehouse office."], e: "Lời nhờ giúp → đồng ý (Sure) và hỏi thêm." },
+        { p: "5", q: "Ms. Kim prepared the presentation by ___.", o: ["herself", "her", "hers", "she"], e: "by + đại từ phản thân = tự mình → by herself." }
+      ]
+    }
+  ],
+  test: [
+    { p: "5", q: "The new employees ___ a training course this week.", o: ["are taking", "is taking", "takes", "taken"], e: "this week + chủ ngữ số nhiều → are taking." },
+    { p: "5", q: "I ___ the client yesterday afternoon.", o: ["called", "call", "calls", "am calling"], e: "yesterday → quá khứ đơn." },
+    { p: "5", q: "Our products are ___ than our competitor's.", o: ["cheaper", "cheap", "cheapest", "more cheap"], e: "than → so sánh hơn; cheap là tính từ ngắn → cheaper." },
+    { p: "5", q: "Please give ___ the report before 5 p.m.", o: ["me", "I", "my", "mine"], e: "give + tân ngữ (me) + vật." },
+    { p: "5", q: "Mr. Lopez ___ at the meeting last Friday.", o: ["wasn't", "weren't", "didn't", "isn't"], e: "Quá khứ của to be, chủ ngữ số ít → wasn't." },
+    { p: "5", q: "This is the ___ hotel in the city.", o: ["largest", "larger", "large", "most large"], e: "the … in the city → so sánh nhất → the largest." },
+    { p: "5", q: "___ you send the invoice to the customer last week?", o: ["Did", "Do", "Were", "Have"], e: "last week → câu hỏi quá khứ → Did + V." },
+    { p: "5", q: "The technicians ___ the air conditioner at the moment.", o: ["are fixing", "fixed", "fix", "fixes"], e: "at the moment → hiện tại tiếp diễn." },
+    { p: "5", q: "Could you ___ me your pen for a moment?", o: ["lend", "borrow", "lending", "to lend"], e: "lend sb sth = cho ai mượn. borrow = mượn của ai (borrow sth from sb)." },
+    { p: "5", q: "The meeting room is ___ than my office.", o: ["bigger", "big", "biggest", "more big"], e: "big → bigger (gấp đôi phụ âm cuối)." },
+    { p: "2", s: "Did you finish the sales report?", o: ["Yes, I sent it this morning.", "The sales were good.", "It's on sale.", "No, I'm the manager."], e: "Hỏi đã xong chưa → Yes, I sent it. Hai đáp án lặp từ sales/sale là bẫy." },
+    { p: "2", s: "Why is the train late?", o: ["There was a problem with the signal.", "At platform three.", "Yes, it is.", "I take the train."], e: "Why → hỏi lý do → There was a problem…" },
+    { p: "2", s: "Can I borrow your stapler?", o: ["Of course, here you are.", "No, I didn't staple it.", "On Tuesday.", "It's a new stapler."], e: "Lời xin mượn → Of course, here you are." },
+    { p: "7", r: "Dear Mr. Nguyen,\nThank you for your order of 50 desk lamps. Unfortunately, the lamps are not in stock at the moment. We are expecting a new delivery next Wednesday. We will send your order as soon as it arrives. As a thank-you for your patience, we are giving you a 10% discount.\nSincerely,\nAnna Ruiz, Customer Service", q: "Why did Ms. Ruiz write the letter?", o: ["To explain a delay in an order", "To ask for a payment", "To introduce a new product", "To cancel a meeting"], e: "Hàng chưa có (not in stock), sẽ gửi khi về → giải thích việc giao chậm." },
+    { p: "7", r: "Dear Mr. Nguyen,\nThank you for your order of 50 desk lamps. Unfortunately, the lamps are not in stock at the moment. We are expecting a new delivery next Wednesday. We will send your order as soon as it arrives. As a thank-you for your patience, we are giving you a 10% discount.\nSincerely,\nAnna Ruiz, Customer Service", q: "What will Mr. Nguyen receive?", o: ["A 10% discount", "A free lamp", "A new catalog", "A full refund"], e: "\"we are giving you a 10% discount\"." }
+  ]
+});
+
+/* Bậc Thang TOEIC — Nội dung Bậc 3–4 (o[0] luôn là đáp án đúng) */
+(window.TOEIC_LEVELS = window.TOEIC_LEVELS || []).push({
+  n: 3, name: "Tiền trung cấp", en: "Pre-Intermediate", band: "400–550", cefr: "B1", color: "#5b5bd6",
+  goal: "Thành thạo hiện tại hoàn thành, tương lai, từ loại và câu bị động — nhóm điểm ngữ pháp xuất hiện nhiều nhất ở Part 5.",
+  units: [
+    {
+      t: "Tuyển dụng & kinh nghiệm", topic: "Thì hiện tại hoàn thành",
+      g: {
+        title: "Thì HIỆN TẠI HOÀN THÀNH: have / has + V3",
+        rules: [
+          "Hành động bắt đầu trong quá khứ, kéo dài đến nay hoặc có kết quả ở hiện tại.",
+          "<b>since</b> + mốc thời gian (since 2020, since Monday) · <b>for</b> + khoảng thời gian (for five years).",
+          "Dấu hiệu: already, yet, just, ever, never, recently, so far, over the past…",
+          "KHÔNG dùng với thời điểm quá khứ xác định (yesterday, last year, … ago) → dùng quá khứ đơn."
+        ],
+        ex: [
+          ["She has worked here since 2019.", "Cô ấy làm việc ở đây từ năm 2019."],
+          ["We have already received 30 applications.", "Chúng tôi đã nhận được 30 hồ sơ."],
+          ["Have you ever used this software?", "Bạn đã từng dùng phần mềm này chưa?"],
+          ["They haven't hired anyone yet.", "Họ vẫn chưa tuyển được ai."]
+        ],
+        tip: "Thấy since / for / so far / over the past… → ưu tiên have/has + V3."
+      },
+      v: [
+        ["applicant", "/ˈæplɪkənt/", "n.", "người nộp đơn, ứng viên", "We have 40 applicants for the job."],
+        ["position", "/pəˈzɪʃn/", "n.", "vị trí, chức vụ", "She applied for the position of supervisor."],
+        ["experience", "/ɪkˈspɪriəns/", "n.", "kinh nghiệm", "He has ten years of experience."],
+        ["résumé", "/ˈrezəmeɪ/", "n.", "sơ yếu lý lịch (CV)", "Please attach your résumé."],
+        ["interview", "/ˈɪntərvjuː/", "n./v.", "phỏng vấn", "The interview is on Tuesday."],
+        ["qualified", "/ˈkwɑːlɪfaɪd/", "adj.", "đủ năng lực, đủ tiêu chuẩn", "She is highly qualified for the role."],
+        ["hire", "/haɪər/", "v.", "thuê, tuyển", "We plan to hire three engineers."],
+        ["promote", "/prəˈmoʊt/", "v.", "thăng chức", "He was promoted to manager."]
+      ],
+      quiz: [
+        { p: "5", q: "Mr. Choi ___ for this company since 2015.", o: ["has worked", "worked", "works", "is working"], e: "since 2015 → hiện tại hoàn thành." },
+        { p: "5", q: "We have interviewed six applicants ___ Monday.", o: ["since", "for", "ago", "during"], e: "Monday là mốc thời gian → since." },
+        { p: "5", q: "We haven't received her résumé ___.", o: ["yet", "already", "since", "ever"], e: "Câu phủ định hiện tại hoàn thành, cuối câu → yet." },
+        { p: "5", q: "Ms. Patel ___ the company three years ago.", o: ["joined", "has joined", "joins", "has been joining"], e: "three years ago là thời điểm xác định → quá khứ đơn." },
+        { p: "2", s: "Have you ever worked in a factory before?", o: ["Yes, for about two years.", "It's a big factory.", "I'll work tomorrow.", "Next to the office."], e: "Hỏi kinh nghiệm → Yes, for about two years." },
+        { p: "7", r: "JOB OPENING: Maintenance Technician\nRequirements: at least 3 years of experience with electrical systems; ability to work night shifts.\nTo apply, send your résumé to hr@sunrise-mfg.com by March 15.", q: "What is required for the position?", o: ["Experience with electrical systems", "A university degree in sales", "Ability to speak Japanese", "A driver's license"], e: "\"at least 3 years of experience with electrical systems\"." }
+      ]
+    },
+    {
+      t: "Kế hoạch & cuộc họp", topic: "Tương lai: will / be going to",
+      g: {
+        title: "TƯƠNG LAI: will – be going to – mệnh đề thời gian",
+        rules: [
+          "<b>will + V</b>: quyết định tức thời, lời hứa, dự đoán: I'<b>ll call</b> him back.",
+          "<b>be going to + V</b>: kế hoạch đã định trước, dự đoán có căn cứ: We <b>are going to open</b> a new branch.",
+          "Sau <b>when, after, before, as soon as, until, once</b> dùng HIỆN TẠI ĐƠN cho tương lai: I will call you when I <b>arrive</b>.",
+          "Hiện tại tiếp diễn cũng diễn tả lịch hẹn đã sắp xếp."
+        ],
+        ex: [
+          ["I'll send you the agenda right away.", "Tôi sẽ gửi ngay chương trình họp cho bạn."],
+          ["The company is going to expand next year.", "Công ty dự định mở rộng vào năm sau."],
+          ["We'll start the meeting as soon as everyone arrives.", "Chúng ta sẽ bắt đầu họp ngay khi mọi người đến."],
+          ["Look at those clouds. It's going to rain.", "Nhìn mây kìa. Trời sắp mưa."]
+        ],
+        tip: "Bẫy cực phổ biến: as soon as the shipment ARRIVES (không phải will arrive)."
+      },
+      v: [
+        ["agenda", "/əˈdʒendə/", "n.", "chương trình nghị sự", "The agenda has five items."],
+        ["postpone", "/poʊstˈpoʊn/", "v.", "hoãn lại", "The meeting was postponed to Friday."],
+        ["attend", "/əˈtend/", "v.", "tham dự", "All managers must attend."],
+        ["branch", "/bræntʃ/", "n.", "chi nhánh", "We have a branch in Da Nang."],
+        ["expand", "/ɪkˈspænd/", "v.", "mở rộng", "The company plans to expand overseas."],
+        ["announce", "/əˈnaʊns/", "v.", "thông báo", "They will announce the results today."],
+        ["budget", "/ˈbʌdʒɪt/", "n.", "ngân sách", "The project is within budget."],
+        ["confirm", "/kənˈfɜːrm/", "v.", "xác nhận", "Please confirm your attendance."]
+      ],
+      quiz: [
+        { p: "5", q: "Please call me as soon as the shipment ___.", o: ["arrives", "will arrive", "arrived", "is going to arrive"], e: "Sau as soon as dùng hiện tại đơn cho tương lai." },
+        { p: "5", q: "The phone is ringing. I ___ answer it.", o: ["will", "am going", "was", "have"], e: "Quyết định tức thời → will." },
+        { p: "5", q: "The plans are finished. The company ___ open a new branch in Da Nang next year.", o: ["is going to", "will to", "going to", "is go to"], e: "Kế hoạch đã định → be going to + V." },
+        { p: "5", q: "The meeting has been ___ until next Tuesday because the director is sick.", o: ["postponed", "attended", "expanded", "announced"], e: "Giám đốc ốm → cuộc họp bị hoãn (postponed)." },
+        { p: "2", s: "Who's going to attend the conference?", o: ["Ms. Yoon and two engineers.", "It's in Seoul.", "Yes, I'm going.", "It was very interesting."], e: "Who → hỏi người → Ms. Yoon and two engineers. Câu hỏi Wh- không trả lời Yes/No." },
+        { p: "7", r: "MEMO\nThe monthly safety meeting will be held on Friday at 3 p.m. in Room 201 instead of Thursday. All shift leaders must attend. Please confirm your attendance with Mr. Kang by Wednesday.", q: "What is being changed?", o: ["The day of the meeting", "The meeting room", "The meeting time", "The speaker"], e: "\"on Friday … instead of Thursday\" → đổi ngày họp." }
+      ]
+    },
+    {
+      t: "Từ loại (Word form)", topic: "Danh – Động – Tính – Trạng từ",
+      g: {
+        title: "TỪ LOẠI — chìa khóa của Part 5",
+        rules: [
+          "Sau mạo từ / tính từ sở hữu, trước động từ → <b>DANH TỪ</b>: the decision, our success.",
+          "Trước danh từ, hoặc sau be / become / seem / remain → <b>TÍNH TỪ</b>: a successful plan; The plan is successful.",
+          "Bổ nghĩa cho động từ, tính từ hoặc cả câu → <b>TRẠNG TỪ</b> (thường -ly): work efficiently, extremely busy.",
+          "Hậu tố: danh từ <b>-tion, -ment, -ness, -ity, -er/-or</b> · tính từ <b>-ful, -ive, -able, -al, -ous</b> · trạng từ <b>-ly</b> · động từ <b>-ize, -en, -ify</b>."
+        ],
+        ex: [
+          ["Her decision surprised everyone.", "Quyết định của cô ấy làm mọi người bất ngờ. (danh từ)"],
+          ["The new system is very efficient.", "Hệ thống mới rất hiệu quả. (tính từ)"],
+          ["The team worked efficiently.", "Nhóm đã làm việc hiệu quả. (trạng từ)"],
+          ["We need to improve productivity.", "Chúng ta cần nâng cao năng suất. (danh từ)"]
+        ],
+        tip: "Làm câu từ loại không cần dịch: chỉ cần nhìn từ đứng trước và sau ô trống."
+      },
+      v: [
+        ["success", "/səkˈses/", "n.", "sự thành công (succeed v., successful adj.)", "The launch was a great success."],
+        ["efficient", "/ɪˈfɪʃnt/", "adj.", "hiệu quả (efficiency n., efficiently adv.)", "LED lights are more efficient."],
+        ["production", "/prəˈdʌkʃn/", "n.", "sự sản xuất (produce v., productive adj.)", "Production increased by 10%."],
+        ["decision", "/dɪˈsɪʒn/", "n.", "quyết định (decide v.)", "The final decision is yours."],
+        ["careful", "/ˈkerfl/", "adj.", "cẩn thận (carefully adv.)", "Be careful with the cables."],
+        ["improvement", "/ɪmˈpruːvmənt/", "n.", "sự cải thiện (improve v.)", "We saw a big improvement in quality."],
+        ["responsible", "/rɪˈspɑːnsəbl/", "adj.", "chịu trách nhiệm (responsibility n.)", "Who is responsible for safety?"],
+        ["competitive", "/kəmˈpetətɪv/", "adj.", "cạnh tranh (compete v., competition n.)", "We offer competitive prices."]
+      ],
+      quiz: [
+        { p: "5", q: "The ___ of the new factory took two years.", o: ["construction", "construct", "constructive", "constructed"], e: "Sau The, trước of → danh từ construction." },
+        { p: "5", q: "Please read the safety instructions ___.", o: ["carefully", "careful", "care", "carefulness"], e: "Bổ nghĩa cho động từ read → trạng từ carefully." },
+        { p: "5", q: "Our team has made a significant ___ in quality.", o: ["improvement", "improve", "improved", "improving"], e: "Sau tính từ significant → danh từ improvement." },
+        { p: "5", q: "The new machine is more ___ than the old one.", o: ["efficient", "efficiency", "efficiently", "efficiencies"], e: "Sau be + more → tính từ efficient." },
+        { p: "5", q: "Mr. Lim is ___ for checking all incoming materials.", o: ["responsible", "responsibility", "responsibly", "respond"], e: "be responsible for = chịu trách nhiệm về." },
+        { p: "5", q: "Prices in this market are highly ___.", o: ["competitive", "compete", "competition", "competitively"], e: "Trạng từ highly bổ nghĩa cho tính từ → competitive." }
+      ]
+    },
+    {
+      t: "Nhà máy & sản xuất", topic: "Câu bị động",
+      g: {
+        title: "CÂU BỊ ĐỘNG: be + V3",
+        rules: [
+          "Nhấn mạnh đối tượng chịu tác động: The parts <b>are made</b> in Korea (by…).",
+          "Theo thì: is/are + V3 · was/were + V3 · will be + V3 · has/have been + V3 · is being + V3 · <b>can / must / should be + V3</b>.",
+          "Mẹo Part 5: sau ô trống CÓ tân ngữ → thường chủ động; KHÔNG có tân ngữ → cân nhắc bị động.",
+          "Chủ ngữ là vật (products, the report, the machine) thường đi với bị động."
+        ],
+        ex: [
+          ["These cables are produced in our Hai Phong plant.", "Những dây cáp này được sản xuất tại nhà máy Hải Phòng."],
+          ["The machine was repaired yesterday.", "Cái máy đã được sửa hôm qua."],
+          ["All products must be inspected before shipping.", "Mọi sản phẩm phải được kiểm tra trước khi giao."],
+          ["A new production line has been installed.", "Một dây chuyền sản xuất mới vừa được lắp đặt."]
+        ],
+        tip: "must / should / can / will + BE + V3 — đừng quên chữ be."
+      },
+      v: [
+        ["manufacture", "/ˌmænjuˈfæktʃər/", "v.", "sản xuất", "The company manufactures electric motors."],
+        ["inspect", "/ɪnˈspekt/", "v.", "kiểm tra", "Inspect the wiring before use."],
+        ["warehouse", "/ˈwerhaʊs/", "n.", "nhà kho", "The goods are stored in the warehouse."],
+        ["shipment", "/ˈʃɪpmənt/", "n.", "lô hàng", "The shipment arrived this morning."],
+        ["assembly line", "/əˈsembli laɪn/", "n.", "dây chuyền lắp ráp", "He works on the assembly line."],
+        ["maintenance", "/ˈmeɪntənəns/", "n.", "bảo trì", "Maintenance is scheduled for Saturday."],
+        ["regulation", "/ˌreɡjuˈleɪʃn/", "n.", "quy định", "Follow all safety regulations."],
+        ["defect", "/ˈdiːfekt/", "n.", "lỗi, khuyết tật", "No defects were found."]
+      ],
+      quiz: [
+        { p: "5", q: "All products ___ carefully before they are shipped.", o: ["are inspected", "inspect", "are inspecting", "inspected"], e: "Sản phẩm được kiểm tra, không có tân ngữ → bị động are inspected." },
+        { p: "5", q: "The new assembly line ___ last month.", o: ["was installed", "installed", "is installing", "has installed"], e: "Dây chuyền được lắp đặt + last month → was installed." },
+        { p: "5", q: "Safety helmets must ___ in this area at all times.", o: ["be worn", "wear", "wearing", "be wearing"], e: "Mũ được đội → must be + V3 (worn)." },
+        { p: "5", q: "The shipment ___ to the customer tomorrow.", o: ["will be delivered", "will deliver", "delivers", "delivered"], e: "Lô hàng được giao + tomorrow → will be delivered." },
+        { p: "2", s: "When was the generator last checked?", o: ["During the maintenance last week.", "In the generator room.", "He checked it himself.", "Yes, it's working."], e: "When → thời gian → During the maintenance last week." },
+        { p: "7", r: "NOTICE\nLine 3 will be shut down on Saturday from 8 a.m. to 4 p.m. for scheduled maintenance. Production orders for Line 3 will be moved to Line 5 during this time.", q: "What will happen to Line 3's orders?", o: ["They will be moved to Line 5.", "They will be canceled.", "They will be finished on Sunday.", "They will be checked by customers."], e: "\"Production orders for Line 3 will be moved to Line 5\"." }
+      ]
+    }
+  ],
+  test: [
+    { p: "5", q: "She ___ in the marketing department for six years.", o: ["has worked", "works", "is working", "worked since"], e: "for six years (đến nay) → hiện tại hoàn thành." },
+    { p: "5", q: "The report ___ by the sales team every Monday.", o: ["is prepared", "prepares", "is preparing", "prepared"], e: "by the sales team + every Monday → bị động hiện tại đơn." },
+    { p: "5", q: "I will give you the documents when I ___ you tomorrow.", o: ["see", "will see", "saw", "am going to see"], e: "Sau when (mệnh đề thời gian) dùng hiện tại đơn." },
+    { p: "5", q: "The training was very ___ for new employees.", o: ["useful", "use", "usefully", "usefulness"], e: "Sau be + very → tính từ useful." },
+    { p: "5", q: "Our sales have increased ___ since we launched the new website.", o: ["significantly", "significant", "significance", "signify"], e: "Bổ nghĩa cho động từ increased → trạng từ." },
+    { p: "5", q: "The company ___ a new CEO last month.", o: ["appointed", "has appointed", "appoints", "was appointed"], e: "last month → quá khứ đơn; có tân ngữ (a new CEO) → chủ động." },
+    { p: "5", q: "We have known each other ___ ten years.", o: ["for", "since", "ago", "from"], e: "ten years là khoảng thời gian → for." },
+    { p: "5", q: "The ___ of the meeting is to discuss next year's budget.", o: ["purpose", "purposeful", "purposely", "purposed"], e: "Sau The, trước of → danh từ purpose." },
+    { p: "5", q: "All visitors must ___ at the front gate.", o: ["be registered", "register to", "registering", "registered"], e: "must + be + V3 (khách được đăng ký)." },
+    { p: "5", q: "Don't worry. I ___ help you move the boxes.", o: ["will", "am going", "was", "have"], e: "Lời đề nghị giúp tức thời → will." },
+    { p: "2", s: "Has the new manager arrived yet?", o: ["Yes, she's in her office now.", "He manages the team.", "It will arrive by truck.", "No, I'm not new."], e: "Hỏi đã đến chưa → Yes, she's in her office now." },
+    { p: "2", s: "Are you going to attend the workshop on Friday?", o: ["I haven't decided yet.", "It was very useful.", "In the workshop room.", "Last Friday."], e: "Trả lời gián tiếp \"chưa quyết định\" là đáp án rất hay gặp ở Part 2." },
+    { p: "2", s: "Where are these parts manufactured?", o: ["At our plant in Bac Ninh.", "Last year.", "By machine operators.", "Yes, they are."], e: "Where → nơi chốn → At our plant in Bac Ninh." },
+    { p: "7", r: "From: Linda Park\nTo: All Production Staff\nSubject: New Quality Checks\n\nStarting next Monday, every product will be inspected twice before it is packed. The first inspection will be done by line workers, and the second by the Quality Control team. This change has been made because we have received several customer complaints about defects this year. Thank you for your cooperation.", q: "Why has the change been made?", o: ["Customers complained about defects", "A new product has been launched", "The packing team is too small", "The factory will close soon"], e: "\"because we have received several customer complaints about defects\"." },
+    { p: "7", r: "From: Linda Park\nTo: All Production Staff\nSubject: New Quality Checks\n\nStarting next Monday, every product will be inspected twice before it is packed. The first inspection will be done by line workers, and the second by the Quality Control team. This change has been made because we have received several customer complaints about defects this year. Thank you for your cooperation.", q: "Who will do the second inspection?", o: ["The Quality Control team", "Line workers", "Customers", "Linda Park"], e: "\"…and the second by the Quality Control team\"." }
+  ]
+});
+
+(window.TOEIC_LEVELS = window.TOEIC_LEVELS || []).push({
+  n: 4, name: "Trung cấp", en: "Intermediate", band: "550–700", cefr: "B1+", color: "#9146c9",
+  goal: "Câu phức: mệnh đề quan hệ, điều kiện, V-ing / to V, liên từ. Đọc hiểu email, hợp đồng.",
+  units: [
+    {
+      t: "Nhân sự", topic: "Mệnh đề quan hệ",
+      g: {
+        title: "MỆNH ĐỀ QUAN HỆ: who – which – that – whose – where",
+        rules: [
+          "<b>who</b>: thay cho người · <b>which</b>: thay cho vật · <b>that</b>: người hoặc vật (mệnh đề xác định).",
+          "<b>whose + danh từ</b>: chỉ sở hữu: The employee <b>whose car</b> is parked outside…",
+          "<b>where</b> = in/at which (nơi chốn) · <b>when</b> = thời gian.",
+          "Mệnh đề không xác định (có dấu phẩy) và sau giới từ: KHÔNG dùng that → dùng which / whom."
+        ],
+        ex: [
+          ["The engineer who designed this system is on leave.", "Kỹ sư thiết kế hệ thống này đang nghỉ phép."],
+          ["The report that you requested is attached.", "Báo cáo bạn yêu cầu được đính kèm."],
+          ["Ms. Ito, whose team won the award, will give a speech.", "Cô Ito, người có nhóm thắng giải, sẽ phát biểu."],
+          ["This is the room where we hold training sessions.", "Đây là phòng chúng tôi tổ chức đào tạo."]
+        ],
+        tip: "Sau ô trống là danh từ không có mạo từ (… ___ office is…) → gần như chắc chắn là whose."
+      },
+      v: [
+        ["personnel", "/ˌpɜːrsəˈnel/", "n.", "nhân sự", "All personnel must wear ID badges."],
+        ["recruit", "/rɪˈkruːt/", "v.", "tuyển dụng", "We are recruiting new technicians."],
+        ["supervisor", "/ˈsuːpərvaɪzər/", "n.", "người giám sát", "Report problems to your supervisor."],
+        ["evaluation", "/ɪˌvæljuˈeɪʃn/", "n.", "sự đánh giá", "Performance evaluations are done yearly."],
+        ["benefits", "/ˈbenɪfɪts/", "n.", "phúc lợi", "The benefits include health insurance."],
+        ["resign", "/rɪˈzaɪn/", "v.", "từ chức, nghỉ việc", "He resigned to start his own business."],
+        ["candidate", "/ˈkændɪdət/", "n.", "ứng viên", "She is the best candidate for the job."],
+        ["orientation", "/ˌɔːriənˈteɪʃn/", "n.", "buổi định hướng (nhân viên mới)", "Orientation starts at 9 a.m."]
+      ],
+      quiz: [
+        { p: "5", q: "The candidate ___ we interviewed yesterday has excellent experience.", o: ["whom", "whose", "which", "where"], e: "Thay cho người, làm tân ngữ của interviewed → whom (hoặc who / that)." },
+        { p: "5", q: "Mr. Brown, ___ office is next to mine, is the new supervisor.", o: ["whose", "who", "which", "that"], e: "Theo sau là danh từ office → sở hữu → whose." },
+        { p: "5", q: "This is the factory ___ our products are assembled.", o: ["where", "which", "who", "whose"], e: "Nơi chốn + mệnh đề đầy đủ → where." },
+        { p: "5", q: "Employees ___ want to join the training should register by Friday.", o: ["who", "which", "whose", "whom"], e: "Thay cho người, làm chủ ngữ của want → who." },
+        { p: "5", q: "The benefits package, ___ includes health insurance, is very attractive.", o: ["which", "that", "who", "what"], e: "Mệnh đề không xác định (có dấu phẩy), chỉ vật → which; không dùng that." },
+        { p: "7", r: "New Employee Orientation will take place on May 3 in the Main Hall. All new staff members who joined after April 1 are required to attend. Lunch will be provided.", q: "Who must attend the orientation?", o: ["Staff who joined after April 1", "All supervisors", "Employees who are resigning", "Only managers in the Main Hall"], e: "\"All new staff members who joined after April 1 are required to attend\"." }
+      ]
+    },
+    {
+      t: "Hợp đồng & đàm phán", topic: "Câu điều kiện loại 1, 2",
+      g: {
+        title: "CÂU ĐIỀU KIỆN loại 1 & 2",
+        rules: [
+          "Loại 1 (có thể xảy ra): <b>If + hiện tại đơn, will / can / may + V</b>: If you sign today, we will give you a discount.",
+          "Loại 2 (không có thật ở hiện tại): <b>If + quá khứ đơn, would / could + V</b>; to be dùng <b>were</b> cho mọi ngôi.",
+          "<b>Unless</b> = If … not: Unless you renew it, the contract will expire.",
+          "<b>Provided (that) / As long as</b> = với điều kiện là."
+        ],
+        ex: [
+          ["If the price is too high, we will look for another supplier.", "Nếu giá quá cao, chúng tôi sẽ tìm nhà cung cấp khác."],
+          ["If we had more staff, we could finish earlier.", "Nếu có nhiều nhân viên hơn, chúng ta đã có thể xong sớm hơn."],
+          ["Unless you renew the contract, it will expire in June.", "Nếu không gia hạn, hợp đồng sẽ hết hạn vào tháng Sáu."],
+          ["We will deliver on time as long as you confirm by Friday.", "Chúng tôi sẽ giao đúng hạn miễn là bạn xác nhận trước thứ Sáu."]
+        ],
+        tip: "Mệnh đề If không bao giờ có will (loại 1). Nhìn vế còn lại: will → loại 1; would → loại 2."
+      },
+      v: [
+        ["contract", "/ˈkɑːntrækt/", "n.", "hợp đồng", "Please sign the contract."],
+        ["negotiate", "/nɪˈɡoʊʃieɪt/", "v.", "đàm phán", "We negotiated a lower price."],
+        ["supplier", "/səˈplaɪər/", "n.", "nhà cung cấp", "Our main supplier is in Taiwan."],
+        ["terms", "/tɜːrmz/", "n.", "điều khoản", "Read the terms carefully."],
+        ["expire", "/ɪkˈspaɪər/", "v.", "hết hạn", "The warranty expires next month."],
+        ["renew", "/rɪˈnuː/", "v.", "gia hạn", "We decided to renew the lease."],
+        ["agreement", "/əˈɡriːmənt/", "n.", "thỏa thuận", "Both sides reached an agreement."],
+        ["proposal", "/prəˈpoʊzl/", "n.", "đề xuất", "The client accepted our proposal."]
+      ],
+      quiz: [
+        { p: "5", q: "If the supplier ___ the price, we will sign the contract.", o: ["lowers", "will lower", "lowered", "lowering"], e: "Loại 1: If + hiện tại đơn, will + V." },
+        { p: "5", q: "If I ___ the manager, I would hire more staff.", o: ["were", "am", "will be", "have been"], e: "Loại 2: If + were (mọi ngôi), would + V." },
+        { p: "5", q: "___ we receive payment by Friday, the order will be canceled.", o: ["Unless", "If", "As long as", "Provided"], e: "Nghĩa: Nếu KHÔNG nhận được tiền… sẽ hủy → Unless." },
+        { p: "5", q: "If we had a bigger budget, we ___ advertise on TV.", o: ["could", "can", "will", "are"], e: "If + quá khứ (had) → loại 2 → could / would + V." },
+        { p: "2", s: "What will happen if the contract isn't renewed?", o: ["We'll need to find a new supplier.", "It was renewed last year.", "The contract is on your desk.", "Yes, it will."], e: "Hỏi hậu quả → We'll need to find a new supplier." },
+        { p: "7", r: "…Under the terms of this agreement, Lumina Co. will supply 2,000 LED panels per month. If a shipment arrives more than five days late, the buyer will receive a 5% discount on that shipment…", q: "What happens if a shipment is more than five days late?", o: ["The buyer gets a 5% discount", "The contract ends immediately", "Lumina Co. sends 2,000 extra panels", "The buyer pays a 5% fee"], e: "\"the buyer will receive a 5% discount on that shipment\"." }
+      ]
+    },
+    {
+      t: "Công việc hằng ngày", topic: "V-ing & to V",
+      g: {
+        title: "DANH ĐỘNG TỪ (V-ing) & ĐỘNG TỪ NGUYÊN MẪU (to V)",
+        rules: [
+          "Động từ + <b>V-ing</b>: avoid, consider, enjoy, finish, mind, suggest, recommend, postpone, keep, delay.",
+          "Động từ + <b>to V</b>: decide, plan, agree, hope, expect, want, need, refuse, offer, <b>afford</b>, intend.",
+          "Sau <b>giới từ</b> luôn là V-ing: interested in joining · <b>look forward to meeting</b> (to ở đây là giới từ).",
+          "Đổi nghĩa: stop <b>to do</b> (dừng lại để làm) / stop <b>doing</b> (thôi làm) · remember <b>to do</b> (nhớ phải làm) / remember <b>doing</b> (nhớ đã làm)."
+        ],
+        ex: [
+          ["We are considering opening a new store.", "Chúng tôi đang cân nhắc mở cửa hàng mới."],
+          ["The company decided to reduce costs.", "Công ty quyết định cắt giảm chi phí."],
+          ["I look forward to hearing from you.", "Tôi mong sớm nhận được phản hồi của bạn."],
+          ["Please remember to turn off the machine.", "Nhớ tắt máy nhé."]
+        ],
+        tip: "look forward to / be used to / object to / be committed to + V-ing — nhóm \"to\" giới từ hay bị gài."
+      },
+      v: [
+        ["consider", "/kənˈsɪdər/", "v.", "cân nhắc", "We are considering your application."],
+        ["recommend", "/ˌrekəˈmend/", "v.", "đề xuất, khuyên", "I recommend booking early."],
+        ["avoid", "/əˈvɔɪd/", "v.", "tránh", "Avoid using the elevator during a fire."],
+        ["reduce", "/rɪˈduːs/", "v.", "giảm", "We need to reduce energy costs."],
+        ["afford", "/əˈfɔːrd/", "v.", "có đủ khả năng (chi trả)", "We can't afford to lose this client."],
+        ["look forward to", "", "phr.", "mong đợi", "I look forward to working with you."],
+        ["in charge of", "", "phr.", "phụ trách", "She is in charge of the night shift."],
+        ["refuse", "/rɪˈfjuːz/", "v.", "từ chối", "He refused to sign the document."]
+      ],
+      quiz: [
+        { p: "5", q: "The manager suggested ___ the meeting until next week.", o: ["postponing", "to postpone", "postpone", "postponed"], e: "suggest + V-ing." },
+        { p: "5", q: "We cannot afford ___ any more mistakes.", o: ["to make", "making", "make", "made"], e: "afford + to V." },
+        { p: "5", q: "I look forward to ___ you at the conference.", o: ["meeting", "meet", "met", "be meeting"], e: "look forward to (giới từ) + V-ing." },
+        { p: "5", q: "The workers agreed ___ overtime this weekend.", o: ["to work", "working", "work", "worked"], e: "agree + to V." },
+        { p: "5", q: "Please avoid ___ heavy equipment without training.", o: ["operating", "to operate", "operate", "operation"], e: "avoid + V-ing." },
+        { p: "2", s: "Would you consider working the night shift next month?", o: ["Yes, if it's only for a month.", "The night was very long.", "He worked yesterday.", "It shifts every hour."], e: "Lời đề nghị → đồng ý kèm điều kiện. Các đáp án khác lặp từ night / shift để gài bẫy." }
+      ]
+    },
+    {
+      t: "Viết email công việc", topic: "Liên từ & từ nối",
+      g: {
+        title: "LIÊN TỪ & TỪ NỐI",
+        rules: [
+          "<b>Although / Even though + mệnh đề</b> · <b>Despite / In spite of + danh từ / V-ing</b>.",
+          "<b>Because / Since + mệnh đề</b> · <b>Because of / Due to + danh từ</b>.",
+          "<b>However, Therefore, Moreover, In addition</b> đứng đầu câu (sau dấu chấm/chấm phẩy) + dấu phẩy.",
+          "Cặp liên từ: both A <b>and</b> B · either A <b>or</b> B · neither A <b>nor</b> B · not only A <b>but (also)</b> B."
+        ],
+        ex: [
+          ["Although sales increased, profits fell.", "Mặc dù doanh số tăng, lợi nhuận lại giảm."],
+          ["The event was canceled due to bad weather.", "Sự kiện bị hủy do thời tiết xấu."],
+          ["The price is high. However, the quality is excellent.", "Giá cao. Tuy nhiên chất lượng rất tốt."],
+          ["Both the manager and the staff attended the party.", "Cả quản lý lẫn nhân viên đều dự tiệc."]
+        ],
+        tip: "Nhìn sau ô trống: mệnh đề (S + V) → although/because; cụm danh từ → despite/due to."
+      },
+      v: [
+        ["attach", "/əˈtætʃ/", "v.", "đính kèm", "I have attached the price list."],
+        ["regarding", "/rɪˈɡɑːrdɪŋ/", "prep.", "về việc, liên quan đến", "I'm writing regarding your order."],
+        ["inquiry", "/ɪnˈkwaɪəri/", "n.", "yêu cầu thông tin", "Thank you for your inquiry."],
+        ["reply", "/rɪˈplaɪ/", "v./n.", "trả lời", "Please reply by Monday."],
+        ["forward", "/ˈfɔːrwərd/", "v.", "chuyển tiếp", "I'll forward the email to you."],
+        ["invoice", "/ˈɪnvɔɪs/", "n.", "hóa đơn", "The invoice is due in 30 days."],
+        ["in advance", "", "phr.", "trước", "Thank you in advance."],
+        ["apologize", "/əˈpɑːlədʒaɪz/", "v.", "xin lỗi", "We apologize for the delay."]
+      ],
+      quiz: [
+        { p: "5", q: "___ the heavy traffic, Mr. Silva arrived on time.", o: ["Despite", "Although", "Because", "However"], e: "Sau ô trống là cụm danh từ + ý tương phản → Despite." },
+        { p: "5", q: "The flight was canceled ___ the storm.", o: ["due to", "because", "although", "so"], e: "Cụm danh từ (the storm) + chỉ nguyên nhân → due to." },
+        { p: "5", q: "The new software is expensive. ___, it will save us a lot of time.", o: ["However", "Although", "Despite", "Because"], e: "Đầu câu + dấu phẩy + ý tương phản → However." },
+        { p: "5", q: "You can pay either by credit card ___ by bank transfer.", o: ["or", "nor", "and", "but"], e: "either … or." },
+        { p: "6", r: "Dear Ms. Tran,\nThank you for your inquiry ___ our cleaning services. I have attached a price list for your review.", q: "Chọn từ phù hợp cho chỗ trống.", o: ["regarding", "regard", "regarded", "regards"], e: "inquiry regarding sth = yêu cầu về việc gì (regarding là giới từ)." },
+        { p: "2", s: "Did you get the invoice I forwarded?", o: ["Yes, I'll pay it today.", "Forward it to the front.", "The voice is too loud.", "No, I didn't go forward."], e: "Xác nhận đã nhận → Yes, I'll pay it today. Bẫy âm giống: invoice / voice, forwarded / forward." }
+      ]
+    }
+  ],
+  test: [
+    { p: "5", q: "The engineer ___ fixed the problem has been promoted.", o: ["who", "which", "whose", "where"], e: "Thay cho người, làm chủ ngữ → who." },
+    { p: "5", q: "If you ___ any questions, please contact me.", o: ["have", "will have", "had", "having"], e: "Điều kiện loại 1 → If + hiện tại đơn." },
+    { p: "5", q: "The company is planning ___ a new factory in Vietnam.", o: ["to build", "building", "build", "built"], e: "plan + to V." },
+    { p: "5", q: "___ the price increase, sales remained strong.", o: ["Despite", "Although", "Because", "Since"], e: "Cụm danh từ + tương phản → Despite." },
+    { p: "5", q: "If our company ___ bigger, we would have more departments.", o: ["were", "is", "will be", "be"], e: "Loại 2: If + were, would + V." },
+    { p: "5", q: "Mr. Kato finished ___ the contract this morning.", o: ["reviewing", "to review", "review", "reviewed"], e: "finish + V-ing." },
+    { p: "5", q: "The meeting room ___ we usually meet is being painted.", o: ["where", "which", "who", "when"], e: "Nơi chốn + mệnh đề đầy đủ (we usually meet) → where." },
+    { p: "5", q: "Neither the manager ___ his assistant was at the meeting.", o: ["nor", "or", "and", "but"], e: "neither … nor." },
+    { p: "5", q: "The shipment was delayed ___ a problem at the port.", o: ["because of", "because", "although", "however"], e: "Cụm danh từ + nguyên nhân → because of." },
+    { p: "5", q: "We will not finish on time ___ we hire more workers.", o: ["unless", "if", "because", "so"], e: "Nghĩa: sẽ không xong nếu KHÔNG thuê thêm → unless." },
+    { p: "2", s: "Who is in charge of the new project?", o: ["Ms. Rahman from the design team.", "It's charged to my account.", "Next month, I think.", "Yes, it's a new project."], e: "Who → người phụ trách → Ms. Rahman." },
+    { p: "2", s: "Why don't we ask the supplier for a discount?", o: ["That's a good idea.", "Because it's expensive.", "Yes, they supplied it.", "I don't know why."], e: "Why don't we…? là lời ĐỀ NGHỊ, không hỏi lý do → That's a good idea." },
+    { p: "2", s: "Would you mind checking these figures for me?", o: ["Not at all. Leave them here.", "Yes, I'm checking out.", "They are about 500.", "It's a big figure."], e: "Would you mind…? → đồng ý giúp = Not at all." },
+    { p: "7", r: "To: Kevin Ho\nFrom: Sara Lind, Purchasing\nSubject: Supplier contract\n\nKevin,\nOur contract with Delta Parts expires at the end of this month. Although their prices are higher than other suppliers', their delivery has always been on time. I recommend renewing the contract for one more year. However, I suggest asking them for a 3% discount, since we have increased our orders by 20% this year. Please let me know what you think before Friday.\nSara", q: "What does Ms. Lind recommend?", o: ["Renewing the contract with Delta Parts", "Finding a cheaper supplier", "Reducing orders by 20%", "Canceling the contract on Friday"], e: "\"I recommend renewing the contract for one more year.\"" },
+    { p: "7", r: "To: Kevin Ho\nFrom: Sara Lind, Purchasing\nSubject: Supplier contract\n\nKevin,\nOur contract with Delta Parts expires at the end of this month. Although their prices are higher than other suppliers', their delivery has always been on time. I recommend renewing the contract for one more year. However, I suggest asking them for a 3% discount, since we have increased our orders by 20% this year. Please let me know what you think before Friday.\nSara", q: "Why does Ms. Lind think a discount is possible?", o: ["The company has ordered more this year", "Delta Parts delivered late", "Other suppliers offered 3%", "The contract is very old"], e: "\"since we have increased our orders by 20% this year\"." }
+  ]
+});
+
+/* Bậc Thang TOEIC — Nội dung Bậc 5–6 (o[0] luôn là đáp án đúng) */
+(window.TOEIC_LEVELS = window.TOEIC_LEVELS || []).push({
+  n: 5, name: "Trung cao cấp", en: "Upper-Intermediate", band: "700–850", cefr: "B2", color: "#d1477a",
+  goal: "Ngữ pháp khó của Part 5: điều kiện loại 3, rút gọn mệnh đề, giả định, sai khiến, cụm cố định.",
+  units: [
+    {
+      t: "Đánh giá dự án", topic: "Điều kiện loại 3, hỗn hợp & wish",
+      g: {
+        title: "ĐIỀU KIỆN LOẠI 3 – HỖN HỢP – WISH",
+        rules: [
+          "Loại 3 (trái với quá khứ): <b>If + had V3, would / could have + V3</b>.",
+          "Hỗn hợp (quá khứ → hiện tại): <b>If + had V3, would + V</b> (+ now): If he had accepted the job, he would be our manager now.",
+          "<b>wish + quá khứ đơn</b>: ước cho hiện tại · <b>wish + had V3</b>: tiếc nuối quá khứ.",
+          "Dạng đảo ngữ: <b>Had we known</b>…, we would have… (= If we had known…)."
+        ],
+        ex: [
+          ["If we had ordered earlier, the parts would have arrived on time.", "Nếu đặt hàng sớm hơn thì linh kiện đã đến đúng hạn."],
+          ["If she hadn't missed the flight, she would be here now.", "Nếu cô ấy không lỡ chuyến bay thì giờ đã ở đây."],
+          ["I wish we had more time.", "Ước gì chúng ta có nhiều thời gian hơn."],
+          ["The manager wishes he had hired more staff.", "Người quản lý tiếc là đã không tuyển thêm người."]
+        ],
+        tip: "Thấy would have + V3 ở một vế → vế If là had + V3."
+      },
+      v: [
+        ["outcome", "/ˈaʊtkʌm/", "n.", "kết quả", "We are pleased with the outcome."],
+        ["estimate", "/ˈestɪmət/", "n.", "bản ước tính", "The final cost exceeded the estimate."],
+        ["exceed", "/ɪkˈsiːd/", "v.", "vượt quá", "Sales exceeded our expectations."],
+        ["feasible", "/ˈfiːzəbl/", "adj.", "khả thi", "The plan is not financially feasible."],
+        ["setback", "/ˈsetbæk/", "n.", "trở ngại", "The fire was a major setback."],
+        ["assess", "/əˈses/", "v.", "đánh giá", "We need to assess the risks."],
+        ["prior to", "/ˈpraɪər tə/", "prep.", "trước khi", "Check in prior to departure."],
+        ["in hindsight", "/ɪn ˈhaɪndsaɪt/", "phr.", "nhìn lại thì", "In hindsight, we should have waited."]
+      ],
+      quiz: [
+        { p: "5", q: "If we had checked the figures, we ___ the mistake.", o: ["would have noticed", "would notice", "will notice", "had noticed"], e: "If + had V3 → loại 3 → would have + V3." },
+        { p: "5", q: "If Ms. Ahn ___ the offer last year, she would be working in London now.", o: ["had accepted", "accepted", "has accepted", "would accept"], e: "Hỗn hợp: điều kiện quá khứ (last year) → kết quả hiện tại (now) → If + had V3." },
+        { p: "5", q: "I wish I ___ the training session yesterday.", o: ["had attended", "attended", "have attended", "would attend"], e: "Tiếc nuối quá khứ (yesterday) → wish + had V3." },
+        { p: "5", q: "The project ___ its budget by 15% because of unexpected costs.", o: ["exceeded", "exceeding", "excess", "excessive"], e: "Câu cần động từ chính ở quá khứ → exceeded." },
+        { p: "2", s: "Why didn't the shipment arrive on time?", o: ["It would have if the port hadn't closed.", "It's arriving at gate two.", "Yes, it was on time.", "Ship it by air, please."], e: "Giải thích lý do bằng điều kiện loại 3: lẽ ra đã đến nếu cảng không đóng." },
+        { p: "5", q: "A thorough ___ of the risks was carried out prior to the launch.", o: ["assessment", "assess", "assessed", "assessing"], e: "Sau tính từ thorough, trước of → danh từ assessment." }
+      ]
+    },
+    {
+      t: "Báo cáo & thông báo", topic: "Rút gọn mệnh đề bằng phân từ",
+      g: {
+        title: "RÚT GỌN MỆNH ĐỀ: V-ing / V3 / Having V3",
+        rules: [
+          "<b>V-ing</b> (chủ động): The man <b>standing</b> at the door is our CEO. (= who is standing)",
+          "<b>V3</b> (bị động): The products <b>made</b> in this factory are exported. (= which are made)",
+          "Rút gọn trạng ngữ: <b>After finishing</b> the report, she left. · <b>When asked</b>, he refused to comment.",
+          "<b>Having + V3</b>: hành động xảy ra trước hành động chính: Having completed the training, he started work."
+        ],
+        ex: [
+          ["Applications received after May 1 will not be considered.", "Hồ sơ nhận sau ngày 1/5 sẽ không được xét."],
+          ["Employees wishing to attend should register online.", "Nhân viên muốn tham dự nên đăng ký trực tuyến."],
+          ["Before leaving, please turn off all lights.", "Trước khi về, vui lòng tắt hết đèn."],
+          ["Once installed, the software updates automatically.", "Sau khi cài đặt, phần mềm tự cập nhật."]
+        ],
+        tip: "Danh từ tự làm hành động → V-ing; danh từ bị tác động → V3. Applications (bị nhận) → received."
+      },
+      v: [
+        ["submit", "/səbˈmɪt/", "v.", "nộp", "Submit the form by Friday."],
+        ["eligible", "/ˈelɪdʒəbl/", "adj.", "đủ điều kiện", "Full-time staff are eligible for a bonus."],
+        ["complimentary", "/ˌkɑːmplɪˈmentri/", "adj.", "miễn phí (được tặng)", "Breakfast is complimentary."],
+        ["revised", "/rɪˈvaɪzd/", "adj.", "đã sửa đổi", "Please see the revised schedule."],
+        ["attendee", "/əˌtenˈdiː/", "n.", "người tham dự", "Each attendee will get a name tag."],
+        ["notify", "/ˈnoʊtɪfaɪ/", "v.", "thông báo", "We will notify you by email."],
+        ["upon", "/əˈpɑːn/", "prep.", "ngay khi", "Payment is due upon delivery."],
+        ["accordingly", "/əˈkɔːrdɪŋli/", "adv.", "theo đó, tương ứng", "Plans changed, so we adjusted accordingly."]
+      ],
+      quiz: [
+        { p: "5", q: "Applications ___ after the deadline will not be accepted.", o: ["submitted", "submitting", "submit", "to submit"], e: "Hồ sơ BỊ nộp → rút gọn bị động bằng V3." },
+        { p: "5", q: "Customers ___ to return an item must show the receipt.", o: ["wishing", "wished", "wish", "to wishing"], e: "Khách hàng tự muốn (chủ động) → V-ing (= who wish)." },
+        { p: "5", q: "Before ___ the building, please return your visitor badge.", o: ["leaving", "leave", "left", "to leave"], e: "Before (giới từ) + V-ing." },
+        { p: "5", q: "___ the training course, Mr. Ito was promoted to supervisor.", o: ["Having completed", "Completed", "Having been completed", "To complete"], e: "Hoàn thành khóa học xảy ra trước, chủ động → Having + V3." },
+        { p: "5", q: "When ___ about the delay, the spokesperson declined to comment.", o: ["asked", "asking", "to ask", "ask"], e: "Người phát ngôn ĐƯỢC hỏi → When + V3." },
+        { p: "7", r: "ATTENTION ATTENDEES\nComplimentary lunch will be served in Hall B at 12:30. Attendees holding a VIP badge are also eligible for a free dinner at the Riverside Hotel. Please show your badge upon arrival.", q: "Who can get a free dinner?", o: ["Attendees with a VIP badge", "All attendees in Hall B", "Staff of the Riverside Hotel", "Anyone who arrives at 12:30"], e: "\"Attendees holding a VIP badge are also eligible for a free dinner\"." }
+      ]
+    },
+    {
+      t: "Đề xuất & yêu cầu", topic: "Thể giả định & thể sai khiến",
+      g: {
+        title: "THỂ GIẢ ĐỊNH & THỂ SAI KHIẾN",
+        rules: [
+          "Sau <b>recommend, suggest, request, require, insist, ask, propose + that + S + V nguyên mẫu</b> (không chia): requested that he <b>submit</b>.",
+          "<b>It is essential / important / necessary / vital that + S + V nguyên mẫu</b>; bị động: that it <b>be</b> done.",
+          "Sai khiến: <b>have + người + V</b> · <b>have + vật + V3</b>: We had the technician check the wiring. / We had the wiring checked.",
+          "<b>get + người + to V</b> · <b>get + vật + V3</b>: I got him to sign it. / I got it signed."
+        ],
+        ex: [
+          ["The director insisted that every employee attend the safety training.", "Giám đốc yêu cầu mọi nhân viên phải dự buổi đào tạo an toàn."],
+          ["It is essential that the machine be turned off before cleaning.", "Bắt buộc phải tắt máy trước khi vệ sinh."],
+          ["We had our office repainted last month.", "Tháng trước chúng tôi đã cho sơn lại văn phòng."],
+          ["She got the supplier to lower the price.", "Cô ấy đã thuyết phục được nhà cung cấp hạ giá."]
+        ],
+        tip: "Chủ ngữ số ít nhưng động từ không thêm -s sau recommend / require that… là dấu hiệu nhận biết thể giả định."
+      },
+      v: [
+        ["mandatory", "/ˈmændətɔːri/", "adj.", "bắt buộc", "Safety training is mandatory."],
+        ["comply (with)", "/kəmˈplaɪ/", "v.", "tuân thủ", "All sites must comply with the rules."],
+        ["insist", "/ɪnˈsɪst/", "v.", "nhất quyết, khăng khăng", "She insisted on paying."],
+        ["authorize", "/ˈɔːθəraɪz/", "v.", "ủy quyền, cho phép", "Only managers can authorize refunds."],
+        ["procedure", "/prəˈsiːdʒər/", "n.", "quy trình", "Follow the emergency procedure."],
+        ["essential", "/ɪˈsenʃl/", "adj.", "thiết yếu", "Good communication is essential."],
+        ["inspection", "/ɪnˈspekʃn/", "n.", "cuộc kiểm tra", "The inspection is next week."],
+        ["approve", "/əˈpruːv/", "v.", "phê duyệt", "The budget was approved."]
+      ],
+      quiz: [
+        { p: "5", q: "The safety officer recommended that all workers ___ protective gloves.", o: ["wear", "wears", "wore", "wearing"], e: "recommend that + S + V nguyên mẫu." },
+        { p: "5", q: "It is essential that the report ___ before the inspection.", o: ["be completed", "is completed", "completes", "was completed"], e: "It is essential that + S + be + V3 (bị động giả định)." },
+        { p: "5", q: "We had the electrician ___ the main panel.", o: ["inspect", "inspected", "to inspect", "inspecting"], e: "have + người + V nguyên mẫu." },
+        { p: "5", q: "Mr. Park had his car ___ at the service center.", o: ["repaired", "repair", "repairing", "to repair"], e: "have + vật + V3." },
+        { p: "5", q: "All staff must ___ with the new security procedures.", o: ["comply", "obey", "follow", "respect"], e: "comply with = tuân thủ. obey / follow / respect không đi với with." },
+        { p: "2", s: "Who authorized this purchase?", o: ["The finance director approved it.", "It was purchased online.", "At the author's office.", "For about 300 dollars."], e: "Who → người phê duyệt → The finance director. Bẫy âm: authorized / author." }
+      ]
+    },
+    {
+      t: "Cụm từ cố định", topic: "Collocations & giới từ đi kèm",
+      g: {
+        title: "COLLOCATIONS — cụm từ đi liền với nhau",
+        rules: [
+          "Động từ + giới từ: <b>comply with, apply for</b> (vị trí) / <b>apply to</b> (nơi), depend on, consist of, respond to, participate in, specialize in.",
+          "Tính từ + giới từ: <b>responsible for, eligible for, familiar with, aware of, capable of, subject to</b>.",
+          "Cụm cố định: <b>in accordance with, on behalf of, in charge of, with regard to, ahead of schedule, out of stock</b>.",
+          "Động từ đi với danh từ: <b>make</b> a decision · <b>meet</b> a deadline · <b>place</b> an order · <b>conduct</b> a survey · <b>take</b> responsibility."
+        ],
+        ex: [
+          ["She applied for the position of team leader.", "Cô ấy ứng tuyển vị trí trưởng nhóm."],
+          ["Prices are subject to change without notice.", "Giá có thể thay đổi mà không báo trước."],
+          ["I am writing on behalf of the sales team.", "Tôi viết thư này thay mặt nhóm kinh doanh."],
+          ["The project was completed ahead of schedule.", "Dự án hoàn thành sớm hơn kế hoạch."]
+        ],
+        tip: "Part 5 trình độ cao thường không hỏi ngữ pháp mà hỏi \"từ nào đi với từ nào\" — học theo cụm, đừng học từ đơn lẻ."
+      },
+      v: [
+        ["subject to", "", "phr.", "có thể bị, tùy thuộc vào", "All bookings are subject to availability."],
+        ["on behalf of", "", "phr.", "thay mặt cho", "He signed on behalf of the company."],
+        ["in accordance with", "", "phr.", "theo đúng, phù hợp với", "Work in accordance with the manual."],
+        ["specialize in", "", "phr.", "chuyên về", "We specialize in solar installations."],
+        ["meet a deadline", "", "phr.", "kịp hạn chót", "We worked late to meet the deadline."],
+        ["place an order", "", "phr.", "đặt hàng", "I'd like to place an order for 200 units."],
+        ["conduct a survey", "", "phr.", "tiến hành khảo sát", "We conducted a customer survey."],
+        ["ahead of schedule", "", "phr.", "sớm hơn kế hoạch", "Construction is ahead of schedule."]
+      ],
+      quiz: [
+        { p: "5", q: "All prices listed are subject ___ change.", o: ["to", "for", "with", "of"], e: "be subject to + danh từ = có thể bị." },
+        { p: "5", q: "Our firm specializes ___ industrial electrical installations.", o: ["in", "on", "at", "for"], e: "specialize in." },
+        { p: "5", q: "We must ___ the deadline, or the client will cancel the order.", o: ["meet", "make", "do", "take"], e: "meet a deadline = kịp hạn chót." },
+        { p: "5", q: "Ms. Rossi accepted the award on ___ of the entire team.", o: ["behalf", "part", "side", "place"], e: "on behalf of = thay mặt cho." },
+        { p: "5", q: "The renovation was completed two weeks ___ of schedule.", o: ["ahead", "before", "early", "prior"], e: "ahead of schedule = sớm hơn kế hoạch." },
+        { p: "5", q: "Waste must be disposed of in accordance ___ local regulations.", o: ["with", "to", "by", "for"], e: "in accordance with = theo đúng." }
+      ]
+    }
+  ],
+  test: [
+    { p: "5", q: "If the engineers had followed the procedure, the accident ___.", o: ["would not have happened", "would not happen", "will not happen", "had not happened"], e: "If + had V3 → would (not) have + V3." },
+    { p: "5", q: "The director requested that the budget report ___ by Thursday.", o: ["be submitted", "is submitted", "was submitted", "submits"], e: "request that + S + be + V3 (giả định, bị động)." },
+    { p: "5", q: "Employees ___ in the program will receive a certificate.", o: ["participating", "participate", "participated", "to participate"], e: "Nhân viên tự tham gia (chủ động) → V-ing (= who participate)." },
+    { p: "5", q: "We had the old cables ___ last weekend.", o: ["replaced", "replace", "replacing", "to replace"], e: "have + vật + V3." },
+    { p: "5", q: "The company is not responsible ___ items left in the locker room.", o: ["for", "of", "to", "with"], e: "responsible for." },
+    { p: "5", q: "___ the inspection, the team leader submitted a detailed report.", o: ["Having completed", "Completed", "Having been completed", "Complete"], e: "Hoàn thành kiểm tra trước, chủ động → Having + V3." },
+    { p: "5", q: "I wish the management ___ us about the changes earlier.", o: ["had told", "told", "has told", "will tell"], e: "Tiếc nuối việc đã qua → wish + had V3." },
+    { p: "5", q: "The new policy will take ___ on January 1.", o: ["effect", "affect", "effective", "effectively"], e: "take effect = có hiệu lực (effect là danh từ)." },
+    { p: "5", q: "It is vital that every visitor ___ a safety helmet.", o: ["wear", "wears", "wore", "wearing"], e: "It is vital that + S + V nguyên mẫu." },
+    { p: "5", q: "The documents ___ to the client yesterday contained several errors.", o: ["sent", "sending", "were sent", "send"], e: "Tài liệu ĐƯỢC gửi → rút gọn V3; câu đã có động từ chính contained." },
+    { p: "2", s: "Has the client approved the revised proposal?", o: ["Not yet, they'll reply by Monday.", "I proposed it last week.", "It's been revised twice.", "Yes, he's a client."], e: "Hỏi đã duyệt chưa → Not yet, they'll reply by Monday." },
+    { p: "2", s: "Shouldn't we have the system checked before the inspection?", o: ["Yes, I'll call the technician now.", "It was checked out from the library.", "The inspection went well.", "He's the inspector."], e: "Đề xuất cho kiểm tra hệ thống → đồng ý và hành động: I'll call the technician." },
+    { p: "2", s: "If you had known about the traffic, would you have taken the train?", o: ["Definitely, it would have been faster.", "The train leaves at six.", "I know the traffic is bad.", "No, I take the bus every day."], e: "Câu hỏi điều kiện loại 3 → trả lời bằng would have + V3." },
+    { p: "7", r: "NOTICE TO ALL TENANTS\nIn accordance with city fire regulations, the building's sprinkler system will be inspected on Tuesday, June 10. Inspectors will need access to every office between 9 a.m. and 3 p.m. Tenants unable to be present during this time are requested to leave a key with building management by Monday, June 9. We apologize for any inconvenience and thank you for your cooperation.", q: "What is the main purpose of the notice?", o: ["To announce a safety inspection", "To introduce new fire regulations", "To request rent payment", "To announce new office hours"], e: "Thông báo kiểm tra hệ thống phun nước chữa cháy → kiểm tra an toàn." },
+    { p: "7", r: "NOTICE TO ALL TENANTS\nIn accordance with city fire regulations, the building's sprinkler system will be inspected on Tuesday, June 10. Inspectors will need access to every office between 9 a.m. and 3 p.m. Tenants unable to be present during this time are requested to leave a key with building management by Monday, June 9. We apologize for any inconvenience and thank you for your cooperation.", q: "What should tenants who cannot be present do?", o: ["Leave a key with building management", "Call the fire department", "Reschedule for Monday", "Turn off their sprinklers"], e: "\"are requested to leave a key with building management\"." }
+  ]
+});
+
+(window.TOEIC_LEVELS = window.TOEIC_LEVELS || []).push({
+  n: 6, name: "Nâng cao", en: "Advanced", band: "850–990", cefr: "C1", color: "#d98a00",
+  goal: "Đảo ngữ, từ dễ nhầm, chiến thuật Part 6–7 và nghe hiểu hội thoại dài Part 3–4.",
+  units: [
+    {
+      t: "Văn phong trang trọng", topic: "Đảo ngữ",
+      g: {
+        title: "ĐẢO NGỮ (Inversion)",
+        rules: [
+          "Trạng từ phủ định đầu câu + trợ động từ + S: <b>Never / Rarely / Seldom / Hardly ever</b>: Rarely <b>do we</b> receive complaints.",
+          "<b>Not only</b> + trợ động từ + S…, <b>but (also)</b>…: Not only <b>did sales</b> rise, but costs also fell.",
+          "<b>Only after / Only when / Not until / Under no circumstances</b> + … → đảo ngữ ở mệnh đề chính.",
+          "<b>Hardly / Scarcely … when</b> · <b>No sooner … than</b>: No sooner had he arrived <b>than</b> the meeting began.",
+          "Đảo ngữ điều kiện: <b>Should you need</b> (= If you need) · <b>Had we known</b> (= If we had known) · <b>Were it not for</b> (= If it were not for)."
+        ],
+        ex: [
+          ["Should you have any questions, please contact our support team.", "Nếu có thắc mắc, vui lòng liên hệ bộ phận hỗ trợ."],
+          ["Had we known about the strike, we would have changed the route.", "Nếu biết trước có đình công, chúng tôi đã đổi tuyến."],
+          ["Under no circumstances should the door be left open.", "Trong bất kỳ trường hợp nào cũng không được để cửa mở."],
+          ["Not until the end of the year will the results be announced.", "Phải đến cuối năm kết quả mới được công bố."]
+        ],
+        tip: "\"Should you…\" ở đầu thư/email = \"If you…\". Xuất hiện rất thường xuyên ở Part 5 và Part 6."
+      },
+      v: [
+        ["under no circumstances", "", "phr.", "trong bất kỳ trường hợp nào cũng không", "Under no circumstances should you share your password."],
+        ["seldom", "/ˈseldəm/", "adv.", "hiếm khi", "Seldom have we had such strong sales."],
+        ["no sooner … than", "", "phr.", "vừa mới … thì đã", "No sooner had we started than it rained."],
+        ["audit", "/ˈɔːdɪt/", "n.", "cuộc kiểm toán", "The annual audit begins next week."],
+        ["unprecedented", "/ʌnˈpresɪdentɪd/", "adj.", "chưa từng có", "Demand reached unprecedented levels."],
+        ["substantial", "/səbˈstænʃl/", "adj.", "đáng kể", "We made a substantial profit."],
+        ["stringent", "/ˈstrɪndʒənt/", "adj.", "nghiêm ngặt", "The plant follows stringent safety rules."],
+        ["disruption", "/dɪsˈrʌpʃn/", "n.", "sự gián đoạn", "The storm caused major disruption."]
+      ],
+      quiz: [
+        { p: "5", q: "___ you require further assistance, please do not hesitate to contact us.", o: ["Should", "Had", "Were", "Would"], e: "Should you + V = If you + V (đảo ngữ điều kiện loại 1)." },
+        { p: "5", q: "Seldom ___ such a high level of customer satisfaction.", o: ["have we seen", "we have seen", "we saw", "seen we have"], e: "Seldom đầu câu → đảo trợ động từ: have we seen." },
+        { p: "5", q: "Not only ___ the deadline, but they also reduced costs.", o: ["did the team meet", "the team met", "the team did meet", "met the team"], e: "Not only đầu câu → đảo ngữ: did + S + V." },
+        { p: "5", q: "Had the shipment arrived earlier, we ___ the order.", o: ["could have fulfilled", "could fulfill", "can fulfill", "had fulfilled"], e: "Had + S + V3 = If + had V3 → could have + V3." },
+        { p: "5", q: "Under no circumstances ___ the emergency exit be blocked.", o: ["should", "it should", "must not", "does"], e: "Under no circumstances + trợ động từ + S: should the exit be blocked. (\"must not\" thành phủ định kép.)" },
+        { p: "5", q: "No sooner had the meeting started ___ the fire alarm went off.", o: ["than", "when", "then", "that"], e: "No sooner … than (Hardly … when)." }
+      ]
+    },
+    {
+      t: "Từ dễ nhầm lẫn", topic: "affect / effect, rise / raise…",
+      g: {
+        title: "CẶP TỪ DỄ NHẦM & so / such",
+        rules: [
+          "<b>affect</b> (v) ảnh hưởng đến · <b>effect</b> (n) tác động, hiệu lực (take effect, have an effect on).",
+          "<b>rise</b> (nội động từ, rose – risen): tự tăng · <b>raise</b> (ngoại động từ, cần tân ngữ): nâng, tăng cái gì.",
+          "<b>economic</b> (thuộc kinh tế) / <b>economical</b> (tiết kiệm) · <b>considerable</b> (đáng kể) / <b>considerate</b> (chu đáo).",
+          "<b>so + adj / adv + that</b> · <b>such + (a/an) + adj + danh từ + that</b>.",
+          "<b>enough</b> đứng SAU tính từ (big enough) và TRƯỚC danh từ (enough time)."
+        ],
+        ex: [
+          ["The new rules will affect all employees.", "Quy định mới sẽ ảnh hưởng đến mọi nhân viên."],
+          ["The company raised salaries by 5%.", "Công ty tăng lương 5%."],
+          ["This car is very economical to run.", "Chiếc xe này vận hành rất tiết kiệm."],
+          ["It was such a successful event that we will repeat it next year.", "Sự kiện thành công đến mức năm sau sẽ tổ chức lại."]
+        ],
+        tip: "Sau ô trống có tân ngữ → raise; không có tân ngữ → rise."
+      },
+      v: [
+        ["affect", "/əˈfekt/", "v.", "ảnh hưởng đến", "The delay affected our schedule."],
+        ["effect", "/ɪˈfekt/", "n.", "tác động, hiệu lực", "The new law takes effect in May."],
+        ["raise", "/reɪz/", "v.", "nâng, tăng (cái gì)", "They raised prices last month."],
+        ["rise", "/raɪz/", "v.", "tăng lên (tự tăng)", "Costs rose by 8%."],
+        ["economical", "/ˌiːkəˈnɑːmɪkl/", "adj.", "tiết kiệm", "Inverter motors are more economical."],
+        ["considerable", "/kənˈsɪdərəbl/", "adj.", "đáng kể", "It took a considerable amount of time."],
+        ["considerate", "/kənˈsɪdərət/", "adj.", "chu đáo, ân cần", "It was considerate of you to call."],
+        ["prospective", "/prəˈspektɪv/", "adj.", "tiềm năng, triển vọng", "We met several prospective clients."]
+      ],
+      quiz: [
+        { p: "5", q: "The new regulations will directly ___ small businesses.", o: ["affect", "effect", "effective", "affection"], e: "Cần động từ sau will → affect." },
+        { p: "5", q: "Raw material costs have ___ sharply this quarter.", o: ["risen", "raised", "rose", "raising"], e: "Không có tân ngữ → rise; have + V3 → risen." },
+        { p: "5", q: "The board decided to ___ the price of its premium models.", o: ["raise", "rise", "arise", "rising"], e: "Có tân ngữ (the price) → raise." },
+        { p: "5", q: "LED lighting is more ___ than traditional lighting.", o: ["economical", "economic", "economy", "economist"], e: "Nghĩa tiết kiệm (chi phí vận hành) → economical." },
+        { p: "5", q: "It was ___ a productive meeting that we finished an hour early.", o: ["such", "so", "very", "too"], e: "such + a + adj + danh từ + that." },
+        { p: "5", q: "The company has invested a ___ amount of money in automation.", o: ["considerable", "considerate", "considering", "consideration"], e: "Lượng tiền đáng kể → considerable." }
+      ]
+    },
+    {
+      t: "Đọc hiểu nâng cao", topic: "Chiến thuật Part 6 & Part 7",
+      g: {
+        title: "CHIẾN THUẬT PART 6 & PART 7",
+        rules: [
+          "Part 6: đọc cả đoạn, không chỉ câu có chỗ trống; chọn thì động từ theo mạch thời gian của bức thư.",
+          "Câu chèn: tìm <b>từ nối</b> (However, In addition, As a result) và <b>đại từ</b> (this, these, such) để nối với câu trước – sau.",
+          "Part 7: đọc câu hỏi trước, gạch từ khóa. Câu <b>NOT true / NOT mentioned</b> phải loại từng đáp án.",
+          "Câu suy luận (<b>suggested, implied, most likely</b>): đáp án thường là thông tin được <b>diễn đạt lại</b> (paraphrase), không chép nguyên văn.",
+          "Bài nhiều văn bản: câu hỏi liên kết yêu cầu kết hợp thông tin từ 2 văn bản."
+        ],
+        ex: [
+          ["In addition, all staff will receive new ID cards.", "Bổ sung ý cùng chiều."],
+          ["As a result, delivery times have improved.", "Nêu kết quả của câu trước."],
+          ["This change will take effect next month.", "\"This change\" → câu trước phải nói về một thay đổi."],
+          ["Nevertheless, the project remains on schedule.", "Ý trái ngược với câu trước."]
+        ],
+        tip: "Paraphrase là chìa khóa: \"outsourced to Vantage Services\" = \"operated by another company\"."
+      },
+      v: [
+        ["implement", "/ˈɪmplɪment/", "v.", "triển khai, thực hiện", "The new system will be implemented in May."],
+        ["in the meantime", "", "phr.", "trong lúc chờ đợi", "In the meantime, use the old form."],
+        ["tentatively", "/ˈtentətɪvli/", "adv.", "tạm thời, dự kiến", "The launch is tentatively set for June."],
+        ["relocate", "/ˌriːˈloʊkeɪt/", "v.", "di dời", "The office will relocate to District 7."],
+        ["consolidate", "/kənˈsɑːlɪdeɪt/", "v.", "hợp nhất", "The two teams were consolidated."],
+        ["outsource", "/ˈaʊtsɔːrs/", "v.", "thuê ngoài", "We outsource our IT support."],
+        ["streamline", "/ˈstriːmlaɪn/", "v.", "tinh gọn", "We streamlined the approval process."],
+        ["respectively", "/rɪˈspektɪvli/", "adv.", "lần lượt, tương ứng", "Sales in A and B grew 5% and 8%, respectively."]
+      ],
+      quiz: [
+        { p: "6", r: "To: All Employees\nSubject: Office Relocation\n\nAs you know, the Finance and Purchasing departments will be ___(1)___ into a single team next quarter. To support this change, both departments will relocate to the fourth floor in early May. ___(2)___. In the meantime, please continue to submit purchase requests through the current online system. A detailed moving schedule will be distributed ___(3)___ next week.", q: "Chọn từ phù hợp cho chỗ trống (1).", o: ["consolidated", "outsourced", "respected", "implemented"], e: "Hai phòng ban được hợp nhất thành một nhóm → consolidated." },
+        { p: "6", r: "To: All Employees\nSubject: Office Relocation\n\nAs you know, the Finance and Purchasing departments will be ___(1)___ into a single team next quarter. To support this change, both departments will relocate to the fourth floor in early May. ___(2)___. In the meantime, please continue to submit purchase requests through the current online system. A detailed moving schedule will be distributed ___(3)___ next week.", q: "Chọn câu phù hợp nhất cho chỗ trống (2).", o: ["The exact moving date has not yet been confirmed.", "The fourth floor cafeteria serves lunch daily.", "The Purchasing department was founded in 1990.", "Please submit your vacation requests by Friday."], e: "Câu trước: \"early May\" (chưa cụ thể); câu sau: \"In the meantime\" → ngày chuyển chưa được xác nhận." },
+        { p: "6", r: "To: All Employees\nSubject: Office Relocation\n\nAs you know, the Finance and Purchasing departments will be ___(1)___ into a single team next quarter. To support this change, both departments will relocate to the fourth floor in early May. ___(2)___. In the meantime, please continue to submit purchase requests through the current online system. A detailed moving schedule will be distributed ___(3)___ next week.", q: "Chọn từ phù hợp cho chỗ trống (3).", o: ["tentatively", "tentative", "tentativeness", "tentation"], e: "Bổ nghĩa cho động từ will be distributed → trạng từ tentatively." },
+        { p: "7", r: "GREENLINE LOGISTICS – QUARTERLY UPDATE\nThis quarter, Greenline streamlined its delivery routes in the southern region, cutting average delivery times by 18%. The company also outsourced its customer call center to Vantage Services, a move expected to save $400,000 annually. Revenue in the northern and central regions grew by 6% and 9%, respectively. However, fuel costs rose for the third consecutive quarter, and management plans to introduce electric trucks in the southern region next year.", q: "What is suggested about Greenline's customer call center?", o: ["It is now operated by another company.", "It was moved to the southern region.", "It cost $400,000 to build.", "It will be closed next year."], e: "outsourced to Vantage Services = do công ty khác vận hành (paraphrase)." },
+        { p: "7", r: "GREENLINE LOGISTICS – QUARTERLY UPDATE\nThis quarter, Greenline streamlined its delivery routes in the southern region, cutting average delivery times by 18%. The company also outsourced its customer call center to Vantage Services, a move expected to save $400,000 annually. Revenue in the northern and central regions grew by 6% and 9%, respectively. However, fuel costs rose for the third consecutive quarter, and management plans to introduce electric trucks in the southern region next year.", q: "By how much did revenue grow in the central region?", o: ["9%", "6%", "18%", "15%"], e: "northern and central … 6% and 9%, respectively → miền Trung 9%." },
+        { p: "7", r: "GREENLINE LOGISTICS – QUARTERLY UPDATE\nThis quarter, Greenline streamlined its delivery routes in the southern region, cutting average delivery times by 18%. The company also outsourced its customer call center to Vantage Services, a move expected to save $400,000 annually. Revenue in the northern and central regions grew by 6% and 9%, respectively. However, fuel costs rose for the third consecutive quarter, and management plans to introduce electric trucks in the southern region next year.", q: "What is NOT mentioned as a change made this quarter?", o: ["Introducing electric trucks", "Shorter delivery times", "Outsourcing the call center", "Revenue growth in the north"], e: "Xe tải điện chỉ là kế hoạch năm sau, chưa thực hiện trong quý này." }
+      ]
+    },
+    {
+      t: "Nghe hiểu nâng cao", topic: "Chiến thuật Part 3 & Part 4",
+      g: {
+        title: "CHIẾN THUẬT PART 3 (hội thoại) & PART 4 (bài nói)",
+        rules: [
+          "Đọc trước câu hỏi trước khi audio chạy; đoán bối cảnh: ai nói, ở đâu, vấn đề gì.",
+          "Câu hỏi thường theo thứ tự: câu 1 → đầu bài, câu 3 → cuối bài.",
+          "\"What will the man probably do next?\" → nghe kỹ câu CUỐI (I'll…, Let me…).",
+          "Tín hiệu quan trọng: <b>I'm afraid…</b> (tin xấu) · <b>Why don't we…?</b> (đề xuất) · <b>I'll take care of it</b> (nhận việc) · <b>Unfortunately / However</b> (thông tin then chốt).",
+          "Part 4 (thông báo, tin nhắn thoại): chú ý mục đích ở đầu bài và yêu cầu ở cuối bài."
+        ],
+        ex: [
+          ["I'm afraid the technician can't come until tomorrow.", "E rằng thợ kỹ thuật phải mai mới đến được."],
+          ["Why don't we use room C instead?", "Hay là mình dùng phòng C nhé?"],
+          ["I'll take care of the booking.", "Để tôi lo việc đặt chỗ."],
+          ["Unfortunately, the flight has been delayed.", "Rất tiếc, chuyến bay đã bị hoãn."]
+        ],
+        tip: "Bấm nút Nghe. Ở chế độ luyện tập bạn nghe lại thoải mái; trong bài kiểm tra chỉ được nghe tối đa 2 lần."
+      },
+      v: [
+        ["I'm afraid…", "", "phr.", "e rằng (báo tin không vui)", "I'm afraid we're out of stock."],
+        ["take care of", "", "phr.", "lo liệu, xử lý", "I'll take care of the invoice."],
+        ["reschedule", "/ˌriːˈskedʒuːl/", "v.", "dời lịch", "Can we reschedule the call?"],
+        ["in person", "", "phr.", "trực tiếp", "I'd like to discuss it in person."],
+        ["go over", "", "phr. v.", "xem lại, rà soát", "Let's go over the numbers."],
+        ["shortly", "/ˈʃɔːrtli/", "adv.", "ngay, sớm thôi", "The train will arrive shortly."],
+        ["backorder", "/ˈbækɔːrdər/", "n.", "hàng đặt chờ (tạm hết)", "The item is on backorder."],
+        ["head office", "/hed ˈɔːfɪs/", "n.", "trụ sở chính", "The head office is in Seoul."]
+      ],
+      quiz: [
+        { p: "3", s: "M: Hi Julia, the projector in conference room B isn't working again. W: I'm afraid the technician can't come until tomorrow. Why don't we use room C for the client presentation? M: Good idea. I'll move the materials there now.", q: "What problem does the man mention?", o: ["A projector is broken.", "A client is late.", "Room C is booked.", "The materials are missing."], e: "\"the projector in conference room B isn't working again\"." },
+        { p: "3", s: "M: Hi Julia, the projector in conference room B isn't working again. W: I'm afraid the technician can't come until tomorrow. Why don't we use room C for the client presentation? M: Good idea. I'll move the materials there now.", q: "What will the man most likely do next?", o: ["Move materials to another room", "Call a technician", "Cancel the presentation", "Contact the client"], e: "Câu cuối: \"I'll move the materials there now.\"" },
+        { p: "4", s: "Attention passengers. Flight 702 to Seoul, originally scheduled to depart at 4:15, has been delayed due to a mechanical inspection. The new departure time is 5:30. Passengers may collect a meal voucher at the service desk near gate 12. We apologize for the inconvenience.", q: "Why is the flight delayed?", o: ["Because of a mechanical inspection", "Because of bad weather", "Because the crew is late", "Because the gate has changed"], e: "\"delayed due to a mechanical inspection\"." },
+        { p: "4", s: "Attention passengers. Flight 702 to Seoul, originally scheduled to depart at 4:15, has been delayed due to a mechanical inspection. The new departure time is 5:30. Passengers may collect a meal voucher at the service desk near gate 12. We apologize for the inconvenience.", q: "What can passengers get at the service desk?", o: ["A meal voucher", "A new ticket", "A seat upgrade", "A refund"], e: "\"collect a meal voucher at the service desk\"." },
+        { p: "3", s: "W: Have you gone over the budget figures for the new warehouse? M: Not yet. The accounting team sent them only an hour ago. W: The director wants to discuss them in person this afternoon. M: Then I'll review them over lunch.", q: "Why hasn't the man reviewed the figures?", o: ["He received them recently.", "He was on a business trip.", "The director has them.", "The file was damaged."], e: "\"sent them only an hour ago\" → mới nhận." },
+        { p: "3", s: "W: Have you gone over the budget figures for the new warehouse? M: Not yet. The accounting team sent them only an hour ago. W: The director wants to discuss them in person this afternoon. M: Then I'll review them over lunch.", q: "When will the man review the figures?", o: ["During lunch", "This evening", "Tomorrow morning", "Next week"], e: "\"I'll review them over lunch.\"" }
+      ]
+    }
+  ],
+  test: [
+    { p: "5", q: "Only after the system had been tested thoroughly ___ to customers.", o: ["was it released", "it was released", "released it", "it released"], e: "Only after + mệnh đề → đảo ngữ ở mệnh đề chính: was it released." },
+    { p: "5", q: "___ it not for the generous support of our sponsors, the event could not take place.", o: ["Were", "Had", "Should", "Did"], e: "Were it not for = If it were not for." },
+    { p: "5", q: "The merger is expected to have a significant ___ on employee morale.", o: ["effect", "affect", "effective", "effecting"], e: "have an effect on (danh từ)." },
+    { p: "5", q: "Hardly had the presentation begun ___ the power went out.", o: ["when", "than", "then", "that"], e: "Hardly … when." },
+    { p: "5", q: "The CEO insisted that the contract ___ by the legal team before signing.", o: ["be reviewed", "is reviewed", "was reviewed", "reviews"], e: "insist that + S + be + V3 (giả định)." },
+    { p: "5", q: "Profits ___ steadily over the past three quarters.", o: ["have risen", "have raised", "rose up", "have arisen"], e: "over the past… → hiện tại hoàn thành; không tân ngữ → rise (risen). arise = nảy sinh (sai nghĩa)." },
+    { p: "5", q: "Rarely ___ such stringent safety standards in this industry.", o: ["does one encounter", "one encounters", "one does encounter", "encounters one"], e: "Rarely đầu câu → does + S + V." },
+    { p: "5", q: "Candidates must be ___ with international accounting standards.", o: ["familiar", "aware", "knowledgeable", "capable"], e: "familiar with. (aware of, knowledgeable about, capable of)." },
+    { p: "5", q: "The two plants produce 5,000 and 8,000 units per day, ___.", o: ["respectively", "respective", "respect", "respectful"], e: "Cuối câu, liệt kê tương ứng → respectively." },
+    { p: "5", q: "The new procedure is designed to ___ the approval process.", o: ["streamline", "streamlined", "streamlining", "streamliner"], e: "to + V nguyên mẫu → streamline." },
+    { p: "3", s: "W: Mark, did the replacement parts for Line 2 arrive? M: Only half of them. The rest are on backorder until next Thursday. W: That could delay our production. Can we borrow some from the Hai Phong plant in the meantime? M: I'll call their manager right away.", q: "What problem are the speakers discussing?", o: ["Some parts have not arrived.", "Line 2 was shut down permanently.", "The Hai Phong plant closed.", "The manager is on vacation."], e: "\"Only half of them. The rest are on backorder\"." },
+    { p: "3", s: "W: Mark, did the replacement parts for Line 2 arrive? M: Only half of them. The rest are on backorder until next Thursday. W: That could delay our production. Can we borrow some from the Hai Phong plant in the meantime? M: I'll call their manager right away.", q: "What does the woman suggest?", o: ["Borrowing parts from another plant", "Canceling next Thursday's order", "Hiring more workers", "Ordering from a new supplier"], e: "\"Can we borrow some from the Hai Phong plant in the meantime?\"" },
+    { p: "4", s: "Good morning, everyone. Before we begin today's safety workshop, please note that the fire drill scheduled for this afternoon has been moved to Friday at 10 a.m. Also, those who haven't yet submitted their training forms should hand them to me during the break.", q: "What has been rescheduled?", o: ["A fire drill", "A safety workshop", "The morning break", "A training deadline"], e: "\"the fire drill scheduled for this afternoon has been moved to Friday\"." },
+    { p: "7", r: "EMAIL 1\nFrom: Procurement, Orion Electronics\nTo: Bao Minh Cables\nWe would like to place an order for 12,000 meters of 4 mm² copper cable. Please note that delivery must be completed before our plant expansion begins on September 1. Could you confirm whether you can meet this deadline?\n\nEMAIL 2\nFrom: Bao Minh Cables\nTo: Procurement, Orion Electronics\nThank you for your order. Unfortunately, our current stock covers only 7,000 meters. We can ship this amount immediately and deliver the remainder by August 25, provided that payment for the first shipment is received within ten days. Should this arrangement be acceptable, please sign and return the attached confirmation.", q: "How many meters of cable will be delivered later?", o: ["5,000", "7,000", "12,000", "4,000"], e: "Kết hợp 2 email: đặt 12.000 m, có sẵn 7.000 m → phần còn lại 5.000 m." },
+    { p: "7", r: "EMAIL 1\nFrom: Procurement, Orion Electronics\nTo: Bao Minh Cables\nWe would like to place an order for 12,000 meters of 4 mm² copper cable. Please note that delivery must be completed before our plant expansion begins on September 1. Could you confirm whether you can meet this deadline?\n\nEMAIL 2\nFrom: Bao Minh Cables\nTo: Procurement, Orion Electronics\nThank you for your order. Unfortunately, our current stock covers only 7,000 meters. We can ship this amount immediately and deliver the remainder by August 25, provided that payment for the first shipment is received within ten days. Should this arrangement be acceptable, please sign and return the attached confirmation.", q: "What condition does Bao Minh Cables set?", o: ["Payment for the first shipment within ten days", "Delivery after September 1", "An order of at least 12,000 meters", "A visit to their factory"], e: "\"provided that payment for the first shipment is received within ten days\"." }
+  ]
+});
+
+</script>
+<script>
+/* Bậc Thang TOEIC — logic ứng dụng (chạy offline, lưu tiến độ trên máy) */
+(function () {
+  'use strict';
+  var LV = window.TOEIC_LEVELS.slice().sort(function (a, b) { return a.n - b.n; });
+  var PASS_TEST = 0.7, PASS_UNIT = 0.6, SEC_PER_Q = 60, MAX_PLAYS_TEST = 2, PLACE_PER_LV = 4, PLACE_PASS = 3;
+  var PART = { '2': 'Part 2 · Hỏi – đáp', '3': 'Part 3 · Hội thoại', '4': 'Part 4 · Bài nói ngắn', '5': 'Part 5 · Hoàn thành câu', '6': 'Part 6 · Hoàn thành đoạn văn', '7': 'Part 7 · Đọc hiểu' };
+  var QI = {};
+  LV.forEach(function (L) {
+    L.units.forEach(function (U, ui) {
+      U.quiz.forEach(function (q, qi) { q.id = 'L' + L.n + 'U' + (ui + 1) + 'Q' + (qi + 1); q.lv = L.n; q.src = 'Bậc ' + L.n + ' · Bài ' + (ui + 1); QI[q.id] = q; });
+    });
+    L.test.forEach(function (q, qi) { q.id = 'L' + L.n + 'T' + (qi + 1); q.lv = L.n; q.src = 'Bậc ' + L.n + ' · Đề kiểm tra'; QI[q.id] = q; });
+  });
+
+  /* ---------- lưu trữ ---------- */
+  var KEY = 'bacthang-toeic-v1';
+  function def() { return { units: {}, tests: {}, wrong: {}, known: {}, rate: 0.9, answered: 0, correct: 0, streak: 0, lastDay: '', placed: false }; }
+  var S = def();
+  try { var raw = localStorage.getItem(KEY); if (raw) S = Object.assign(def(), JSON.parse(raw)); } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+  /* ---------- tiện ích ---------- */
+  function $(s) { return document.querySelector(s); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pct(x) { return Math.round(x * 100) + '%'; }
+  function dayStr(d) { return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+  function today() { return dayStr(new Date()); }
+  function yesterday() { var d = new Date(); d.setDate(d.getDate() - 1); return dayStr(d); }
+  function touchDay() { var t = today(); if (S.lastDay === t) return; S.streak = S.lastDay === yesterday() ? S.streak + 1 : 1; S.lastDay = t; }
+  function streakNow() { return (S.lastDay === today() || S.lastDay === yesterday()) ? S.streak : 0; }
+  function fmtText(s) { return esc(s).replace(/___\((\d)\)___/g, '<span class="blank">($1)</span>').replace(/_{3,}/g, '<span class="blank">&nbsp;</span>').replace(/\n/g, '<br>'); }
+  function fmtTr(s) { return esc(s).replace(/\b([MW]):/g, function (m, w) { return '<br><b>' + (w === 'M' ? 'Nam' : 'Nữ') + ':</b>'; }).replace(/^<br>/, ''); }
+
+  var IC = {
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg>',
+    play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>',
+    star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8L3.5 9.7l5.9-.8z"/></svg>',
+    path: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20h4v-5h5v-5h5V4"/><circle cx="19" cy="4" r="1.2" fill="currentColor"/></svg>',
+    redo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/></svg>',
+    gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+    ladder: '<svg viewBox="0 0 24 24" fill="none" stroke="#f2a541" stroke-width="2.4" stroke-linecap="round"><path d="M7 3v18M17 3v18M7 7h10M7 12h10M7 17h10"/></svg>'
+  };
+
+  /* ---------- tiến độ ---------- */
+  function uKey(n, u) { return n + '-' + u; }
+  function unitDone(n, u) { var x = S.units[uKey(n, u)]; return !!(x && x.done); }
+  function unitsDone(n) { var c = 0; for (var u = 1; u <= 4; u++) if (unitDone(n, u)) c++; return c; }
+  function passed(n) { return !!(S.tests[n] && S.tests[n].passed); }
+  function unlocked(n) { return n === 1 || passed(n - 1); }
+  function testReady(n) { return unlocked(n) && unitsDone(n) === 4; }
+  function currentLevel() { for (var i = 0; i < LV.length; i++) if (!passed(LV[i].n)) return LV[i].n; return 7; }
+  function estBand() { var hi = 0; LV.forEach(function (L) { if (passed(L.n)) hi = L.n; }); if (!hi) return '—'; return LV[hi - 1].band.split('–')[1] + '+'; }
+  function lv(n) { return LV[n - 1]; }
+
+  /* ---------- giọng đọc (Web Speech, chạy offline trên iPhone) ---------- */
+  var voices = [];
+  function loadVoices() { try { voices = speechSynthesis.getVoices().filter(function (v) { return /^en[-_]/i.test(v.lang); }); } catch (e) { voices = []; } }
+  if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+  function pickVoice(who) {
+    var us = voices.filter(function (v) { return /en[-_]US/i.test(v.lang); });
+    var pool = us.length ? us : voices; if (!pool.length) return null;
+    if (who === 'W') return pool.find(function (v) { return /female|samantha|zira|aria|jenny|allison|ava|susan|karen|victoria|nicky|zoe/i.test(v.name); }) || pool[0];
+    if (who === 'M') return pool.find(function (v) { return /\bmale|alex|david|guy|fred|aaron|tom|evan|nathan|daniel/i.test(v.name) && !/female/i.test(v.name); }) || pool[1] || pool[0];
+    return pool.find(function (v) { return /samantha|aria|jenny|ava|google us/i.test(v.name); }) || pool[0];
+  }
+  var speakingBtn = null;
+  function stopSpeech() { try { speechSynthesis.cancel(); } catch (e) {} if (speakingBtn) speakingBtn.classList.remove('on'); speakingBtn = null; }
+  function speak(text, btn) {
+    if (!('speechSynthesis' in window)) { toast('Thiết bị không hỗ trợ đọc tiếng Anh'); return; }
+    stopSpeech();
+    var parts = String(text).split(/(?=\b[MW]:\s)/).map(function (s) { return s.trim(); }).filter(Boolean);
+    if (btn) { speakingBtn = btn; btn.classList.add('on'); }
+    parts.forEach(function (p, i) {
+      var m = p.match(/^([MW]):\s*([\s\S]*)$/), who = m ? m[1] : null, t = m ? m[2] : p;
+      var u = new SpeechSynthesisUtterance(t);
+      u.lang = 'en-US'; u.rate = S.rate || 0.9;
+      var v = pickVoice(who); if (v) u.voice = v;
+      u.pitch = who === 'W' ? 1.12 : who === 'M' ? 0.82 : 1;
+      if (i === parts.length - 1) u.onend = u.onerror = function () { if (btn) btn.classList.remove('on'); if (speakingBtn === btn) speakingBtn = null; };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  /* ---------- toast / modal / confetti ---------- */
+  var toastT;
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2600); }
+  function confirmBox(msg, okText, cb) {
+    var m = $('#modal');
+    m.innerHTML = '<div class="modal-bg"><div class="modal"><p>' + msg + '</p><div class="btn-row"><button class="btn ghost" id="mNo">Hủy</button><button class="btn dark" id="mOk">' + esc(okText) + '</button></div></div></div>';
+    $('#mNo').onclick = function () { m.innerHTML = ''; };
+    $('#mOk').onclick = function () { m.innerHTML = ''; cb(); };
+  }
+  function confetti() {
+    var cols = ['#f2a541', '#1f9e89', '#2f7ee6', '#d1477a', '#9146c9', '#d98a00'];
+    for (var i = 0; i < 70; i++) {
+      var d = document.createElement('div'); d.className = 'confetti';
+      d.style.left = Math.random() * 100 + 'vw'; d.style.background = cols[i % cols.length];
+      d.style.animationDuration = (1.8 + Math.random() * 1.8) + 's'; d.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(d); setTimeout(function (x) { return function () { x.remove(); }; }(d), 4200);
+    }
+  }
+
+  /* ---------- router ---------- */
+  var rq = 0;
+  function schedule() { if (rq) return; rq = requestAnimationFrame(function () { rq = 0; route(); }); }
+  window.addEventListener('hashchange', schedule);
+  window.addEventListener('popstate', schedule);
+  function go(h) { if (location.hash === h || (h === '#' && !location.hash)) route(); else location.hash = h; }
+  function parts() { return location.hash.replace(/^#\/?/, '').split(/[\/-]/).filter(Boolean); }
+
+  function route() {
+    stopSpeech();
+    var p = parts(), html;
+    document.body.classList.toggle('quiz-mode', p[0] === 'quiz' || p[0] === 'result');
+    if (p[0] !== 'quiz') clearInterval(timerId);
+    if (p[0] === 'level' && lv(+p[1])) html = vLevel(+p[1]);
+    else if (p[0] === 'unit' && lv(+p[1]) && lv(+p[1]).units[+p[2] - 1]) html = vUnit(+p[1], +p[2], p[3] || 'grammar');
+    else if (p[0] === 'quiz' && Q) { renderQuiz(); return; }
+    else if (p[0] === 'result' && R) html = vResult();
+    else if (p[0] === 'review') html = vReview();
+    else if (p[0] === 'caidat') html = vSettings();
+    else { if (p.length) { history.replaceState(null, '', location.pathname + location.search); } html = vHome(); p = []; }
+    $('#app').innerHTML = html;
+    tabbar(p[0] || 'home');
+    window.scrollTo(0, 0);
+  }
+  function tabbar(cur) {
+    var nw = Object.keys(S.wrong).length;
+    $('#tabbar').innerHTML = '<div class="in">' +
+      '<a href="#" class="' + (['home', 'level', 'unit'].indexOf(cur) >= 0 ? 'on' : '') + '">' + IC.path + 'Lộ trình</a>' +
+      '<a href="#review" class="' + (cur === 'review' ? 'on' : '') + '">' + IC.redo + 'Ôn lỗi sai' + (nw ? '<span class="badge">' + nw + '</span>' : '') + '</a>' +
+      '<a href="#caidat" class="' + (cur === 'caidat' ? 'on' : '') + '">' + IC.gear + 'Cài đặt</a></div>';
+  }
+  function topBar(title, backHash, right) {
+    return '<header class="top">' + (backHash ? '<a class="icon-btn" href="' + backHash + '" aria-label="Quay lại">' + IC.back + '</a>' : '') + '<h2>' + title + '</h2>' + (right || '') + '</header>';
+  }
+
+  /* ---------- màn hình: trang chủ ---------- */
+  function vHome() {
+    var cur = currentLevel(), tot = 0; LV.forEach(function (L) { tot += unitsDone(L.n); });
+    var knownN = Object.keys(S.known).length, acc = S.answered ? pct(S.correct / S.answered) : '—';
+    var h = '<header class="top"><div class="brand"><div class="brand-mark">' + IC.ladder + '</div><div><b>Bậc Thang TOEIC</b><small>Cơ bản → Nâng cao</small></div></div>' +
+      '<div class="streak" title="Số ngày học liên tiếp">🔥 ' + streakNow() + '</div></header>';
+    if (cur > 6) {
+      h += '<div class="cert"><div class="seal">🏆</div><h2>Hoàn thành lộ trình</h2><div class="muted">Bạn đã vượt qua cả 6 bậc · trình độ ước tính TOEIC 850+</div></div>';
+    }
+    h += '<section class="hero"><div class="hero-top"><div><div class="eyebrow">' + (cur <= 6 ? 'Đang học' : 'Tuyệt vời!') + '</div>' +
+      '<h1>' + (cur <= 6 ? 'Bậc ' + cur + ' · ' + lv(cur).name : 'Đã mở khóa toàn bộ') + '</h1>' +
+      '<p>' + (cur <= 6 ? 'Mục tiêu TOEIC ' + lv(cur).band + ' · ' + lv(cur).cefr : 'Ôn tập lại bất kỳ bậc nào bạn muốn') + '</p></div>' +
+      '<div class="ring" style="--p:' + (tot / 24) + '"><b>' + Math.round(tot / 24 * 100) + '%</b></div></div>' +
+      '<div class="stats"><div><b>' + streakNow() + '</b><span>ngày liên tiếp</span></div><div><b>' + knownN + '</b><span>từ đã nhớ</span></div>' +
+      '<div><b>' + acc + '</b><span>trả lời đúng</span></div><div><b>' + estBand() + '</b><span>TOEIC ước tính</span></div></div>' +
+      (cur <= 6 ? '<button class="btn primary" data-act="go" data-h="#level-' + cur + '">Học tiếp Bậc ' + cur + ' →</button>' : '') + '</section>';
+    if (!S.placed && cur <= 6) {
+      h += '<div class="card placement" data-act="placement" role="button"><div class="pi">🧭</div><div><b>Đã có nền tảng? Làm bài xếp lớp</b><span class="muted small">24 câu · 24 phút. Đạt bậc nào sẽ mở khóa bậc đó, không cần học lại từ đầu.</span></div><div class="chev">›</div></div>';
+    }
+    h += '<div class="sec-title">Lộ trình 6 bậc</div><div class="ladder">';
+    LV.forEach(function (L) {
+      var un = unlocked(L.n), ps = passed(L.n), d = unitsDone(L.n), t = S.tests[L.n];
+      var cls = ps ? 'passed' : un ? (L.n === cur ? 'current' : '') : 'locked';
+      var badge = ps ? IC.check : un ? L.n : IC.lock;
+      var status = ps ? '<span class="chip ok">✓ Đã đạt' + (t && t.best ? ' ' + pct(t.best) : '') + '</span>'
+        : !un ? '<span class="chip">Đạt bài KT Bậc ' + (L.n - 1) + ' để mở</span>'
+          : testReady(L.n) ? '<span class="chip go">Sẵn sàng kiểm tra</span>' : '<span class="chip go">Đang học</span>';
+      h += '<div class="lv ' + cls + '" style="--c:' + L.color + '" data-act="level" data-n="' + L.n + '" role="button">' +
+        '<div class="lv-badge">' + badge + '</div><div class="lv-body"><div class="lv-title">Bậc ' + L.n + ' · ' + L.name + '<small>' + L.en + '</small></div>' +
+        '<div class="lv-meta">TOEIC ' + L.band + ' · CEFR ' + L.cefr + '</div>' +
+        '<div class="bar"><i style="width:' + (ps ? 100 : d / 4 * 100) + '%"></i></div>' +
+        '<div class="lv-foot"><span>' + d + '/4 bài học</span>' + status + '</div></div></div>';
+    });
+    return h + '</div>';
+  }
+
+  /* ---------- màn hình: bậc ---------- */
+  function vLevel(n) {
+    var L = lv(n);
+    if (!unlocked(n)) { setTimeout(function () { toast('Bậc ' + n + ' chưa mở. Hãy đạt ≥70% bài kiểm tra Bậc ' + (n - 1) + '.'); }, 50); }
+    var h = topBar('Bậc ' + n + ' · ' + L.name, '#');
+    h += '<section class="lv-hero" style="--c:' + L.color + '"><div class="eyebrow">TOEIC ' + L.band + ' · CEFR ' + L.cefr + '</div><h1>' + L.name + ' <span style="opacity:.7;font-weight:600;font-size:16px">' + L.en + '</span></h1><p>' + esc(L.goal) + '</p></section>';
+    h += '<div class="sec-title">4 bài học</div>';
+    L.units.forEach(function (U, i) {
+      var u = i + 1, st = S.units[uKey(n, u)], done = unitDone(n, u);
+      var info = st ? 'Điểm luyện tập cao nhất ' + pct(st.best) : 'Chưa luyện tập';
+      h += '<div class="card unit ' + (done ? 'done' : '') + '" data-act="unit" data-n="' + n + '" data-u="' + u + '" role="button"><div class="unit-num">' + (done ? IC.check.replace('<svg', '<svg width="18" height="18"') : u) + '</div>' +
+        '<div class="unit-body"><b>' + esc(U.t) + '</b><span>' + esc(U.topic) + ' · ' + info + '</span></div><div class="chev">›</div></div>';
+    });
+    var t = S.tests[n], d = unitsDone(n), ready = testReady(n), next = n < 6 ? 'Bậc ' + (n + 1) : 'chứng nhận hoàn thành';
+    h += '<div class="sec-title">Bài kiểm tra lên bậc</div><div class="card test-card" style="--c:' + L.color + '">' +
+      '<h3>Kiểm tra Bậc ' + n + ' → mở ' + next + '</h3>' +
+      '<div class="req"><i>' + (d === 4 ? '✅' : '⬜') + '</i><span>Hoàn thành 4 bài học (luyện tập ≥60%) — <b>' + d + '/4</b></span></div>' +
+      '<div class="req"><i>🎯</i><span>' + L.test.length + ' câu kiểu TOEIC (nghe + đọc), ' + L.test.length + ' phút. Cần đạt <b>≥70% (' + Math.ceil(L.test.length * PASS_TEST) + '/' + L.test.length + ' câu)</b></span></div>' +
+      (t ? '<div class="req"><i>📈</i><span>Đã làm ' + (t.attempts || 0) + ' lần · cao nhất ' + pct(t.best || 0) + (t.viaPlacement ? ' · mở bằng bài xếp lớp' : '') + '</span></div>' : '') +
+      '<div style="margin-top:12px">' + (passed(n) ? '<span class="chip ok" style="margin-bottom:10px">✓ Đã đạt</span>' : '') +
+      '<button class="btn ' + (ready ? 'dark' : '') + '" data-act="test" data-n="' + n + '" ' + (ready ? '' : 'disabled') + '>' + (passed(n) ? 'Làm lại bài kiểm tra' : ready ? 'Bắt đầu kiểm tra' : '🔒 Hoàn thành 4 bài để mở') + '</button></div></div>';
+    return h;
+  }
+
+  /* ---------- màn hình: bài học ---------- */
+  var FC = null;
+  function vUnit(n, u, tab) {
+    var L = lv(n), U = L.units[u - 1];
+    if (!unlocked(n)) { setTimeout(function () { go('#level-' + n); }, 0); return ''; }
+    var h = topBar('Bài ' + u + ' · ' + esc(U.t), '#level-' + n);
+    var tabs = [['grammar', 'Ngữ pháp'], ['vocab', 'Từ vựng'], ['practice', 'Luyện tập']];
+    h += '<div class="tabs">' + tabs.map(function (t) { return '<button class="' + (tab === t[0] ? 'on' : '') + '" data-act="go" data-h="#unit-' + n + '-' + u + '-' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+    if (tab === 'vocab') h += vVocab(n, u, U);
+    else if (tab === 'practice') h += vPractice(n, u, U);
+    else {
+      var g = U.g;
+      h += '<div class="card"><h3 class="g-title">' + esc(g.title) + '</h3><ul class="rules">' + g.rules.map(function (r) { return '<li>' + r + '</li>'; }).join('') + '</ul></div>';
+      h += '<div class="card"><div class="muted small" style="font-weight:700;margin-bottom:4px">VÍ DỤ — bấm loa để nghe</div>' + g.ex.map(function (x) {
+        return '<div class="ex"><button class="say" data-act="say" data-t="' + esc(x[0]) + '" aria-label="Nghe">' + IC.vol + '</button><div><div class="en">' + esc(x[0]) + '</div><div class="vi">' + esc(x[1]) + '</div></div></div>';
+      }).join('') + '</div>';
+      h += '<div class="tip"><b>Mẹo TOEIC</b>' + esc(g.tip) + '</div><div style="height:14px"></div>';
+      h += '<button class="btn dark" data-act="go" data-h="#unit-' + n + '-' + u + '-vocab">Tiếp: Từ vựng →</button>';
+    }
+    return h;
+  }
+  function vVocab(n, u, U) {
+    if (FC && FC.n === n && FC.u === u) return vCards(U);
+    var kn = U.v.filter(function (w) { return S.known[w[0]]; }).length;
+    var h = '<div class="btn-row" style="margin-bottom:12px"><button class="btn primary" data-act="cards" data-n="' + n + '" data-u="' + u + '">🃏 Học bằng thẻ</button></div>';
+    h += '<div class="card"><div class="muted small" style="font-weight:700;margin-bottom:6px"><span id="knownCount">' + kn + '</span>/' + U.v.length + ' TỪ ĐÃ NHỚ — bấm ★ để đánh dấu</div>' + U.v.map(function (w) {
+      return '<div class="word"><button class="say" data-act="say" data-t="' + esc(w[0].replace('…', '')) + '">' + IC.vol + '</button><div class="word-main"><div><span class="w">' + esc(w[0]) + '</span>' + (w[1] ? '<span class="ipa">' + esc(w[1]) + '</span>' : '') + '<span class="pos">' + esc(w[2]) + '</span></div>' +
+        '<div class="mean">' + esc(w[3]) + '</div><div class="exs" data-act="say" data-t="' + esc(w[4]) + '">' + esc(w[4]) + '</div></div>' +
+        '<button class="star ' + (S.known[w[0]] ? 'on' : '') + '" data-act="known" data-w="' + esc(w[0]) + '" aria-label="Đã nhớ">' + IC.star + '</button></div>';
+    }).join('') + '</div>';
+    h += '<button class="btn dark" data-act="go" data-h="#unit-' + n + '-' + u + '-practice">Tiếp: Luyện tập →</button>';
+    return h;
+  }
+  function vCards(U) {
+    if (FC.i >= FC.list.length) {
+      var kn = FC.list.filter(function (w) { return S.known[w[0]]; }).length;
+      return '<div class="card" style="text-align:center;padding:26px"><div style="font-size:42px">🎉</div><h3>Xong một lượt thẻ!</h3><p class="muted">Bạn nhớ ' + kn + '/' + FC.list.length + ' từ.</p>' +
+        '<div class="btn-row"><button class="btn" data-act="cardsRestart">Học lại từ chưa nhớ</button><button class="btn dark" data-act="cardsClose">Xem danh sách</button></div></div>';
+    }
+    var w = FC.list[FC.i];
+    return '<div class="fc-count">Thẻ ' + (FC.i + 1) + ' / ' + FC.list.length + '</div>' +
+      '<div class="fc-wrap"><div class="fc ' + (FC.flip ? 'flip' : '') + '" data-act="flip">' +
+      '<div class="fc-face"><div class="w">' + esc(w[0]) + '</div><div class="ipa">' + esc(w[1]) + ' · ' + esc(w[2]) + '</div><div class="fc-hint">Chạm để lật thẻ</div></div>' +
+      '<div class="fc-face fc-back"><div class="mean">' + esc(w[3]) + '</div><div class="exs">' + esc(w[4]) + '</div></div></div></div>' +
+      '<div class="btn-row" style="margin-bottom:10px"><button class="btn" data-act="say" data-t="' + esc(w[0].replace('…', '')) + '">' + IC.vol.replace('<svg', '<svg width="18" height="18"') + ' Nghe từ</button><button class="btn" data-act="say" data-t="' + esc(w[4]) + '">' + IC.vol.replace('<svg', '<svg width="18" height="18"') + ' Nghe câu</button></div>' +
+      '<div class="btn-row"><button class="btn ghost" data-act="fcAns" data-k="0">😕 Chưa nhớ</button><button class="btn primary" data-act="fcAns" data-k="1">✓ Đã nhớ</button></div>' +
+      '<div style="text-align:center;margin-top:12px"><button class="btn sm ghost" data-act="cardsClose" style="display:inline-flex">Thoát chế độ thẻ</button></div>';
+  }
+  function vPractice(n, u, U) {
+    var st = S.units[uKey(n, u)], done = unitDone(n, u);
+    var parts = {}; U.quiz.forEach(function (q) { parts[q.p] = 1; });
+    return '<div class="card"><h3>Luyện tập: ' + U.quiz.length + ' câu</h3><p class="muted small" style="margin:0 0 10px">Dạng câu: ' + Object.keys(parts).map(function (p) { return PART[p]; }).join(' · ') + '. Có giải thích ngay sau mỗi câu.</p>' +
+      '<div class="req" style="display:flex;gap:8px;font-size:14px"><span>🎯</span><span>Đạt <b>≥60%</b> để hoàn thành bài (cần cho bài kiểm tra lên bậc).</span></div>' +
+      (st ? '<p style="margin:10px 0 0">Cao nhất: <b>' + pct(st.best) + '</b> ' + (done ? '<span class="chip ok">✓ Hoàn thành</span>' : '<span class="chip bad">Chưa đạt</span>') + '</p>' : '') +
+      '</div><button class="btn primary" data-act="practice" data-n="' + n + '" data-u="' + u + '">' + (st ? 'Luyện lại' : 'Bắt đầu luyện tập') + '</button>';
+  }
+
+  /* ---------- quiz ---------- */
+  var Q = null, R = null, timerId = 0;
+  function groupOrder(qs, mix, byType) {
+    var groups = [], idx = {};
+    qs.forEach(function (q) { var k = q.r || q.s || q.id; if (idx[k] == null) { idx[k] = groups.length; groups.push([]); } groups[idx[k]].push(q); });
+    if (mix) groups = shuffle(groups);
+    if (byType) { var rank = function (g) { var q = g[0]; return q.s ? 0 : q.p === '5' ? 1 : 2; }; groups.sort(function (a, b) { return rank(a) - rank(b); }); }
+    return [].concat.apply([], groups);
+  }
+  function startQuiz(o) {
+    stopSpeech();
+    Q = { mode: o.mode, title: o.title, n: o.n, u: o.u, timed: !!o.timed, i: 0,
+      items: o.questions.map(function (q) { return { q: q, order: shuffle(q.o.map(function (_, k) { return k; })), chosen: null, plays: 0, auto: false }; }) };
+    if (Q.timed) Q.deadline = Date.now() + Q.items.length * SEC_PER_Q * 1000;
+    history.pushState(null, '', '#quiz');
+    document.body.classList.add('quiz-mode');
+    renderQuiz();
+  }
+  function isRight(it) { return it.chosen !== null && it.order[it.chosen] === 0; }
+  function record(q, ok) { S.answered++; if (ok) { S.correct++; delete S.wrong[q.id]; } else S.wrong[q.id] = (S.wrong[q.id] || 0) + 1; touchDay(); }
+  function renderQuiz() {
+    var it = Q.items[Q.i], q = it.q, practice = !Q.timed, answered = it.chosen !== null;
+    var h = '<div class="qtop" style="padding-top:calc(10px + var(--safe-t))"><button class="icon-btn" data-act="quitQuiz" aria-label="Thoát">' + IC.x + '</button><div class="title">' + esc(Q.title) + '</div>' +
+      (Q.timed ? '<div class="timer" id="timer"></div>' : '<div class="chip">' + (Q.i + 1) + '/' + Q.items.length + '</div>') + '</div>';
+    h += '<div class="qprog"><i style="width:' + ((Q.i + (practice && answered ? 1 : 0)) / Q.items.length * 100) + '%"></i></div>';
+    if (Q.timed) h += '<div class="dots">' + Q.items.map(function (x, k) { return '<button class="' + (x.chosen !== null ? 'ans ' : '') + (k === Q.i ? 'cur' : '') + '" data-act="jump" data-i="' + k + '">' + (k + 1) + '</button>'; }).join('') + '</div>';
+    h += '<span class="tag">' + (PART[q.p] || 'Câu hỏi') + '</span>';
+    if (q.s) {
+      var left = MAX_PLAYS_TEST - it.plays;
+      h += '<div class="audio"><button class="play" id="playBtn" data-act="play" aria-label="Phát audio" ' + (Q.timed && left <= 0 ? 'disabled style="opacity:.4"' : '') + '>' + IC.play + '</button><div><b>Nghe audio</b><span>' +
+        (Q.timed ? (left > 0 ? 'Còn ' + left + ' lượt nghe' : 'Đã hết lượt nghe') : 'Nghe lại không giới hạn') + '</span></div></div>';
+    }
+    if (q.r) h += '<div class="passage">' + fmtText(q.r) + '</div>';
+    h += '<div class="qtext">' + fmtText(q.q || 'Chọn câu đáp lại phù hợp nhất.') + '</div><div class="opts">';
+    it.order.forEach(function (oi, pos) {
+      var cls = 'opt';
+      if (practice && answered) { if (oi === 0) cls += ' right'; else if (pos === it.chosen) cls += ' wrong'; else cls += ' dim'; }
+      else if (pos === it.chosen) cls += ' sel';
+      h += '<button class="' + cls + '" data-act="pick" data-pos="' + pos + '"><span class="k">' + 'ABCD'[pos] + '</span><span>' + esc(q.o[oi]) + '</span></button>';
+    });
+    h += '</div>';
+    if (practice && answered) {
+      var ok = isRight(it);
+      h += '<div class="fb ' + (ok ? 'ok' : 'no') + '"><h4>' + (ok ? '✓ Chính xác!' : '✗ Chưa đúng — đáp án: ' + esc(q.o[0])) + '</h4>' + esc(q.e) +
+        (q.s ? '<div class="tr"><b>Lời thoại:</b> ' + fmtTr(q.s) + '</div>' : '') + '</div>';
+    }
+    h += '<div class="qnav">';
+    if (Q.timed) {
+      h += '<button class="btn" data-act="prev" ' + (Q.i === 0 ? 'disabled' : '') + '>← Câu trước</button>';
+      h += Q.i < Q.items.length - 1 ? '<button class="btn dark" data-act="next">Câu tiếp →</button>' : '<button class="btn primary" data-act="submit">Nộp bài</button>';
+    } else if (answered) {
+      h += Q.i < Q.items.length - 1 ? '<button class="btn dark" data-act="next">Câu tiếp →</button>' : '<button class="btn primary" data-act="submit">Xem kết quả</button>';
+    }
+    h += '</div>';
+    if (Q.timed) h += '<div style="text-align:center;margin-top:14px"><button class="btn sm ghost" data-act="submit" style="display:inline-flex">Nộp bài sớm</button></div>';
+    $('#app').innerHTML = h;
+    $('#tabbar').innerHTML = '';
+    window.scrollTo(0, 0);
+    if (Q.timed) { tick(); clearInterval(timerId); timerId = setInterval(tick, 1000); }
+    if (q.s && !it.auto) { it.auto = true; playAudio(); }
+  }
+  function tick() {
+    if (!Q || !Q.timed) return clearInterval(timerId);
+    var left = Math.max(0, Math.round((Q.deadline - Date.now()) / 1000)), el = $('#timer');
+    if (el) { el.textContent = '⏱ ' + Math.floor(left / 60) + ':' + ('0' + left % 60).slice(-2); el.classList.toggle('low', left <= 60); }
+    if (left <= 0) { clearInterval(timerId); toast('Hết giờ! Bài làm đã được nộp.'); finishQuiz(); }
+  }
+  function playAudio() {
+    var it = Q.items[Q.i];
+    if (Q.timed) { if (it.plays >= MAX_PLAYS_TEST) return toast('Đã hết lượt nghe cho câu này'); it.plays++; }
+    var b = $('#playBtn'); speak(it.q.s, b);
+    if (Q.timed) { var sp = b && b.parentNode.querySelector('span'); var left = MAX_PLAYS_TEST - it.plays; if (sp) sp.textContent = left > 0 ? 'Còn ' + left + ' lượt nghe' : 'Đã hết lượt nghe (đang phát)'; }
+  }
+  function pick(pos) {
+    var it = Q.items[Q.i];
+    if (!Q.timed) { if (it.chosen !== null) return; it.chosen = pos; record(it.q, isRight(it)); save(); stopSpeech(); renderQuiz(); }
+    else { it.chosen = pos; document.querySelectorAll('.opt').forEach(function (b, k) { b.classList.toggle('sel', k === pos); }); var d = document.querySelectorAll('.dots button')[Q.i]; if (d) d.classList.add('ans'); }
+  }
+  function finishQuiz() {
+    clearInterval(timerId); stopSpeech();
+    var items = Q.items, total = items.length, correct = items.filter(isRight).length, score = correct / total;
+    if (Q.timed) items.forEach(function (it) { record(it.q, isRight(it)); });
+    var r = { mode: Q.mode, title: Q.title, n: Q.n, u: Q.u, score: score, correct: correct, total: total, items: items };
+    if (Q.mode === 'unit') {
+      var k = uKey(Q.n, Q.u), prev = S.units[k] || {};
+      r.wasDone = !!prev.done;
+      S.units[k] = { best: Math.max(prev.best || 0, score), done: !!prev.done || score >= PASS_UNIT, attempts: (prev.attempts || 0) + 1 };
+      r.nowDone = S.units[k].done; r.testNowReady = !r.wasDone && r.nowDone && testReady(Q.n);
+    } else if (Q.mode === 'test') {
+      var pt = S.tests[Q.n] || {}, was = !!pt.passed, ok = score >= PASS_TEST;
+      S.tests[Q.n] = { best: Math.max(pt.best || 0, score), passed: was || ok, attempts: (pt.attempts || 0) + 1, last: score, viaPlacement: pt.viaPlacement && !ok ? true : undefined };
+      r.ok = ok; r.newly = !was && ok;
+    } else if (Q.mode === 'placement') {
+      var per = LV.map(function (L) { var its = items.filter(function (it) { return it.q.lv === L.n; }); return { n: L.n, c: its.filter(isRight).length, t: its.length }; });
+      var placed = 0; for (var i = 0; i < per.length; i++) { if (per[i].c >= PLACE_PASS) placed = per[i].n; else break; }
+      for (var n = 1; n <= placed; n++) if (!passed(n)) S.tests[n] = { best: 0, passed: true, attempts: 0, viaPlacement: true };
+      S.placed = true; r.per = per; r.placed = placed;
+    }
+    save(); R = r; Q = null;
+    history.replaceState(null, '', '#result');
+    route();
+    if (r.newly || (r.mode === 'placement' && r.placed > 0)) confetti();
+  }
+
+  /* ---------- màn hình: kết quả ---------- */
+  function vResult() {
+    var r = R, good = r.mode === 'test' ? r.ok : r.mode === 'unit' ? r.score >= PASS_UNIT : r.mode === 'placement' ? r.placed > 0 : r.score >= 0.6;
+    var h = topBar('Kết quả', '#', '');
+    h += '<div class="card res"><div class="big-ring" style="--p:' + r.score + ';--c:' + (good ? 'var(--ok)' : 'var(--bad)') + '"><div><b>' + pct(r.score) + '</b><span>' + r.correct + '/' + r.total + ' câu đúng</span></div></div>';
+    if (r.mode === 'test') {
+      var L = lv(r.n);
+      h += '<h2>' + (r.ok ? 'ĐẠT — Bậc ' + r.n + ' hoàn thành!' : 'Chưa đạt') + '</h2><p>' + (r.ok ? 'Bạn đã chứng minh trình độ TOEIC ' + L.band + '.' : 'Cần ≥70% (' + Math.ceil(r.total * PASS_TEST) + '/' + r.total + ' câu). Hãy ôn lại các câu sai rồi thử lại nhé.') + '</p>';
+      if (r.newly) h += '<div class="unlock">' + (r.n < 6 ? '🔓 Đã mở khóa Bậc ' + (r.n + 1) + ' · ' + lv(r.n + 1).name + ' (TOEIC ' + lv(r.n + 1).band + ')' : '🏆 Bạn đã hoàn thành toàn bộ lộ trình 6 bậc!') + '</div>';
+      h += '</div><div class="btn-row">' + (r.ok && r.n < 6 ? '<button class="btn primary" data-act="go" data-h="#level-' + (r.n + 1) + '">Vào Bậc ' + (r.n + 1) + ' →</button>' : '<button class="btn dark" data-act="test" data-n="' + r.n + '">Làm lại</button>') +
+        '<button class="btn" data-act="go" data-h="#level-' + r.n + '">Về Bậc ' + r.n + '</button></div>';
+    } else if (r.mode === 'unit') {
+      var U = lv(r.n).units[r.u - 1];
+      h += '<h2>' + (r.score >= PASS_UNIT ? 'Hoàn thành bài!' : 'Cố lên chút nữa!') + '</h2><p>' + esc(U.t) + (r.score >= PASS_UNIT ? '' : ' · cần ≥60% để hoàn thành bài') + '</p>';
+      if (r.testNowReady) h += '<div class="unlock">🎯 Bạn đã xong 4/4 bài — bài kiểm tra Bậc ' + r.n + ' đã mở!</div>';
+      h += '</div><div class="btn-row"><button class="btn" data-act="practice" data-n="' + r.n + '" data-u="' + r.u + '">Luyện lại</button>' +
+        (r.u < 4 && r.score >= PASS_UNIT ? '<button class="btn dark" data-act="go" data-h="#unit-' + r.n + '-' + (r.u + 1) + '-grammar">Bài ' + (r.u + 1) + ' →</button>' : '<button class="btn dark" data-act="go" data-h="#level-' + r.n + '">Về Bậc ' + r.n + '</button>') + '</div>';
+    } else if (r.mode === 'placement') {
+      h += '<h2>' + (r.placed ? 'Bạn vững đến Bậc ' + r.placed : 'Bắt đầu từ Bậc 1') + '</h2><p>' + (r.placed >= 6 ? 'Toàn bộ lộ trình đã được mở.' : r.placed ? 'Đã mở khóa đến Bậc ' + (r.placed + 1) + '. Bạn vẫn có thể ôn lại các bậc dưới.' : 'Mỗi bậc cần đúng ≥' + PLACE_PASS + '/' + PLACE_PER_LV + ' câu. Học từ nền tảng sẽ chắc hơn!') + '</p>';
+      h += '<table class="pl-table">' + r.per.map(function (p) { return '<tr><td style="text-align:left">Bậc ' + p.n + ' · ' + lv(p.n).name + '</td><td style="text-align:right"><b>' + p.c + '/' + p.t + '</b> ' + (p.c >= PLACE_PASS ? '✅' : '—') + '</td></tr>'; }).join('') + '</table></div>';
+      h += '<button class="btn primary" data-act="go" data-h="#level-' + Math.min(6, r.placed + 1) + '">Học Bậc ' + Math.min(6, r.placed + 1) + ' →</button>';
+    } else {
+      h += '<h2>Ôn tập xong</h2><p>Câu trả lời đúng đã được gỡ khỏi Sổ lỗi sai.</p></div><button class="btn dark" data-act="go" data-h="#review">Về Sổ lỗi sai</button>';
+    }
+    h += '<div class="sec-title">Xem lại từng câu</div>';
+    r.items.forEach(function (it, k) { h += reviewCard(it.q, it.chosen === null ? null : it.q.o[it.order[it.chosen]], isRight(it), k + 1); });
+    return h;
+  }
+  function reviewCard(q, yours, ok, num) {
+    return '<div class="card rv ' + (ok ? '' : 'no') + '"><div class="muted small">' + (num ? 'Câu ' + num + ' · ' : '') + (PART[q.p] || '') + ' · ' + q.src + '</div>' +
+      '<div class="q">' + (q.q ? fmtText(q.q) : '🎧 “' + esc(q.s) + '”') + '</div>' +
+      (yours !== undefined ? '<div class="a">' + (ok ? '✅' : '❌') + ' Bạn chọn: <b>' + (yours === null ? '(bỏ trống)' : esc(yours)) + '</b></div>' : '') +
+      (!ok ? '<div class="a">✔️ Đáp án đúng: <b>' + esc(q.o[0]) + '</b></div>' : '') +
+      '<div class="a muted">' + esc(q.e) + '</div>' +
+      ((q.s || q.r) ? '<details><summary>' + (q.s ? 'Lời thoại' : 'Đoạn văn') + '</summary>' + (q.s ? '<button class="btn sm" data-act="say" data-t="' + esc(q.s) + '" style="display:inline-flex;margin:8px 0">' + IC.vol.replace('<svg', '<svg width="16" height="16"') + ' Nghe lại</button><div>' + fmtTr(q.s) + '</div>' : '<div style="margin-top:6px">' + fmtText(q.r) + '</div>') + '</details>' : '') + '</div>';
+  }
+
+  /* ---------- màn hình: sổ lỗi sai ---------- */
+  function vReview() {
+    var ids = Object.keys(S.wrong).filter(function (id) { return QI[id]; });
+    var h = topBar('Sổ lỗi sai', '');
+    if (!ids.length) return h + '<div class="empty"><div class="e">📒</div><h3>Chưa có lỗi sai nào</h3><p>Câu nào bạn trả lời sai sẽ được lưu ở đây để ôn lại. Trả lời đúng khi ôn sẽ tự gỡ khỏi sổ.</p></div>';
+    h += '<div class="card"><h3>' + ids.length + ' câu cần ôn</h3><p class="muted small" style="margin:0 0 12px">Ôn tối đa 10 câu mỗi lượt, có giải thích ngay. Trả lời đúng → câu được gỡ khỏi sổ.</p><button class="btn primary" data-act="reviewStart">Ôn ' + Math.min(10, ids.length) + ' câu ngay</button></div>';
+    h += '<div class="sec-title">Danh sách</div>';
+    ids.sort().forEach(function (id) { h += reviewCard(QI[id], undefined, false); });
+    return h;
+  }
+
+  /* ---------- màn hình: cài đặt ---------- */
+  function vSettings() {
+    var h = topBar('Cài đặt', '');
+    h += '<div class="card"><div class="set-row" style="display:block"><div class="lbl"><b>Tốc độ đọc: <span id="rateV">' + S.rate.toFixed(2) + '×</span></b><span>Chậm hơn giúp luyện nghe dễ hơn ở các bậc đầu</span></div>' +
+      '<input type="range" id="rate" min="0.6" max="1.2" step="0.05" value="' + S.rate + '"></div>' +
+      '<div class="set-row"><div class="lbl"><b>Thử giọng đọc</b><span>' + (voices.length ? voices.length + ' giọng tiếng Anh trên máy' : 'Đang tải giọng đọc…') + '</span></div><button class="btn sm" data-act="say" data-t="M: Good morning. Is the report ready? W: Yes, I sent it to you an hour ago.">▶ Nghe thử</button></div></div>';
+    h += '<div class="card"><div class="set-row"><div class="lbl"><b>Sao lưu tiến độ</b><span>Tải file .json để chuyển sang máy khác</span></div><button class="btn sm" data-act="export">Tải về</button></div>' +
+      '<div class="set-row"><div class="lbl"><b>Khôi phục tiến độ</b><span>Chọn file sao lưu đã tải trước đó</span></div><label class="btn sm" style="cursor:pointer">Chọn file<input type="file" id="importF" accept=".json,application/json" hidden></label></div>' +
+      '<div class="set-row"><div class="lbl"><b>Làm lại bài xếp lớp</b><span>Chỉ mở thêm bậc, không xóa kết quả cũ</span></div><button class="btn sm" data-act="placement">Làm</button></div>' +
+      '<div class="set-row"><div class="lbl"><b style="color:var(--bad)">Xóa toàn bộ tiến độ</b><span>Khóa lại các bậc và bắt đầu từ đầu</span></div><button class="btn sm" data-act="reset">Xóa</button></div></div>';
+    h += '<div class="card small muted"><b style="color:var(--ink)">Quy tắc lên bậc</b><br>• Mỗi bậc có 4 bài: Ngữ pháp → Từ vựng → Luyện tập.<br>• Luyện tập đạt ≥60% thì bài được tính là hoàn thành.<br>• Xong 4 bài thì mở bài kiểm tra 15 câu / 15 phút, phần nghe chỉ được nghe tối đa 2 lần.<br>• Đạt ≥70% mới mở khóa bậc tiếp theo.<br>• Tiến độ lưu ngay trên máy này và vẫn dùng được khi không có mạng.</div>';
+    return h;
+  }
+
+  /* ---------- sự kiện ---------- */
+  var ACT = {
+    go: function (b) { go(b.dataset.h); },
+    level: function (b) { var n = +b.dataset.n; if (!unlocked(n)) return toast('🔒 Cần đạt ≥70% bài kiểm tra Bậc ' + (n - 1) + ' để mở Bậc ' + n); go('#level-' + n); },
+    unit: function (b) { FC = null; go('#unit-' + b.dataset.n + '-' + b.dataset.u + '-grammar'); },
+    say: function (b) { speak(b.dataset.t, b.classList.contains('say') || b.classList.contains('play') ? b : null); },
+    known: function (b) {
+      var w = b.dataset.w; if (S.known[w]) delete S.known[w]; else S.known[w] = 1; touchDay(); save();
+      b.classList.toggle('on', !!S.known[w]);
+      var p = parts(), U = lv(+p[1]) && lv(+p[1]).units[+p[2] - 1], c = $('#knownCount');
+      if (U && c) c.textContent = U.v.filter(function (x) { return S.known[x[0]]; }).length;
+    },
+    cards: function (b) { var n = +b.dataset.n, u = +b.dataset.u; FC = { n: n, u: u, i: 0, flip: false, list: shuffle(lv(n).units[u - 1].v) }; route(); },
+    cardsRestart: function () { var U = lv(FC.n).units[FC.u - 1]; var l = U.v.filter(function (w) { return !S.known[w[0]]; }); FC.list = shuffle(l.length ? l : U.v); FC.i = 0; FC.flip = false; route(); },
+    cardsClose: function () { FC = null; route(); },
+    flip: function () { FC.flip = !FC.flip; var el = $('.fc'); if (el) el.classList.toggle('flip', FC.flip); },
+    fcAns: function (b) { var w = FC.list[FC.i]; if (b.dataset.k === '1') S.known[w[0]] = 1; else delete S.known[w[0]]; touchDay(); save(); FC.i++; FC.flip = false; route(); },
+    practice: function (b) { var n = +b.dataset.n, u = +b.dataset.u, U = lv(n).units[u - 1]; startQuiz({ mode: 'unit', n: n, u: u, title: 'Luyện tập · ' + U.t, questions: groupOrder(U.quiz, true, false) }); },
+    test: function (b) { var n = +b.dataset.n; if (!testReady(n)) return toast('Hoàn thành 4 bài học trước nhé'); startQuiz({ mode: 'test', n: n, timed: true, title: 'Kiểm tra Bậc ' + n, questions: groupOrder(lv(n).test, true, true) }); },
+    placement: function () {
+      confirmBox('Bài xếp lớp gồm 24 câu (4 câu mỗi bậc), làm trong 24 phút. Bậc nào bạn đúng ≥3/4 câu (và đạt cả các bậc dưới) sẽ được mở khóa. Bắt đầu?', 'Bắt đầu', function () {
+        var qs = []; LV.forEach(function (L) { var pool = []; L.units.forEach(function (U) { pool = pool.concat(U.quiz); }); qs = qs.concat(shuffle(pool).slice(0, PLACE_PER_LV)); });
+        startQuiz({ mode: 'placement', timed: true, title: 'Bài xếp lớp', questions: qs });
+      });
+    },
+    reviewStart: function () { var ids = shuffle(Object.keys(S.wrong).filter(function (id) { return QI[id]; })).slice(0, 10); startQuiz({ mode: 'review', title: 'Ôn lỗi sai', questions: ids.map(function (id) { return QI[id]; }) }); },
+    pick: function (b) { pick(+b.dataset.pos); },
+    play: function () { playAudio(); },
+    next: function () { stopSpeech(); Q.i++; renderQuiz(); },
+    prev: function () { stopSpeech(); Q.i--; renderQuiz(); },
+    jump: function (b) { stopSpeech(); Q.i = +b.dataset.i; renderQuiz(); },
+    submit: function () {
+      if (!Q.timed) return finishQuiz();
+      var blank = Q.items.filter(function (it) { return it.chosen === null; }).length;
+      if (blank) confirmBox('Còn <b>' + blank + '</b> câu chưa trả lời. Vẫn nộp bài?', 'Nộp bài', finishQuiz); else finishQuiz();
+    },
+    quitQuiz: function () { confirmBox('Thoát bài đang làm? Kết quả bài này sẽ không được lưu.', 'Thoát', function () { clearInterval(timerId); stopSpeech(); var m = Q.mode, n = Q.n, u = Q.u; Q = null; history.replaceState(null, '', m === 'unit' ? '#unit-' + n + '-' + u + '-practice' : m === 'test' ? '#level-' + n : m === 'review' ? '#review' : location.pathname + location.search); route(); }); },
+    export: function () {
+      var name = 'bac-thang-toeic-' + today() + '.json', json = JSON.stringify(S, null, 1);
+      if (DL) { DL.save({ filename: name, data: json }).then(function () { toast('Đã lưu file sao lưu'); }, function () { toast('Không lưu được file'); }); return; }
+      var blob = new Blob([json], { type: 'application/json' }), a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    },
+    reset: function () { confirmBox('Xóa <b>toàn bộ</b> tiến độ, điểm số và sổ lỗi sai? Không thể hoàn tác.', 'Xóa hết', function () { S = def(); save(); toast('Đã xóa tiến độ'); go('#'); }); }
+  };
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]'); if (!b || b.disabled) return;
+    var f = ACT[b.dataset.act]; if (f) { e.preventDefault(); f(b, e); }
+  });
+  document.addEventListener('input', function (e) {
+    if (e.target.id === 'rate') { S.rate = +e.target.value; $('#rateV').textContent = S.rate.toFixed(2) + '×'; save(); }
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target.id !== 'importF' || !e.target.files[0]) return;
+    var fr = new FileReader();
+    fr.onload = function () { try { var d = JSON.parse(fr.result); if (!d || typeof d.units !== 'object' || typeof d.tests !== 'object') throw 0; S = Object.assign(def(), d); save(); toast('Đã khôi phục tiến độ'); go('#'); } catch (err) { toast('File không hợp lệ'); } };
+    fr.readAsText(e.target.files[0]);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!Q || location.hash !== '#quiz' || $('#modal').innerHTML) return;
+    var k = e.key.toUpperCase(), idx = 'ABCD'.indexOf(k); if (idx < 0) idx = '1234'.indexOf(k);
+    if (idx >= 0 && idx < Q.items[Q.i].order.length) pick(idx);
+    else if (e.key === 'Enter' || e.key === 'ArrowRight') { var nb = document.querySelector('[data-act=next],[data-act=submit].primary'); if (nb) nb.click(); }
+    else if (e.key === 'ArrowLeft' && Q.timed && Q.i > 0) ACT.prev();
+  });
+  window.addEventListener('scroll', function () { var t = $('.top'); if (t) t.classList.toggle('scrolled', window.scrollY > 4); }, { passive: true });
+
+  // Khi mở trong trình xem của Claude: dùng tính năng tải file của Claude; trên GitHub Pages dùng tải file thường
+  var DL = null;
+  try { if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { DL = d; }, function () {}); } catch (e) {}
+  if ('serviceWorker' in navigator && location.protocol === 'https:') { navigator.serviceWorker.register('sw.js').catch(function () {}); }
+  route();
+})();
+
+</script>
+</body>
+</html>

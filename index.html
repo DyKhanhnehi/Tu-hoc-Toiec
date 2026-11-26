@@ -255,6 +255,42 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 .empty .e{font-size:44px}
 @media (min-width:700px){ .qtext{font-size:19px} .fc{height:340px} }
 
+/* luyện đề */
+.photo{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;min-height:150px;font-size:58px;line-height:1.1;background:linear-gradient(180deg,#eef3fb,#fffdf9);border:1.5px solid var(--line);border-radius:18px;margin-bottom:12px;padding:16px}
+.photo.sm{min-height:0;font-size:30px;padding:8px;justify-content:flex-start;background:none;border:0;margin:0}
+.opt .lo{color:var(--muted);font-style:italic}
+.score-hero{background:var(--ink);color:#fff;border-radius:24px;padding:20px;margin-bottom:14px}
+.score-hero .eyebrow{color:#f8c77e}
+.score-big{display:flex;align-items:flex-end;gap:14px;margin:6px 0 14px;flex-wrap:wrap}
+.score-big b{font-size:52px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.score-big span{color:#b9c3d6;font-size:14px;padding-bottom:6px}
+.lr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lr div{background:rgba(255,255,255,.08);border-radius:14px;padding:10px 12px}
+.lr small{display:block;color:#a9b4c9;font-size:12px}
+.lr b{font-size:22px;font-variant-numeric:tabular-nums}
+.lr i{display:block;height:6px;border-radius:6px;background:rgba(255,255,255,.14);margin-top:6px;overflow:hidden}
+.lr i:after{content:"";display:block;height:100%;width:var(--w);background:var(--accent)}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#ebe4d6;border-radius:14px;padding:4px;margin-bottom:12px}
+.seg button{padding:9px 2px;border-radius:11px;font-weight:700;font-size:13px;color:var(--ink2);line-height:1.2}
+.seg button small{display:block;font-weight:600;font-size:11px;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.mock{display:flex;gap:12px;align-items:center;cursor:pointer}
+.mock .mi{width:48px;height:48px;border-radius:14px;background:#fde9c8;display:grid;place-items:center;font-weight:800;color:var(--accent-ink);flex:none;font-size:15px}
+.mock.big{border:2px solid var(--accent)}
+.parts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pt{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:14px;text-align:left;display:flex;flex-direction:column;gap:3px}
+.pt .pn{font-size:12px;font-weight:800;color:#0e5d8f;letter-spacing:.04em}
+.pt b{font-size:15.5px;line-height:1.25}
+.pt span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.pt .bar{margin-top:6px}
+.pt.wide{grid-column:1/-1}
+.fmt{width:100%;border-collapse:collapse;font-size:14px}
+.fmt th,.fmt td{padding:7px 6px;border-top:1px solid var(--line);text-align:left}
+.fmt th{font-size:12px;color:var(--muted);font-weight:700;border-top:0}
+.fmt td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hist td{font-variant-numeric:tabular-nums}
+@media (max-width:380px){ .parts{grid-template-columns:1fr} .seg button{font-size:12px} }
+
 </style>
 </head>
 <body>
@@ -1307,12 +1343,355 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 
 </script>
 <script>
+/* Bậc Thang TOEIC — Ngân hàng đề luyện thi theo 7 Part (Bậc 1–6)
+   o[0] luôn là đáp án đúng (app tự xáo trộn). lo: đáp án chỉ được đọc, không in (Part 1, 2 như đề thật).
+   img: tranh minh họa Part 1. Bộ câu Part 3, 4, 6, 7 dùng chung một bài nghe / đoạn văn. */
+(function () {
+  var B = [];
+  function P1(lv, img, o, e) { B.push({ p: '1', lv: lv, img: img, o: o, e: e, lo: 1 }); }
+  function P2(lv, s, o, e) { B.push({ p: '2', lv: lv, s: s, o: o, e: e, lo: 1 }); }
+  function P5(lv, q, o, e) { B.push({ p: '5', lv: lv, q: q, o: o, e: e }); }
+  function SET(p, lv, txt, qs) {
+    qs.forEach(function (x) { var q = { p: p, lv: lv, q: x[0], o: x[1], e: x[2] }; if (p === '3' || p === '4') q.s = txt; else q.r = txt; B.push(q); });
+  }
+  function P6(lv, txt, qs) { SET('6', lv, txt, qs.map(function (x, i) { return ['Chọn đáp án phù hợp cho chỗ trống (' + (i + 1) + ').', x[0], x[1]]; })); }
+
+  /* ======================= BẬC 1 · 10–250 ======================= */
+  P1(1, '👨‍🍳🍳🔥', ['A man is cooking some food.', 'A man is washing the dishes.', 'A man is eating breakfast.', 'A man is buying some eggs.'], 'Tranh: đầu bếp đang nấu trên chảo → cooking.');
+  P1(1, '👩‍💼📞💻', ['A woman is talking on the phone.', 'A woman is typing a letter.', 'A woman is turning off a computer.', 'A woman is drinking some water.'], 'Người phụ nữ đang cầm điện thoại. Máy tính chỉ là chi tiết phụ, đừng bị bẫy.');
+  P1(1, '🚌🚏🧍🧍‍♀️', ['People are waiting at a bus stop.', 'People are getting off a train.', 'A bus is being repaired.', 'People are crossing a bridge.'], 'Có trạm xe buýt và người đứng chờ → waiting at a bus stop.');
+  P1(1, '🧑‍🎓📖📚', ['A man is reading a book.', 'A man is putting books in a box.', 'A man is writing on a board.', 'A man is closing a window.'], 'Người trong tranh đang mở sách đọc → reading a book.');
+  P2(1, 'Where is the meeting room?', ["It's on the second floor.", 'At three o\'clock.', "Yes, I'm meeting him."], 'Where → hỏi nơi chốn. Bẫy: "meeting" lặp âm; câu hỏi Wh- không trả lời bằng Yes.');
+  P2(1, 'What time does the store open?', ['At nine a.m.', "It's very big.", 'I bought some shoes.'], 'What time → trả lời bằng giờ.');
+  P2(1, 'Who is the new manager?', ['Ms. Lee from Seoul.', 'Next Monday.', 'In the sales office.'], 'Who → trả lời bằng người.');
+  P2(1, 'Do you have a pen?', ['Sure, here you are.', "It's open now.", 'Yes, the pan is in the kitchen.'], 'Mượn đồ → Sure, here you are. Bẫy âm giống: pen / pan / open.');
+  P2(1, 'How do you get to work?', ['I usually take the subway.', 'About eight hours.', 'It works well.'], 'How do you get to… → hỏi phương tiện.');
+  P2(1, 'Can I see the menu, please?', ['Of course. Here it is.', 'I see. Thank you.', "It's a nice view."], 'Lời đề nghị → đồng ý và đưa menu. "see / view" là bẫy nghĩa gần.');
+  P2(1, 'When is your flight?', ['Tomorrow morning.', 'At gate five.', "It's a long flight."], 'When → thời gian. "At gate five" là nơi chốn.');
+  P2(1, 'Is this your umbrella?', ['No, mine is black.', "Yes, it's raining.", 'An umbrella stand.'], 'Trả lời gián tiếp: "Không, cái của tôi màu đen".');
+  SET('3', 1, "W: Hello, I'd like to order two sandwiches and a coffee. M: Sure. Is that for here or to go? W: To go, please. How much is it? M: That's twelve dollars.", [
+    ['Where most likely are the speakers?', ['At a café', 'At a bank', 'At a hotel', 'At an airport'], 'order sandwiches and a coffee, for here or to go → quán cà phê.'],
+    ['What does the woman want?', ['Food to take away', 'A table by the window', 'A job application', 'A cup of tea'], '"To go, please" = mang đi.'],
+    ['How much does the woman have to pay?', ['$12', '$2', '$20', '$10'], '"That\'s twelve dollars."']]);
+  SET('3', 1, "M: Hi Anna, are you coming to the training session today? W: Yes, but I'll be a little late. I have a call with a client at ten. M: No problem. It's in Room 204. W: Thanks. I'll see you there.", [
+    ['What event are the speakers talking about?', ['A training session', 'A client dinner', 'A job interview', 'A sales fair'], '"coming to the training session today".'],
+    ['Why will the woman be late?', ['She has a call with a client.', 'Her train is delayed.', 'She is sick.', 'She forgot the room number.'], '"I have a call with a client at ten."'],
+    ['Where will the event be held?', ['In Room 204', 'In Room 104', 'In the lobby', "At the client's office"], '"It\'s in Room 204."']]);
+  SET('4', 1, "Hello, this is Tom from City Dental Clinic. I'm calling to remind you of your appointment tomorrow at 2 p.m. Please arrive ten minutes early. If you need to change the time, call us at 555-0198. Thank you.", [
+    ['Who is the speaker?', ['A clinic employee', 'A teacher', 'A bus driver', 'A bank manager'], '"Tom from City Dental Clinic".'],
+    ['When is the appointment?', ['Tomorrow at 2 p.m.', 'Today at 2 p.m.', 'Tomorrow at 10 a.m.', 'Next week'], '"your appointment tomorrow at 2 p.m."'],
+    ['What should the listener do to change the time?', ['Call the clinic', 'Send an email', 'Visit a website', 'Arrive early'], '"call us at 555-0198".']]);
+  SET('4', 1, "Good morning, everyone, and welcome to Green Park Hotel. Breakfast is served from 6:30 to 9:30 in the restaurant on the first floor. The swimming pool is open until 10 p.m. If you need anything, please call the front desk. Enjoy your stay.", [
+    ['Where is the talk taking place?', ['At a hotel', 'At a school', 'At a hospital', 'At a supermarket'], '"welcome to Green Park Hotel".'],
+    ['Where is breakfast served?', ['In a first-floor restaurant', 'By the pool', 'In the guest rooms', 'At the front desk'], '"in the restaurant on the first floor".'],
+    ['Until what time is the pool open?', ['10 p.m.', '9:30 a.m.', '6:30 a.m.', '9 p.m.'], '"open until 10 p.m."']]);
+  P5(1, 'Please ___ the door when you leave the office.', ['close', 'closes', 'closing', 'closed'], 'Câu mệnh lệnh: Please + V nguyên mẫu.');
+  P5(1, 'Mr. Park ___ to work by bus every day.', ['goes', 'go', 'going', 'gone'], 'every day → hiện tại đơn; chủ ngữ số ít → goes.');
+  P5(1, 'The meeting starts ___ 9 a.m.', ['at', 'on', 'in', 'by'], 'at + giờ.');
+  P5(1, 'Our office is ___ the fifth floor.', ['on', 'at', 'in', 'to'], 'on + tầng.');
+  P5(1, 'There ___ many customers in the store today.', ['are', 'is', 'be', 'was'], 'many customers số nhiều → There are.');
+  P5(1, 'Ms. Ito is ___ honest employee.', ['an', 'a', 'much', 'any'], 'honest đọc /ˈɑːnɪst/ (h câm) → an.');
+  P5(1, 'Please give ___ the report by Friday.', ['me', 'I', 'my', 'mine'], 'Sau động từ give cần đại từ tân ngữ → me.');
+  P5(1, 'The new printer is ___ than the old one.', ['faster', 'fast', 'fastest', 'more fast'], 'than → so sánh hơn; tính từ ngắn + -er.');
+  P5(1, 'We ___ a meeting with the client yesterday.', ['had', 'have', 'has', 'having'], 'yesterday → quá khứ đơn: had.');
+  P5(1, 'Mr. Chen is not in the office ___ the moment.', ['at', 'in', 'on', 'for'], 'at the moment = lúc này.');
+  P5(1, 'All employees must wear ___ ID cards.', ['their', 'they', 'them', 'theirs'], 'Trước danh từ (ID cards) cần tính từ sở hữu → their.');
+  P5(1, 'The cafeteria is ___ from 11 a.m. to 2 p.m.', ['open', 'opens', 'opening', 'opened'], 'be + open (tính từ: đang mở cửa).');
+  P6(1, 'To: All Staff\nFrom: Office Manager\nSubject: Printer\n\nThe printer on the second floor is broken. A technician ___(1)___ it tomorrow morning. Until then, please ___(2)___ the printer on the third floor. ___(3)___. We are sorry for the ___(4)___.', [
+    [['will repair', 'repaired', 'repairing', 'has repaired'], 'tomorrow morning → tương lai: will repair.'],
+    [['use', 'uses', 'using', 'used'], 'please + V nguyên mẫu.'],
+    [['It is next to the elevator.', 'The second floor has a kitchen.', 'Lunch is at noon today.', 'Please buy more coffee.'], 'Câu chèn phải nói tiếp về máy in tầng ba → chỉ vị trí của nó.'],
+    [['inconvenience', 'inconvenient', 'inconveniently', 'inconvenienced'], 'the + danh từ → inconvenience (sự bất tiện).']]);
+  SET('7', 1, 'Riverside Library\nNew Opening Hours (from June 1)\nMonday–Friday: 8:00 a.m. – 8:00 p.m.\nSaturday: 9:00 a.m. – 5:00 p.m.\nSunday: Closed\n\nBooks can be returned 24 hours a day at the return box by the main door.', [
+    ['When does the library close on Saturdays?', ['At 5:00 p.m.', 'At 8:00 p.m.', 'At 9:00 a.m.', 'It is closed all day.'], 'Saturday: 9:00 a.m. – 5:00 p.m.'],
+    ['What is true about the library?', ['Books can be returned at any time.', 'It is open every day.', 'It opens at 9:00 a.m. on weekdays.', 'The hours changed in May.'], '"returned 24 hours a day".'],
+    ['When do the new hours start?', ['June 1', 'May 1', 'Next Sunday', 'Today'], '"New Opening Hours (from June 1)".']]);
+  SET('7', 1, 'Hi Minh, my train is late. I will arrive at the office at about 10:30, not 9:00. Can you start the meeting with the Sales team without me? The notes are on my desk. — Lan', [
+    ['Why did Lan send the message?', ['Her train is delayed.', 'She is sick.', 'She lost her notes.', 'The meeting is cancelled.'], '"my train is late".'],
+    ['What does Lan ask Minh to do?', ['Start a meeting', 'Call the Sales team', 'Buy a train ticket', 'Come to the station'], '"Can you start the meeting… without me?"'],
+    ['Where are the notes?', ["On Lan's desk", 'On the train', 'In the meeting room', 'At the station'], '"The notes are on my desk."']]);
+
+  /* ======================= BẬC 2 · 250–400 ======================= */
+  P1(2, '👷‍♂️🪜🏠', ['A man is climbing a ladder.', 'A man is painting a car.', 'A man is carrying a box.', 'A man is sitting on a roof.'], 'Người thợ đang ở trên thang → climbing a ladder.');
+  P1(2, '🧑‍🤝‍🧑🍽️🍝', ['Some people are having a meal.', 'Some people are cooking in a kitchen.', 'Some people are setting a table.', 'Some people are paying a bill.'], 'Hai người ngồi với đĩa mì → having a meal.');
+  P1(2, '👩🛒🍎🍌', ['A woman is shopping for fruit.', 'A woman is planting trees.', 'A woman is pushing a stroller.', 'A woman is selling vegetables.'], 'Xe đẩy siêu thị và trái cây → shopping for fruit.');
+  P1(2, '🧔⛽🚗', ['A man is putting fuel in a car.', 'A man is washing a car.', 'A man is parking a truck.', 'A man is fixing a tire.'], 'Cây xăng → đổ nhiên liệu.');
+  P2(2, 'Why was the meeting cancelled?', ['Because the manager is sick.', 'In the meeting room.', 'Yes, it was.'], 'Why → lý do (Because…). Câu hỏi Wh- không trả lời Yes/No.');
+  P2(2, 'Would you like some coffee?', ['Yes, please. With milk.', 'I like the copy.', 'The coffee shop is closed.'], 'Lời mời → Yes, please / No, thanks. "coffee / copy" là bẫy âm.');
+  P2(2, 'Which bus goes to the airport?', ['Number 15.', 'About thirty minutes.', 'Yes, it goes there.'], 'Which bus → chỉ ra tuyến xe.');
+  P2(2, 'How long is the training course?', ['Three days.', 'About fifty people.', 'It was very useful.'], 'How long → thời lượng.');
+  P2(2, 'Have you finished the report?', ["Almost. I'll send it soon.", 'The sports report is on TV.', 'Yes, I finish at five.'], 'Hỏi đã xong chưa → "Sắp xong". Câu C sai thì, câu B lặp từ "report".');
+  P2(2, 'Could you help me move these boxes?', ['Sure, where do they go?', 'I moved last year.', "They're very nice boxes."], 'Nhờ giúp → đồng ý và hỏi thêm.');
+  P2(2, 'Whose bag is this?', ["I think it's Kevin's.", "It's a big bag.", 'In the bag.'], 'Whose → chủ sở hữu (Kevin\'s).');
+  P2(2, "Let's take a short break.", ['Good idea. I need some coffee.', 'It broke yesterday.', 'A short meeting.'], 'Lời đề nghị → đồng ý. "break / broke" là bẫy âm.');
+  SET('3', 2, "M: Excuse me, I bought this jacket here last week, but it's too small. W: I'm sorry about that. Would you like a larger size or a refund? M: A larger size, please. Do you have it in blue? W: Let me check in the back room.", [
+    ["What is the man's problem?", ['His jacket is the wrong size.', 'He lost his receipt.', 'His jacket is damaged.', 'He was charged twice.'], '"it\'s too small".'],
+    ['What does the man want?', ['A larger jacket', 'His money back', 'A different store', 'A discount'], '"A larger size, please."'],
+    ['What will the woman probably do next?', ['Look for an item', 'Give a refund', 'Call a manager', 'Close the store'], '"Let me check in the back room."']]);
+  SET('3', 2, "W: Hi David, our flight to Singapore leaves at 7 a.m. tomorrow. M: That's early. Should we take a taxi to the airport? W: Yes, I'll book one for 4:30. M: Great. I'll wait for you in the hotel lobby.", [
+    ['Where are the speakers going tomorrow?', ['To Singapore', 'To Hanoi', 'To Bangkok', 'To Seoul'], '"our flight to Singapore".'],
+    ['What will the woman do?', ['Book a taxi', 'Change the flight', 'Rent a car', 'Call the hotel'], '"I\'ll book one for 4:30."'],
+    ['Where will the man wait?', ['In the hotel lobby', 'At the airport', 'At the train station', 'In his room'], '"I\'ll wait for you in the hotel lobby."']]);
+  SET('4', 2, "Attention shoppers. Today only, all kitchen products are twenty percent off. This includes pots, pans and coffee makers. The sale ends at 8 p.m. Please visit our kitchen section on the second floor. Thank you for shopping at Mega Mart.", [
+    ['What is being announced?', ['A sale', 'A new store', 'A change in closing time', 'A lost child'], '"twenty percent off… The sale ends at 8 p.m."'],
+    ['What products are discounted?', ['Kitchen items', 'Clothes', 'Computers', 'Toys'], '"all kitchen products".'],
+    ['Where is the kitchen section?', ['On the second floor', 'On the first floor', 'Near the entrance', 'In the basement'], '"on the second floor".']]);
+  SET('4', 2, "Hi Sarah, this is Peter from IT. I've checked your laptop, and the battery needs to be replaced. A new battery will arrive on Wednesday, so you can pick up your laptop on Thursday afternoon. Call me at extension 245 if you have any questions.", [
+    ['What is wrong with the laptop?', ['The battery', 'The screen', 'The keyboard', 'The software'], '"the battery needs to be replaced".'],
+    ['When can Sarah get her laptop back?', ['On Thursday afternoon', 'On Wednesday morning', 'Tomorrow', 'On Friday'], '"pick up your laptop on Thursday afternoon".'],
+    ['Why would Sarah call extension 245?', ['To ask questions', 'To order a battery', 'To cancel a meeting', 'To book a room'], '"Call me… if you have any questions."']]);
+  P5(2, 'The sales team ___ on a new project right now.', ['is working', 'works', 'worked', 'work'], 'right now → hiện tại tiếp diễn; the sales team (một nhóm) → is working.');
+  P5(2, 'Ms. Tran ___ to Tokyo last month for a conference.', ['traveled', 'travels', 'travel', 'traveling'], 'last month → quá khứ đơn.');
+  P5(2, 'This is the ___ hotel in the city.', ['most expensive', 'more expensive', 'expensive', 'expensiver'], 'the … in the city → so sánh nhất; tính từ dài → the most.');
+  P5(2, 'Could you ___ me the file, please?', ['send', 'sending', 'sent', 'sends'], 'Could you + V nguyên mẫu.');
+  P5(2, 'Mr. Lopez and ___ will visit the factory tomorrow.', ['I', 'me', 'my', 'mine'], 'Thuộc chủ ngữ → đại từ chủ ngữ I.');
+  P5(2, 'The package ___ arrive yesterday, so we called the company.', ["didn't", "doesn't", "wasn't", "isn't"], 'yesterday + động từ thường (arrive) → didn\'t.');
+  P5(2, 'Our new office is ___ larger than the old one.', ['much', 'very', 'many', 'most'], 'Nhấn mạnh so sánh hơn dùng much / far, không dùng very.');
+  P5(2, 'The store is closed ___ Sundays.', ['on', 'in', 'at', 'by'], 'on + thứ.');
+  P5(2, 'We need ___ information about the product.', ['more', 'many', 'a few', 'several'], 'information không đếm được → không dùng many / a few / several.');
+  P5(2, 'Can you tell me ___ the bank is?', ['where', 'what', 'who', 'which'], 'Hỏi vị trí ngân hàng → where.');
+  P5(2, 'She was very tired, ___ she went home early.', ['so', 'but', 'because', 'or'], 'Nguyên nhân → kết quả: so.');
+  P5(2, 'The training will finish ___ 5 p.m.', ['at', 'in', 'on', 'for'], 'at + giờ.');
+  P6(2, 'Dear Mr. Kim,\n\nThank you for your order of 50 chairs. Unfortunately, the chairs you ___(1)___ are out of stock. We expect new ones to arrive ___(2)___ two weeks. ___(3)___. If you prefer, we can also offer you a different model at the same price. Please let us know your ___(4)___ by Friday.\n\nBest regards,\nAmy Lin, Sales Department', [
+    [['ordered', 'order', 'ordering', 'orders'], 'Việc đặt hàng đã xảy ra → ordered.'],
+    [['in', 'at', 'on', 'since'], 'in + khoảng thời gian = trong / sau (in two weeks).'],
+    [['We will ship them as soon as they arrive.', 'The chairs were delivered yesterday.', 'Our office is closed on Fridays.', 'Thank you for visiting our factory.'], 'Hàng đang chờ về → câu phù hợp: sẽ gửi ngay khi hàng về.'],
+    [['decision', 'decide', 'decided', 'decisive'], 'your + danh từ → decision.']]);
+  SET('7', 2, 'FOR RENT: Office Space\n120 square meters on the 6th floor of Lotus Tower. Close to the subway station. Parking available. $1,500 per month, including electricity and water. Available from August 1.\nCall Mr. Hoang at 0905-555-321 to arrange a visit.', [
+    ['What is being advertised?', ['An office', 'An apartment', 'A parking lot', 'A shop'], '"FOR RENT: Office Space".'],
+    ['What is included in the price?', ['Electricity and water', 'Parking', 'Internet', 'Furniture'], '"including electricity and water". Parking chỉ là "available" (có chỗ), không nói là bao gồm.'],
+    ['What should interested people do?', ['Call Mr. Hoang', 'Send an email', 'Visit on August 1', 'Go to the subway station'], '"Call Mr. Hoang… to arrange a visit."']]);
+  SET('7', 2, 'From: HR Department\nTo: All employees\nSubject: Health check\n\nThe annual health check will take place on March 12 and 13 in the training room. Each check takes about 20 minutes. Please choose a time slot on the HR website by March 5. Employees who cannot attend on these days should contact Ms. Vy in HR.', [
+    ['What is the email about?', ['A health check', 'A training course', 'A new website', 'A holiday'], 'Subject: Health check.'],
+    ['By when should employees choose a time?', ['March 5', 'March 12', 'March 13', 'March 20'], '"choose a time slot… by March 5".'],
+    ['What should employees who cannot attend do?', ['Contact Ms. Vy', 'Visit a hospital', 'Update the website', 'Work from home'], '"should contact Ms. Vy in HR".']]);
+
+  /* ======================= BẬC 3 · 400–550 ======================= */
+  P1(3, '👷‍♀️📐🏗️', ['A worker is looking at a plan.', 'A worker is driving a truck.', 'A building is being painted.', 'A worker is taking off her helmet.'], 'Người thợ cầm bản vẽ ở công trường → looking at a plan.');
+  P1(3, '🧑‍💼🧑‍💼📊🖥️', ['Some people are looking at a presentation.', 'Some people are arranging chairs.', 'A man is turning on a light.', 'Some people are leaving a meeting room.'], 'Hai người nhìn biểu đồ trên màn hình → looking at a presentation.');
+  P1(3, '🧑‍🏭📦📦🚚', ['A man is loading boxes onto a truck.', 'A man is opening a door.', 'Some boxes are being thrown away.', 'A truck is parked in a garage.'], 'Công nhân, thùng hàng và xe tải → loading boxes.');
+  P2(3, "Who's in charge of the new project?", ['Mr. Wilson from Marketing.', "It's very interesting.", 'There is no charge for delivery.'], 'Who → người phụ trách. Bẫy: "charge" lặp từ.');
+  P2(3, 'When will the shipment arrive?', ['By the end of the week.', 'At the shipping office.', 'Yes, it arrived.'], 'When → thời gian.');
+  P2(3, "Why don't we hold the meeting online?", ['That would save time.', "Because it's online.", 'I held it yesterday.'], '"Why don\'t we…?" là lời đề nghị, không hỏi lý do → đáp lại bằng ý kiến đồng ý.');
+  P2(3, "Haven't you met our new director?", ['No, not yet.', 'Yes, she directs it.', 'The meeting is at noon.'], 'Câu hỏi phủ định → trả lời như câu hỏi thường: No, not yet.');
+  P2(3, 'How often do you check the machines?', ['Once a week.', 'For two hours.', "They're new machines."], 'How often → tần suất.');
+  P2(3, 'Should I print the agenda or email it?', ['Email it, please.', 'Yes, you should.', 'A new printer.'], 'Câu hỏi lựa chọn (A or B) → chọn một, không trả lời Yes.');
+  P2(3, 'The client called while you were out.', ['Did he leave a message?', "No, I'm not out.", "I'll call a taxi."], 'Câu trần thuật → phản hồi tự nhiên: hỏi có để lại lời nhắn không.');
+  P2(3, 'Where can I find the user manual?', ["It's on the company intranet.", 'Manually, please.', 'Yes, I can.'], 'Where → nơi chốn (trên mạng nội bộ).');
+  SET('3', 3, "W: Kevin, I heard you're leading the marketing campaign for our new tablet. M: Yes, we start next month. But I still need someone to design the online ads. W: My team has a designer who just finished a project. I'll ask if she's available. M: That would be great. Could you let me know by Friday?", [
+    ['What product is the campaign for?', ['A tablet', 'A car', 'A smartphone app', 'A printer'], '"the marketing campaign for our new tablet".'],
+    ['What does the man need?', ['Someone to design ads', 'A bigger budget', 'A new office', 'A sales report'], '"I still need someone to design the online ads."'],
+    ['What does the man ask the woman to do by Friday?', ['Give him an answer', 'Finish a design', 'Hire a new employee', 'Launch a product'], '"Could you let me know by Friday?"']]);
+  SET('3', 3, "W: Good morning. I'm here for the ten o'clock job interview. My name is Linh Tran. M: Welcome, Ms. Tran. Mr. Davis is still in a meeting, but he'll be with you in about ten minutes. W: No problem. Is there somewhere I can leave my coat? M: Sure, there's a closet next to the elevator.", [
+    ['Why is the woman visiting the company?', ['For a job interview', 'To deliver a package', 'To meet a client', 'To repair the elevator'], '"I\'m here for the ten o\'clock job interview."'],
+    ['Why does the woman have to wait?', ['Mr. Davis is in a meeting.', 'She arrived too early.', 'The office is closed.', 'Her documents are missing.'], '"Mr. Davis is still in a meeting".'],
+    ['What does the woman ask about?', ['Where to leave her coat', 'Where the restroom is', 'How to use the elevator', 'When the meeting ends'], '"Is there somewhere I can leave my coat?"']]);
+  SET('4', 3, "Thank you for calling Sunshine Electronics customer service. Our office hours are Monday to Friday, 8 a.m. to 6 p.m. If you are calling about a repair, please have your product's serial number ready. To check the status of an order, press 1. To speak with a customer service representative, press 0.", [
+    ['What kind of business is this?', ['An electronics company', 'A travel agency', 'A bank', 'A restaurant'], '"Sunshine Electronics customer service".'],
+    ['What should callers about a repair prepare?', ['A serial number', 'A receipt', 'A photo', 'An email address'], '"please have your product\'s serial number ready".'],
+    ['How can callers check an order?', ['By pressing 1', 'By pressing 0', 'By visiting the store', 'By sending a text'], '"To check the status of an order, press 1."']]);
+  SET('4', 3, "Good afternoon, everyone. Before we begin the factory tour, please put on the safety glasses and helmets in the basket. Photography is not allowed inside the production area. The tour will last about forty-five minutes and finish in the showroom, where you can see our latest products.", [
+    ['Who most likely are the listeners?', ['Tour participants', 'Factory workers', 'Photographers', 'Sales staff'], '"Before we begin the factory tour".'],
+    ['What are the listeners asked to do?', ['Wear safety equipment', 'Take photos', 'Sign a form', 'Buy products'], '"put on the safety glasses and helmets".'],
+    ['Where will the tour end?', ['In the showroom', 'In the production area', 'At the main gate', 'In the cafeteria'], '"finish in the showroom".']]);
+  P5(3, 'Ms. Nguyen ___ for the company since 2018.', ['has worked', 'works', 'worked', 'is working'], 'since + mốc thời gian → hiện tại hoàn thành.');
+  P5(3, 'The new branch ___ next spring.', ['will open', 'opened', 'has opened', 'was opened'], 'next spring → tương lai.');
+  P5(3, 'The report must be submitted ___ Friday.', ['by', 'until', 'since', 'during'], 'by + mốc = hạn chót (trước hoặc đúng lúc). until dùng cho hành động kéo dài.');
+  P5(3, 'Please read the instructions ___ before using the machine.', ['carefully', 'careful', 'care', 'caring'], 'Bổ nghĩa cho động từ read → trạng từ carefully.');
+  P5(3, 'Our products ___ in Viet Nam and exported to Japan.', ['are made', 'make', 'are making', 'have make'], 'Sản phẩm được làm ra → bị động are made (song song với exported).');
+  P5(3, 'Our sales ___ by 15 percent last year.', ['increased', 'increase', 'have increased', 'increasing'], 'last year → quá khứ đơn.');
+  P5(3, 'The manager was very ___ with the results.', ['pleased', 'pleasing', 'please', 'pleasure'], 'Cảm xúc của người → tính từ -ed: pleased with.');
+  P5(3, 'Applicants should have ___ experience in sales.', ['previous', 'previously', 'preview', 'previewing'], 'Trước danh từ experience → tính từ previous.');
+  P5(3, 'We are looking forward to ___ you at the conference.', ['seeing', 'see', 'seen', 'saw'], 'look forward to + V-ing (to là giới từ).');
+  P5(3, 'The meeting has been ___ until next Tuesday.', ['postponed', 'postpone', 'postponing', 'postpones'], 'has been + V3 (bị động).');
+  P5(3, '___ the heavy rain, the event was held as planned.', ['Despite', 'Although', 'Because', 'However'], 'Theo sau là cụm danh từ (the heavy rain) → Despite. Although cần mệnh đề.');
+  P5(3, 'Each department ___ its own budget.', ['has', 'have', 'having', 'are having'], 'Each + danh từ số ít → động từ số ít: has.');
+  P6(3, 'To: All Production Staff\nSubject: New safety rule\n\nStarting next Monday, all workers in Building C ___(1)___ to wear ear protection at all times. This rule is part of our effort to reduce noise-related health ___(2)___. ___(3)___. Supervisors will check that the rule is followed ___(4)___ each shift.\n\nThank you for your cooperation.', [
+    [['will be required', 'required', 'requiring', 'has required'], 'Starting next Monday → tương lai; người lao động "được yêu cầu" → bị động will be required.'],
+    [['problems', 'problematic', 'problem', 'problematically'], 'reduce + danh từ; health problems (số nhiều, nói chung).'],
+    [['Ear plugs are available at the front office.', 'Building C was built in 2010.', 'The cafeteria will serve new dishes.', 'Monday is a public holiday.'], 'Câu chèn hợp logic: cho biết nơi nhận nút bịt tai.'],
+    [['during', 'while', 'among', 'between'], 'during + danh từ (each shift). while cần mệnh đề.']]);
+  SET('7', 3, 'To: Jenny Cho\nFrom: Mark Allen\nSubject: Supplier visit\n\nHi Jenny,\nThe team from Bright Packaging will visit our plant on Tuesday, April 9. They want to see our current packing line before they propose new box designs. Could you show them around from 10:00 to 11:30? After that, I\'ll take them to lunch. Please also prepare samples of our three best-selling products so they can measure them.\nThanks,\nMark', [
+    ['Why is Bright Packaging visiting?', ['To see the packing line before proposing designs', 'To sign a contract', 'To deliver new boxes', 'To interview staff'], '"They want to see our current packing line before they propose new box designs."'],
+    ['What is Jenny asked to do?', ['Give the visitors a tour', 'Book a restaurant', 'Design new boxes', 'Call the supplier'], '"Could you show them around…?"'],
+    ['What will the visitors do with the samples?', ['Measure them', 'Sell them', 'Photograph them', 'Test their quality'], '"so they can measure them".']]);
+  SET('7', 3, 'PARKING NOTICE\nThe east parking lot will be closed from May 2 to May 6 for repaving. During this time, employees may park in the west lot or at City Garage on Pine Street. The company will pay for parking at City Garage. Please show your employee ID to the garage attendant.', [
+    ['Why will the east lot be closed?', ['For repaving', 'For a company event', 'Because of a flood', 'For a security check'], '"closed… for repaving".'],
+    ['What is indicated about City Garage?', ['The company will pay for it.', 'It is on Lake Street.', 'It is closed until May 6.', 'Only managers may park there.'], '"The company will pay for parking at City Garage."'],
+    ['What must employees do at City Garage?', ['Show an employee ID', 'Pay at the gate', 'Register online', 'Park on the top floor'], '"Please show your employee ID".']]);
+
+  /* ======================= BẬC 4 · 550–700 ======================= */
+  P1(4, '🧳🧳🧳✈️', ['Some suitcases are lined up in an airport.', 'Passengers are boarding a plane.', 'A suitcase is being opened.', 'A pilot is talking to a passenger.'], 'Tranh chỉ có vali, không có người → loại các câu có người.');
+  P1(4, '🪑🪑🪑🪑📽️', ['Chairs have been arranged in rows.', 'People are sitting in an auditorium.', 'A man is setting up a projector.', 'Chairs are being stacked.'], 'Không có người → dùng hiện tại hoàn thành bị động mô tả trạng thái (have been arranged). "are being stacked" cần có người đang làm.');
+  P1(4, '🧑‍🌾💧🪴🌳', ['A man is watering some plants.', 'A man is cutting down a tree.', 'Some plants are being sold.', 'A man is digging a hole.'], 'Người làm vườn và nước → watering.');
+  P2(4, 'Who should I contact about my travel expenses?', ['The accounting department handles that.', "I'd like to travel to Paris.", "It's expensive."], 'Trả lời bằng bộ phận phụ trách, không cần tên người.');
+  P2(4, "Didn't the shipment arrive this morning?", ["It's been delayed until tomorrow.", "Yes, I'm shipping it.", "No, it's my first morning."], 'Câu hỏi phủ định → thông tin thực tế: bị hoãn.');
+  P2(4, 'Would you rather meet on Tuesday or Wednesday?', ['Either day works for me.', 'Yes, I would.', 'We met last week.'], 'Câu hỏi lựa chọn → "Either / Neither / Cả hai" là đáp án hay gặp.');
+  P2(4, "Why hasn't the contract been signed yet?", ['The lawyers are still reviewing it.', "It's under the sign.", 'Yes, for two years.'], 'Lý do gián tiếp, không cần "Because".');
+  P2(4, "I can't find the keys to the storage room.", ['Did you ask the security guard?', 'The store is closed.', 'Room 302.'], 'Câu trần thuật nêu vấn đề → gợi ý giải pháp.');
+  P2(4, 'How much will it cost to repair the copier?', ['The technician will give us an estimate.', 'About two hours.', "It's a new copy."], 'Không biết con số → trả lời gián tiếp "kỹ thuật viên sẽ báo giá".');
+  P2(4, "Isn't the conference in Da Nang this year?", ["No, it's been moved to Hue.", 'Yes, I conferred with him.', 'Last year.'], 'Câu hỏi phủ định xác nhận thông tin → No + thông tin đúng.');
+  P2(4, 'Let me know if you need help with the presentation.', ["Thanks, I think I'm almost done.", "It's a present for you.", "I don't know him."], 'Lời đề nghị giúp → cảm ơn và từ chối khéo. "present / presentation" là bẫy.');
+  SET('3', 4, "M: Hi Laura, have you seen the latest sales figures for the Southeast region? W: Yes, they're lower than we expected. I think it's because our competitor reduced its prices. M: Should we offer a discount too? W: Not yet. Let's discuss it with the regional managers at Thursday's meeting first.", [
+    ['What are the speakers discussing?', ['Disappointing sales results', 'A new product design', 'A hiring plan', "A manager's resignation"], '"they\'re lower than we expected".'],
+    ['According to the woman, what caused the problem?', ["A competitor's lower prices", 'Bad weather', 'A shipping delay', 'A lack of staff'], '"our competitor reduced its prices".'],
+    ['What does the woman suggest?', ['Discussing the issue at a meeting', 'Offering a discount immediately', 'Hiring more salespeople', 'Changing suppliers'], '"Let\'s discuss it… at Thursday\'s meeting first."']]);
+  SET('3', 4, "W: Good morning, Lakeside Hotel. How can I help you? M: Hi, I have a reservation for three nights starting tonight, but my flight was cancelled. I won't arrive until tomorrow. W: I see. I can change your reservation to two nights starting tomorrow, with no extra charge. M: That would be perfect, thank you.", [
+    ['Why is the man calling?', ['To change a reservation', 'To book a flight', 'To complain about a room', 'To ask for directions'], 'Đặt phòng từ tối nay nhưng chuyến bay bị hủy → muốn đổi.'],
+    ["What happened to the man's flight?", ['It was cancelled.', 'It was delayed by an hour.', 'It arrived early.', 'It was overbooked.'], '"my flight was cancelled".'],
+    ['What does the woman say about the change?', ['There is no extra fee.', 'The hotel is full.', 'He must pay a deposit.', 'He should call back later.'], '"with no extra charge".']]);
+  SET('4', 4, "Good morning, and welcome to the quarterly staff meeting. First, I'm happy to announce that our customer satisfaction scores rose by twelve percent this quarter. This is largely thanks to the new online support system. Next, I'd like to introduce Maria Gomez, who will explain the changes to our holiday schedule.", [
+    ['What is the main purpose of the meeting?', ['To review the quarter', 'To welcome new clients', 'To launch a product', 'To train new staff'], '"welcome to the quarterly staff meeting".'],
+    ['What contributed to the improvement?', ['A new online support system', 'Lower prices', 'More employees', 'A new office'], '"largely thanks to the new online support system".'],
+    ['What will Maria Gomez talk about?', ['Holiday schedule changes', 'Customer complaints', 'Sales targets', 'The support system'], '"explain the changes to our holiday schedule".']]);
+  SET('4', 4, "This is a traffic update for the morning commute. Highway 1 is very busy near the city bridge because of road repairs. Drivers heading downtown are advised to use Nguyen Hue Avenue instead. Also, the number 12 bus will skip the Central Market stop until Friday. We'll have another update in thirty minutes.", [
+    ['What is causing traffic on Highway 1?', ['Road repairs', 'An accident', 'A festival', 'Bad weather'], '"because of road repairs".'],
+    ['What are drivers advised to do?', ['Take a different road', 'Leave home later', 'Take the bus', 'Park near the bridge'], '"advised to use Nguyen Hue Avenue instead".'],
+    ['What will happen until Friday?', ['A bus will skip a stop.', 'The bridge will close.', 'The market will close.', 'Bus fares will rise.'], '"the number 12 bus will skip the Central Market stop until Friday".']]);
+  P5(4, 'The employee ___ won the award has worked here for ten years.', ['who', 'which', 'whose', 'whom'], 'Thay cho người, làm chủ ngữ của "won" → who.');
+  P5(4, 'If we ___ the order today, it will arrive on Monday.', ['place', 'placed', 'will place', 'would place'], 'Điều kiện loại 1: If + hiện tại đơn, will + V.');
+  P5(4, 'Ms. Kwon is responsible for ___ new staff.', ['training', 'train', 'trained', 'to train'], 'Sau giới từ for → V-ing.');
+  P5(4, 'The software is easy to install; ___, it is very expensive.', ['however', 'therefore', 'because', 'unless'], 'Hai ý trái ngược, sau dấu chấm phẩy → however.');
+  P5(4, 'The new policy will take ___ on January 1.', ['effect', 'affect', 'effective', 'effectively'], 'take effect = có hiệu lực (effect là danh từ).');
+  P5(4, 'Please submit your application ___ the deadline.', ['before', 'during', 'while', 'between'], 'before the deadline = trước hạn chót.');
+  P5(4, 'The company decided ___ its headquarters to Hanoi.', ['to move', 'moving', 'move', 'moved'], 'decide + to V.');
+  P5(4, 'All visitors are required to ___ in at the front desk.', ['sign', 'signs', 'signing', 'signed'], 'be required to + V nguyên mẫu; sign in = ký tên vào.');
+  P5(4, 'The ___ of the new factory is expected next year.', ['completion', 'complete', 'completely', 'completed'], 'The + danh từ + of → completion.');
+  P5(4, 'Neither the manager ___ his assistant was available.', ['nor', 'or', 'and', 'but'], 'Neither … nor.');
+  P5(4, 'The conference room is ___ booked for the entire week.', ['fully', 'full', 'fullness', 'fuller'], 'Bổ nghĩa cho tính từ / phân từ booked → trạng từ fully.');
+  P5(4, 'The proposal ___ by the board next week.', ['will be reviewed', 'will review', 'reviewed', 'is reviewing'], 'Đề xuất "được xem xét", next week → bị động tương lai.');
+  P6(4, 'Westfield Mall Renovation\n\nWestfield Mall will undergo a major renovation beginning in October. The project ___(1)___ a new food court and an expanded parking garage. Most stores will remain open ___(2)___ the construction period. ___(3)___. The mall management apologizes for any inconvenience and thanks shoppers for their ___(4)___.', [
+    [['will include', 'included', 'including', 'has included'], 'Dự án bắt đầu từ tháng 10 (tương lai) → will include.'],
+    [['throughout', 'among', 'along', 'upon'], 'throughout + khoảng thời gian = suốt.'],
+    [['However, the east entrance will be closed until December.', 'The mall first opened in 1998.', 'Many shoppers prefer online stores.', 'Parking fees were reduced last year.'], '"Most stores will remain open…" → "However, …" bổ sung ngoại lệ, mạch lạc nhất.'],
+    [['patience', 'patient', 'patiently', 'patients'], 'their + danh từ: patience (sự kiên nhẫn). patients = bệnh nhân (bẫy).']]);
+  SET('7', 4, 'Local Company Wins Green Award\n\nHANOI — Minh Phat Furniture has received this year\'s Green Business Award from the city\'s Chamber of Commerce. The company was recognized for reducing its energy use by 30 percent over two years. It installed solar panels on its factory roof and replaced old machines with more efficient models. CEO Pham Thu said the savings will be used to train workers in sustainable design. The award ceremony will be held on November 20 at the City Convention Center.', [
+    ['What is the article mainly about?', ['A company receiving an award', 'A new furniture store', 'A change in city laws', 'A training program for students'], 'Tiêu đề và câu đầu: nhận Green Business Award.'],
+    ['What did Minh Phat Furniture do?', ['Installed solar panels', 'Built a new factory', 'Hired 30 more workers', 'Moved to a new city'], '"installed solar panels on its factory roof". "30" là phần trăm năng lượng, không phải số người.'],
+    ['How will the savings be used?', ['To train workers', 'To lower prices', 'To open a store', 'To buy land'], '"the savings will be used to train workers".']]);
+  SET('7', 4, 'Lena Ho (9:12): The client from Osaka wants to move our video call to 3 p.m.\nBen Vo (9:14): I have a training session until 3:30.\nLena Ho (9:15): Could you join at 3:30 then? I\'ll cover the first part.\nBen Vo (9:16): Sure. I\'ll send you the updated price list before then.\nLena Ho (9:17): Thanks, that\'s exactly what they asked about.', [
+    ['What does the client want to do?', ['Reschedule a call', 'Cancel an order', 'Visit the office', 'Lower the price'], '"wants to move our video call to 3 p.m."'],
+    ['At 9:15, what does Lena mean when she writes, "I\'ll cover the first part"?', ['She will lead the call until Ben joins.', 'She will pay for the training.', 'She will write the first report.', 'She will book a meeting room.'], 'Ben bận đến 3:30 → Lena lo phần đầu cuộc gọi.'],
+    ['What will Ben send?', ['An updated price list', 'A training schedule', 'A video file', 'A contract'], '"I\'ll send you the updated price list".']]);
+
+  /* ======================= BẬC 5 · 700–850 ======================= */
+  P1(5, '🧑‍🔧🧽🪟🏢', ['A worker is cleaning the windows of a building.', 'A building is being demolished.', 'Some windows have been left open.', 'A man is installing a door.'], 'Người thợ cầm miếng lau trước cửa kính → cleaning the windows.');
+  P1(5, '🛳️⚓🌊🏙️', ['A ship is docked at a harbor.', 'Passengers are boarding a train.', 'A boat is sailing under a bridge.', 'Waves are crashing onto a beach.'], 'Tàu và mỏ neo cạnh thành phố → tàu đang neo ở cảng (docked).');
+  P2(5, 'Has the budget proposal been approved?', ['The board will decide on Friday.', 'I propose a toast.', "Yes, it's a budget hotel."], 'Chưa có kết quả → trả lời gián tiếp "thứ Sáu hội đồng quyết định".');
+  P2(5, "Why don't you ask Ms. Ruiz to lead the workshop?", ["She's fully booked this month.", "Because it's a workshop.", "I'll lead you there."], 'Lời đề nghị → phản hồi bằng lý do không thể.');
+  P2(5, "Shouldn't we update the safety manual?", ['Legal is already working on it.', "It's safe to say.", 'A manual typewriter.'], 'Đáp lại: việc đó đang được làm.');
+  P2(5, 'Where are the quarterly reports kept?', ['Check the shared drive.', 'Every quarter.', "They're reporters."], 'Nơi chốn → ổ đĩa dùng chung. "Every quarter" là bẫy lặp từ.');
+  P2(5, 'How did the product launch go?', ['Better than we expected.', 'By train.', 'It launches at noon.'], 'How did … go? = diễn ra thế nào → đánh giá kết quả.');
+  P2(5, "You've worked with this supplier before, haven't you?", ['Only on a small project.', 'Yes, I supply it.', 'Before noon.'], 'Câu hỏi đuôi → xác nhận kèm chi tiết.');
+  P2(5, "Who's replacing Mr. Han while he's on leave?", ['His deputy will handle his accounts.', "He'll leave at five.", 'A new place.'], 'Người thay thế → his deputy (cấp phó).');
+  P2(5, 'Can we afford to hire two more engineers this year?', ['Only if sales keep growing.', "They're very affordable chairs.", 'I hired a car.'], 'Trả lời có điều kiện.');
+  SET('3', 5, "W: Daniel, the client in Busan just emailed. They want the first shipment of motors two weeks earlier than planned. M: That's going to be difficult. Our assembly line is already at full capacity. W: What if we added a weekend shift? M: That could work, but we'd need approval for overtime pay. I'll talk to the plant director this afternoon.", [
+    ['What does the client request?', ['An earlier delivery', 'A lower price', 'A different product', 'A visit to the plant'], '"want the first shipment… two weeks earlier".'],
+    ['Why is the request difficult?', ['The assembly line is at full capacity.', 'The motors are defective.', 'The client cancelled.', 'Shipping costs increased.'], '"already at full capacity".'],
+    ['What will the man do this afternoon?', ['Talk to the plant director', 'Email the client', 'Hire temporary workers', 'Visit Busan'], '"I\'ll talk to the plant director this afternoon."']]);
+  SET('3', 5, "M: Hi, Ana. I just reviewed the draft of the annual report. The financial section looks great, but the charts are hard to read. W: You're right. The designer used too many colors. Should I ask her to simplify them? M: Yes, and could you also add a summary page at the beginning? Board members don't always read the full report. W: I'll get that done by Wednesday.", [
+    ['What problem does the man mention?', ['The charts are unclear.', 'The figures are wrong.', 'The report is late.', 'The printer is broken.'], '"the charts are hard to read".'],
+    ['What does the man want added?', ['A summary page', 'More charts', 'A list of board members', 'A financial forecast'], '"add a summary page at the beginning".'],
+    ['Why does the man say, "Board members don\'t always read the full report"?', ['To explain why a summary is useful', 'To complain about the board', 'To suggest shortening every section', 'To cancel the report'], 'Câu hỏi ý định người nói: lý do cần trang tóm tắt.']]);
+  SET('4', 5, "Welcome to today's webinar on remote team management. I'm Kate Lim, and I've trained managers at over two hundred companies. Today we'll cover three topics: setting clear goals, running effective online meetings, and measuring performance. Please type your questions in the chat box at any time. A recording of this session will be emailed to all registered participants tomorrow.", [
+    ['What is the webinar about?', ['Managing remote teams', 'Hiring new staff', 'Online marketing', 'Software development'], '"webinar on remote team management".'],
+    ['What does the speaker say about herself?', ['She has trained many managers.', 'She founded a company.', 'She works in IT.', 'She is a new manager.'], '"I\'ve trained managers at over two hundred companies".'],
+    ['What will participants receive tomorrow?', ['A recording', 'A certificate', 'A discount code', 'A book'], '"A recording… will be emailed… tomorrow."']]);
+  SET('4', 5, "Hello, this message is for Mr. Tuan Le. This is Grace from Horizon Office Supplies. Unfortunately, the ergonomic chairs you ordered have been discontinued by the manufacturer. However, we have a similar model that costs about ten percent more. Since this was our error, we'll offer it at the original price. Please call me back by Thursday to confirm, so we can deliver the chairs next week.", [
+    ['Why is the speaker calling?', ['A product is no longer made.', 'A delivery was damaged.', 'A payment was late.', 'An order was duplicated.'], '"have been discontinued by the manufacturer" = ngừng sản xuất.'],
+    ['What does the speaker offer?', ['A similar product at the same price', 'A full refund', 'Free delivery', 'A discount on desks'], '"a similar model… we\'ll offer it at the original price".'],
+    ['What should the listener do by Thursday?', ['Confirm the order', 'Return the chairs', 'Pay an extra fee', 'Visit the store'], '"call me back by Thursday to confirm".']]);
+  P5(5, '___ by the strong results, the manager decided to expand the program.', ['Encouraged', 'Encouraging', 'Encourage', 'To encourage'], 'Rút gọn mệnh đề bị động (Because he was encouraged…) → V3.');
+  P5(5, 'The director recommended that each employee ___ the safety training.', ['complete', 'completes', 'completed', 'completing'], 'recommend that + S + V nguyên mẫu (giả định).');
+  P5(5, 'We had the brochures ___ by a local company.', ['printed', 'print', 'printing', 'to print'], 'Thể sai khiến bị động: have + vật + V3.');
+  P5(5, 'The new regulations will ___ all imported electronics.', ['affect', 'effect', 'effective', 'affection'], 'affect (động từ) = ảnh hưởng tới; effect thường là danh từ.');
+  P5(5, "The company's profits rose ___ due to strong overseas demand.", ['significantly', 'significant', 'significance', 'signify'], 'Bổ nghĩa cho động từ rose → trạng từ.');
+  P5(5, 'Any changes to the schedule are subject ___ approval by the manager.', ['to', 'for', 'with', 'on'], 'be subject to = phụ thuộc vào, phải được…');
+  P5(5, 'The contract will expire ___ it is renewed by June 30.', ['unless', 'if', 'because', 'whereas'], 'unless = trừ khi (if … not).');
+  P5(5, 'Mr. Ito has been ___ to regional sales director.', ['promoted', 'promoting', 'promotion', 'promote'], 'has been + V3: được thăng chức.');
+  P5(5, 'The survey results were ___ with our expectations.', ['consistent', 'consisted', 'consisting', 'consistently'], 'be consistent with = phù hợp với.');
+  P5(5, 'The firm is known for its ___ approach to customer service.', ['innovative', 'innovation', 'innovate', 'innovatively'], 'Trước danh từ approach → tính từ.');
+  P5(5, 'Employees ___ to attend the seminar should register by Friday.', ['wishing', 'wish', 'wished', 'wishes'], 'Rút gọn mệnh đề quan hệ chủ động (who wish) → wishing.');
+  P5(5, 'The budget was ___ reduced, so several projects were delayed.', ['considerably', 'considerable', 'consider', 'consideration'], 'Bổ nghĩa cho phân từ reduced → trạng từ.');
+  P6(5, 'Dear Valued Customer,\n\nWe are writing to inform you that our customer portal will be ___(1)___ for scheduled maintenance this Saturday from 1 a.m. to 5 a.m. During this time, you will not be able to view invoices or place orders online. ___(2)___. We have chosen this time to ___(3)___ the impact on our customers. Once the work is complete, the portal will offer faster loading times and ___(4)___ security features.\n\nSincerely,\nThe Delta Supply Team', [
+    [['unavailable', 'available', 'unavailability', 'availably'], 'Bảo trì → hệ thống không dùng được: unavailable.'],
+    [['Urgent orders can still be placed by phone.', 'Our new office opened last month.', 'Invoices are sent every Friday.', 'Thank you for completing our survey.'], 'Không đặt hàng online được → đưa ra cách khác (qua điện thoại).'],
+    [['minimize', 'maximize', 'criticize', 'finalize'], 'Chọn giờ khuya để giảm thiểu ảnh hưởng → minimize.'],
+    [['enhanced', 'enhancing', 'enhance', 'enhancement'], 'Trước danh từ features → tính từ dạng V3: enhanced (được nâng cấp).']]);
+  SET('7', 5, 'Subject: Conference Registration\n\nDear Dr. Hoang,\nThank you for registering for the Asia Manufacturing Summit, to be held at the Saigon Expo Center from September 18 to 20. Your registration includes access to all sessions, lunch on all three days, and the networking dinner on September 19. Please note that the factory tour on September 20 requires a separate booking, as space is limited to 40 people. Your badge can be collected at the registration desk from 8 a.m. on the first day. If you need to cancel, a full refund is available until August 31.\nRegards,\nSummit Organizing Committee', [
+    ['What is included in the registration?', ['Lunch on all three days', 'The factory tour', 'Hotel accommodation', 'Airport transportation'], '"includes… lunch on all three days". Factory tour phải đặt riêng.'],
+    ['What is indicated about the factory tour?', ['It has limited space.', 'It is on September 18.', 'It is free for everyone.', 'It was cancelled.'], '"space is limited to 40 people".'],
+    ['The word "collected" in the email is closest in meaning to', ['picked up', 'gathered', 'saved', 'paid'], 'collect your badge = nhận / lấy → picked up.'],
+    ['What is true about cancellations?', ['Full refunds are available until August 31.', 'No refunds are given.', 'They must be made in person.', 'They cost a small fee.'], '"a full refund is available until August 31".']]);
+  SET('7', 5, 'Position: Maintenance Technician (Night Shift)\n\nTanPhu Electronics is seeking an experienced technician to maintain production equipment at our main plant. Responsibilities include performing preventive maintenance, repairing electrical faults, and keeping accurate service records. Applicants must have at least three years of experience with industrial machinery and a vocational certificate in electrical engineering. Knowledge of PLC systems is preferred. To apply, send your CV and two references to hr@tanphu.example by October 15.', [
+    ['What is one responsibility of the job?', ['Keeping service records', 'Training new managers', 'Selling equipment', 'Designing products'], '"keeping accurate service records".'],
+    ['What is a requirement for the position?', ['Three years of experience', 'A university degree', 'Knowledge of PLC systems', 'Experience as a supervisor'], '"must have at least three years of experience". PLC chỉ là "preferred" (ưu tiên), không bắt buộc. Đây là bẫy hay gặp.'],
+    ['What must applicants send?', ['A CV and two references', 'A recent photo', 'A cover letter only', 'A copy of their ID'], '"send your CV and two references".']]);
+
+  /* ======================= BẬC 6 · 850–990 ======================= */
+  P1(6, '👷🚜🚧🛣️', ['Construction equipment is being operated on a road.', 'A road has been reopened to traffic.', 'Workers are resting beside a truck.', 'Traffic cones are being loaded onto a truck.'], 'Có người lái máy xúc trên công trường làm đường → being operated.');
+  P1(6, '🚶‍♀️🖼️🖼️🏛️', ['Some artwork is on display in a gallery.', 'Some paintings are being taken down from a wall.', 'A woman is painting a portrait.', 'Some frames are piled on the floor.'], 'Tranh treo trong bảo tàng, người đi xem → on display. Không có ai đang tháo tranh hay vẽ.');
+  P2(6, "Why hasn't the new accounting software been installed?", ["We're still waiting for the licenses.", 'The account was closed.', 'Yes, it has been.'], 'Lý do gián tiếp: còn chờ bản quyền.');
+  P2(6, 'Should we renew the lease or look for a new office?', ["Let's compare the costs first.", 'Yes, we should.', 'The lease was signed in 2019.'], 'Câu hỏi lựa chọn → không chọn ngay, đề xuất so sánh chi phí trước.');
+  P2(6, 'I thought the merger was announced yesterday.', ["It's been pushed back to Monday.", 'Yes, I merge them.', 'Announce it loudly.'], 'Đính chính thông tin: bị lùi sang thứ Hai.');
+  P2(6, 'Who approved the overtime for the weekend shift?', ['I believe it was the plant director.', "It's over there.", 'A weekend shift.'], 'Who → người, có thể kèm "I believe…".');
+  P2(6, "Wouldn't it be cheaper to ship the parts by sea?", ["It would, but it'd take three weeks longer.", 'The parts of speech.', 'I see it.'], 'Đồng ý một phần + nêu hạn chế.');
+  P2(6, "The quarterly figures still haven't been released.", ["Finance said they'd be out by noon.", 'I figured that out.', 'He was released.'], 'Phản hồi bằng thông tin cập nhật.');
+  P2(6, 'How soon can you finalize the contract terms?', ['As soon as legal signs off.', 'For a long term.', 'Very finally.'], 'How soon → thời điểm, có thể trả lời bằng điều kiện.');
+  P2(6, 'Do you know if the CEO will attend the trade show?', ['Her assistant would know.', 'It shows a trade.', 'Yes, I attended.'], 'Không biết → chỉ người biết.');
+  SET('3', 6, "W: Mr. Sato, the auditors have flagged some inconsistencies in our inventory records for the Thu Duc warehouse. M: I saw the preliminary report. Most of the discrepancies seem to come from items that were transferred between warehouses but never logged. W: Then we should implement barcode scanning for every transfer. M: Agreed. Draft a proposal with cost estimates, and I'll present it at the next management meeting.", [
+    ['What problem are the speakers discussing?', ['Errors in inventory records', 'A delayed audit', 'A warehouse fire', 'A shortage of staff'], '"flagged some inconsistencies in our inventory records".'],
+    ['According to the man, what caused the problem?', ['Transfers that were not recorded', 'Faulty barcode scanners', 'Theft from the warehouse', 'A software update'], '"transferred between warehouses but never logged".'],
+    ['What does the man ask the woman to do?', ['Prepare a proposal', 'Contact the auditors', 'Close the warehouse', 'Count the items again'], '"Draft a proposal with cost estimates".']]);
+  SET('3', 6, "M: Linh, I just heard that Ferro Steel is raising its prices by eight percent next quarter. W: That's going to hurt our margins on the bridge project. Is there any way we can lock in the current price? M: Our contract lets us place advance orders at existing rates until the end of this month. W: Then let's order enough for the next six months. I'll check our storage capacity right away.", [
+    ['What news does the man share?', ['A supplier will raise its prices.', 'A project was cancelled.', 'A contract expired.', 'A competitor won a bid.'], '"Ferro Steel is raising its prices".'],
+    ['What does the contract allow the company to do?', ['Order in advance at current prices', 'Get a full refund', 'Receive free delivery', 'Pay in installments'], '"place advance orders at existing rates".'],
+    ['What will the woman check?', ['Storage capacity', 'The project schedule', 'Steel quality', 'The bank balance'], '"I\'ll check our storage capacity right away."']]);
+  SET('4', 6, "Good evening, and thank you for joining us at the Asia Logistics Forum. Our keynote speaker tonight, Dr. Helen Park, has spent two decades advising governments on port infrastructure. Her research on automated container terminals has been credited with cutting loading times by nearly forty percent at several major ports. Following her talk, there will be a brief question-and-answer session. Due to time constraints, we ask that you limit yourselves to one question each.", [
+    ['Who is Dr. Park?', ['An infrastructure expert', 'A government minister', 'A shipping company CEO', 'A journalist'], '"advising governments on port infrastructure".'],
+    ["What has Dr. Park's research been credited with?", ['Reducing loading times', 'Lowering fuel costs', 'Creating new jobs', 'Building new ports'], '"cutting loading times by nearly forty percent".'],
+    ['What are listeners asked to do?', ['Ask only one question each', 'Turn off their phones', 'Submit questions in writing', 'Leave before the Q&A'], '"limit yourselves to one question each".']]);
+  SET('4', 6, "Hi Ms. Duong, it's Victor from the facilities team. I'm calling about the power outage in Building B last night. Our initial inspection suggests the main breaker tripped because of an overload, not an equipment fault. As a precaution, we'll run a full load test this Saturday, so please make sure your team saves its work and shuts down non-essential machines by Friday evening. I'll send you the detailed report once the test is complete.", [
+    ['According to the speaker, what caused the outage?', ['An overload', 'An equipment fault', 'A storm', 'A damaged cable'], '"the main breaker tripped because of an overload, not an equipment fault".'],
+    ['What will happen on Saturday?', ['A load test will be carried out.', 'A new breaker will be installed.', 'Building B will reopen.', 'A safety training will be held.'], '"we\'ll run a full load test this Saturday".'],
+    ["What is the listener's team asked to do?", ['Shut down non-essential machines', 'Work on Saturday', 'Replace some equipment', 'Leave Building B immediately'], '"shuts down non-essential machines by Friday evening".']]);
+  P5(6, 'Not until the audit was completed ___ the extent of the losses.', ['did the company realize', 'the company realized', 'the company did realize', 'realized the company'], 'Not until … đầu câu → đảo ngữ ở mệnh đề chính: did + S + V.');
+  P5(6, '___ the shipment arrive damaged, please contact our claims department immediately.', ['Should', 'If', 'Were', 'Had'], 'Đảo ngữ điều kiện loại 1: Should + S + V (= If the shipment arrives…).');
+  P5(6, 'The board is ___ to approve the merger unless the terms are revised.', ['unlikely', 'unlike', 'unlikelihood', 'dislike'], 'be unlikely to + V = khó có khả năng.');
+  P5(6, "The new CEO has vowed to ___ the company's reputation for reliability.", ['restore', 'restoration', 'restored', 'restorative'], 'vow to + V nguyên mẫu.');
+  P5(6, 'All proposals must ___ with the guidelines outlined in Section 3.', ['comply', 'compliance', 'compliant', 'complying'], 'must + V nguyên mẫu; comply with = tuân thủ.');
+  P5(6, "The factory's output has ___ steadily since the new equipment was installed.", ['risen', 'raised', 'rose', 'arisen'], 'Nội động từ rise (không tân ngữ), V3 risen. raise cần tân ngữ; arise = nảy sinh.');
+  P5(6, 'So ___ was the demand that the product sold out within hours.', ['great', 'greatly', 'greatness', 'greater'], 'Đảo ngữ So + tính từ + be + S + that…');
+  P5(6, "The candidate's references were ___ positive, so she was hired immediately.", ['overwhelmingly', 'overwhelming', 'overwhelmed', 'overwhelm'], 'Bổ nghĩa cho tính từ positive → trạng từ.');
+  P5(6, '___ its competitors, the firm chose to invest heavily in research.', ['Unlike', 'Unless', 'Despite of', 'Whereas'], 'Theo sau là cụm danh từ, nghĩa "không giống như" → Unlike. "Despite of" là sai ngữ pháp.');
+  P5(6, 'The agreement is ___ upon the approval of both boards.', ['contingent', 'consistent', 'convenient', 'confident'], 'be contingent upon = phụ thuộc vào.');
+  P5(6, 'The proposal was rejected on the ___ that it was too costly.', ['grounds', 'reasons', 'causes', 'purposes'], 'on the grounds that = với lý do là (cụm cố định).');
+  P5(6, 'Only by cutting costs ___ remain competitive.', ['can we', 'we can', 'we could', 'could'], 'Only by … đầu câu → đảo ngữ: can we.');
+  P6(6, 'MEMORANDUM\nTo: Department Heads\nRe: Revised travel policy\n\nEffective immediately, all international travel must be approved by a vice president at least three weeks in advance. This change is intended to ___(1)___ costs, which rose sharply last year. ___(2)___, employees are encouraged to use video conferencing whenever possible. Exceptions to the three-week rule will be granted only in ___(3)___ circumstances, such as urgent client issues. ___(4)___\n\nThank you for your cooperation.', [
+    [['curb', 'curve', 'cure', 'curl'], 'curb costs = kiềm chế chi phí.'],
+    [['In addition', 'In contrast', 'Nevertheless', 'Otherwise'], 'Bổ sung thêm một biện pháp → In addition.'],
+    [['exceptional', 'exception', 'exceptionally', 'excepted'], 'Trước danh từ circumstances → tính từ exceptional (đặc biệt).'],
+    [['Please direct any questions to the finance office.', "Last year's sales were the highest ever.", 'The new cafeteria opens on Monday.', 'Video conferencing was invented decades ago.'], 'Câu kết thông báo chính sách → hướng dẫn liên hệ khi có thắc mắc.']]);
+  SET('7', 6, 'Kinh Bac Precision — Quarterly Update\n\nDespite a 6 percent drop in domestic orders, Kinh Bac Precision reported record revenue in the third quarter, driven largely by exports of high-voltage switchgear to Australia and Japan. Export sales now account for 58 percent of total revenue, up from 41 percent a year earlier. To keep pace with demand, the company will add a second production line at its main plant in January, creating roughly 120 jobs. However, CFO Dang Minh cautioned that rising copper prices could squeeze margins next year, and the company is negotiating long-term supply contracts to reduce this risk.', [
+    ['What is the main purpose of the update?', ['To report financial results and plans', 'To announce a merger', 'To advertise new products', 'To recruit managers'], 'Nêu doanh thu quý và kế hoạch mở rộng.'],
+    ['What is suggested about domestic orders?', ['They decreased.', 'They grew by 6 percent.', 'They account for 58 percent of revenue.', 'They mostly come from Japan.'], '"a 6 percent drop in domestic orders".'],
+    ['What is NOT mentioned as part of the company\'s plans?', ['Opening an office in Australia', 'Adding a production line', 'Creating new jobs', 'Negotiating supply contracts'], 'Australia chỉ là thị trường xuất khẩu; không nói mở văn phòng ở đó.'],
+    ['What concern does the CFO raise?', ['Higher copper prices', 'A shortage of workers', 'Weaker exports', 'New regulations'], '"rising copper prices could squeeze margins".']]);
+  SET('7', 6, 'Dear Mr. Quan,\n\nI am writing regarding invoice #4471 for the maintenance of our transformer substation. While we appreciate the prompt service, the invoice lists 14 labor hours, whereas the work report signed by our supervisor records only 9. In addition, the replacement relay was charged at the standard rate, even though our service agreement entitles us to a 15 percent discount on parts. Could you please review these items and issue a corrected invoice? We would like to settle the account before our fiscal year closes on December 31.\n\nBest regards,\nNga Vo, Procurement Manager', [
+    ['Why did Ms. Vo write the email?', ['To dispute charges on an invoice', 'To request urgent maintenance', 'To cancel a service agreement', 'To order new relays'], 'Chỉ ra hai chỗ tính sai và xin hóa đơn đã sửa.'],
+    ['What does the work report show?', ['Nine hours of labor', 'Fourteen hours of labor', 'A damaged transformer', 'A missing part'], '"the work report… records only 9".'],
+    ['What is indicated about the service agreement?', ['It includes a discount on parts.', 'It expires on December 31.', 'It covers labor for free.', 'It was signed by Mr. Quan.'], '"entitles us to a 15 percent discount on parts". December 31 là ngày khóa sổ năm tài chính, không phải ngày hết hạn hợp đồng.']]);
+
+  window.TOEIC_BANK = B;
+})();
+</script>
+<script>
 /* Bậc Thang TOEIC — logic ứng dụng (chạy offline, lưu tiến độ trên máy) */
 (function () {
   'use strict';
   var LV = window.TOEIC_LEVELS.slice().sort(function (a, b) { return a.n - b.n; });
   var PASS_TEST = 0.7, PASS_UNIT = 0.6, SEC_PER_Q = 60, MAX_PLAYS_TEST = 2, PLACE_PER_LV = 4, PLACE_PASS = 3;
-  var PART = { '2': 'Part 2 · Hỏi – đáp', '3': 'Part 3 · Hội thoại', '4': 'Part 4 · Bài nói ngắn', '5': 'Part 5 · Hoàn thành câu', '6': 'Part 6 · Hoàn thành đoạn văn', '7': 'Part 7 · Đọc hiểu' };
+  var PART = { '1': 'Part 1 · Mô tả tranh', '2': 'Part 2 · Hỏi – đáp', '3': 'Part 3 · Hội thoại', '4': 'Part 4 · Bài nói ngắn', '5': 'Part 5 · Hoàn thành câu', '6': 'Part 6 · Hoàn thành đoạn văn', '7': 'Part 7 · Đọc hiểu' };
   var QI = {};
   LV.forEach(function (L) {
     L.units.forEach(function (U, ui) {
@@ -1320,10 +1699,13 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     });
     L.test.forEach(function (q, qi) { q.id = 'L' + L.n + 'T' + (qi + 1); q.lv = L.n; q.src = 'Bậc ' + L.n + ' · Đề kiểm tra'; QI[q.id] = q; });
   });
+  var BANK = window.TOEIC_BANK || [], ALLQ = [], seenQ = {};
+  BANK.forEach(function (q, i) { q.id = 'B' + q.lv + '-' + (i + 1); q.src = 'Ngân hàng đề · Bậc ' + q.lv; QI[q.id] = q; });
+  Object.keys(QI).forEach(function (id) { var q = QI[id], k = q.p + '|' + (q.s || '') + '|' + (q.r || '') + '|' + (q.q || '') + '|' + q.o[0]; if (seenQ[k]) return; seenQ[k] = 1; ALLQ.push(q); });
 
   /* ---------- lưu trữ ---------- */
   var KEY = 'bacthang-toeic-v1';
-  function def() { return { units: {}, tests: {}, wrong: {}, known: {}, rate: 0.9, answered: 0, correct: 0, streak: 0, lastDay: '', placed: false }; }
+  function def() { return { units: {}, tests: {}, wrong: {}, known: {}, rate: 0.9, answered: 0, correct: 0, streak: 0, lastDay: '', placed: false, mocks: [], pf: 'all', ps: {} }; }
   var S = def();
   try { var raw = localStorage.getItem(KEY); if (raw) S = Object.assign(def(), JSON.parse(raw)); } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
@@ -1352,6 +1734,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     path: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20h4v-5h5v-5h5V4"/><circle cx="19" cy="4" r="1.2" fill="currentColor"/></svg>',
     redo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/></svg>',
     gear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+    exam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M9 3.5h6v3H9zM8.5 11l1.5 1.5 3-3M8.5 16.5h7"/></svg>',
     ladder: '<svg viewBox="0 0 24 24" fill="none" stroke="#f2a541" stroke-width="2.4" stroke-linecap="round"><path d="M7 3v18M17 3v18M7 7h10M7 12h10M7 17h10"/></svg>'
   };
 
@@ -1363,7 +1746,8 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   function unlocked(n) { return n === 1 || passed(n - 1); }
   function testReady(n) { return unlocked(n) && unitsDone(n) === 4; }
   function currentLevel() { for (var i = 0; i < LV.length; i++) if (!passed(LV[i].n)) return LV[i].n; return 7; }
-  function estBand() { var hi = 0; LV.forEach(function (L) { if (passed(L.n)) hi = L.n; }); if (!hi) return '—'; return LV[hi - 1].band.split('–')[1] + '+'; }
+  function lastMock() { return S.mocks && S.mocks.length ? S.mocks[S.mocks.length - 1] : null; }
+  function estBand() { var m = lastMock(); if (m) return '≈' + (m.ls + m.rs); var hi = 0; LV.forEach(function (L) { if (passed(L.n)) hi = L.n; }); if (!hi) return '—'; return LV[hi - 1].band.split('–')[1] + '+'; }
   function lv(n) { return LV[n - 1]; }
 
   /* ---------- giọng đọc (Web Speech, chạy offline trên iPhone) ---------- */
@@ -1432,6 +1816,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     else if (p[0] === 'quiz' && Q) { renderQuiz(); return; }
     else if (p[0] === 'result' && R) html = vResult();
     else if (p[0] === 'review') html = vReview();
+    else if (p[0] === 'luyende') html = vDrill();
     else if (p[0] === 'caidat') html = vSettings();
     else { if (p.length) { history.replaceState(null, '', location.pathname + location.search); } html = vHome(); p = []; }
     $('#app').innerHTML = html;
@@ -1442,6 +1827,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     var nw = Object.keys(S.wrong).length;
     $('#tabbar').innerHTML = '<div class="in">' +
       '<a href="#" class="' + (['home', 'level', 'unit'].indexOf(cur) >= 0 ? 'on' : '') + '">' + IC.path + 'Lộ trình</a>' +
+      '<a href="#luyende" class="' + (cur === 'luyende' ? 'on' : '') + '">' + IC.exam + 'Luyện đề</a>' +
       '<a href="#review" class="' + (cur === 'review' ? 'on' : '') + '">' + IC.redo + 'Ôn lỗi sai' + (nw ? '<span class="badge">' + nw + '</span>' : '') + '</a>' +
       '<a href="#caidat" class="' + (cur === 'caidat' ? 'on' : '') + '">' + IC.gear + 'Cài đặt</a></div>';
   }
@@ -1464,6 +1850,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
       '<div class="ring" style="--p:' + (tot / 24) + '"><b>' + Math.round(tot / 24 * 100) + '%</b></div></div>' +
       '<div class="stats"><div><b>' + streakNow() + '</b><span>ngày liên tiếp</span></div><div><b>' + knownN + '</b><span>từ đã nhớ</span></div>' +
       '<div><b>' + acc + '</b><span>trả lời đúng</span></div><div><b>' + estBand() + '</b><span>TOEIC ước tính</span></div></div>' +
+      '<button class="btn" data-act="go" data-h="#luyende" style="margin-bottom:10px;background:rgba(255,255,255,.1);color:#fff;box-shadow:none">' + IC.exam.replace('<svg', '<svg width="18" height="18"') + ' Luyện đề 7 Part · Thi thử</button>' +
       (cur <= 6 ? '<button class="btn primary" data-act="go" data-h="#level-' + cur + '">Học tiếp Bậc ' + cur + ' →</button>' : '') + '</section>';
     if (!S.placed && cur <= 6) {
       h += '<div class="card placement" data-act="placement" role="button"><div class="pi">🧭</div><div><b>Đã có nền tảng? Làm bài xếp lớp</b><span class="muted small">24 câu · 24 phút. Đạt bậc nào sẽ mở khóa bậc đó, không cần học lại từ đầu.</span></div><div class="chev">›</div></div>';
@@ -1577,15 +1964,15 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   }
   function startQuiz(o) {
     stopSpeech();
-    Q = { mode: o.mode, title: o.title, n: o.n, u: o.u, timed: !!o.timed, i: 0,
+    Q = { mode: o.mode, title: o.title, n: o.n, u: o.u, timed: !!o.timed, i: 0, k: o.k, p: o.p, maxPlays: o.maxPlays || MAX_PLAYS_TEST, pl: {}, au: {},
       items: o.questions.map(function (q) { return { q: q, order: shuffle(q.o.map(function (_, k) { return k; })), chosen: null, plays: 0, auto: false }; }) };
-    if (Q.timed) Q.deadline = Date.now() + Q.items.length * SEC_PER_Q * 1000;
+    if (Q.timed) Q.deadline = Date.now() + (o.secs || Q.items.length * SEC_PER_Q) * 1000;
     history.pushState(null, '', '#quiz');
     document.body.classList.add('quiz-mode');
     renderQuiz();
   }
   function isRight(it) { return it.chosen !== null && it.order[it.chosen] === 0; }
-  function record(q, ok) { S.answered++; if (ok) { S.correct++; delete S.wrong[q.id]; } else S.wrong[q.id] = (S.wrong[q.id] || 0) + 1; touchDay(); }
+  function record(q, ok) { S.ps = S.ps || {}; var ps = S.ps[q.p] = S.ps[q.p] || { a: 0, c: 0 }; ps.a++; if (ok) ps.c++; S.answered++; if (ok) { S.correct++; delete S.wrong[q.id]; } else S.wrong[q.id] = (S.wrong[q.id] || 0) + 1; touchDay(); }
   function renderQuiz() {
     var it = Q.items[Q.i], q = it.q, practice = !Q.timed, answered = it.chosen !== null;
     var h = '<div class="qtop" style="padding-top:calc(10px + var(--safe-t))"><button class="icon-btn" data-act="quitQuiz" aria-label="Thoát">' + IC.x + '</button><div class="title">' + esc(Q.title) + '</div>' +
@@ -1593,18 +1980,19 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     h += '<div class="qprog"><i style="width:' + ((Q.i + (practice && answered ? 1 : 0)) / Q.items.length * 100) + '%"></i></div>';
     if (Q.timed) h += '<div class="dots">' + Q.items.map(function (x, k) { return '<button class="' + (x.chosen !== null ? 'ans ' : '') + (k === Q.i ? 'cur' : '') + '" data-act="jump" data-i="' + k + '">' + (k + 1) + '</button>'; }).join('') + '</div>';
     h += '<span class="tag">' + (PART[q.p] || 'Câu hỏi') + '</span>';
-    if (q.s) {
-      var left = MAX_PLAYS_TEST - it.plays;
+    if (q.img) h += '<div class="photo" role="img" aria-label="Tranh minh họa Part 1">' + q.img + '</div>';
+    if (q.s || q.lo) {
+      var left = Q.maxPlays - plays(it);
       h += '<div class="audio"><button class="play" id="playBtn" data-act="play" aria-label="Phát audio" ' + (Q.timed && left <= 0 ? 'disabled style="opacity:.4"' : '') + '>' + IC.play + '</button><div><b>Nghe audio</b><span>' +
-        (Q.timed ? (left > 0 ? 'Còn ' + left + ' lượt nghe' : 'Đã hết lượt nghe') : 'Nghe lại không giới hạn') + '</span></div></div>';
+        (Q.timed ? (left > 0 ? 'Còn ' + left + ' lượt nghe' : 'Đã hết lượt nghe') : 'Nghe lại không giới hạn') + (q.lo ? ' · đáp án chỉ được đọc, không in ra' : '') + '</span></div></div>';
     }
     if (q.r) h += '<div class="passage">' + fmtText(q.r) + '</div>';
-    h += '<div class="qtext">' + fmtText(q.q || 'Chọn câu đáp lại phù hợp nhất.') + '</div><div class="opts">';
+    h += '<div class="qtext">' + fmtText(q.q || (q.p === '1' ? 'Nghe 4 câu mô tả, chọn câu đúng nhất với bức tranh.' : 'Nghe câu hỏi và 3 câu đáp, chọn câu đáp lại phù hợp nhất.')) + '</div><div class="opts">';
     it.order.forEach(function (oi, pos) {
       var cls = 'opt';
       if (practice && answered) { if (oi === 0) cls += ' right'; else if (pos === it.chosen) cls += ' wrong'; else cls += ' dim'; }
       else if (pos === it.chosen) cls += ' sel';
-      h += '<button class="' + cls + '" data-act="pick" data-pos="' + pos + '"><span class="k">' + 'ABCD'[pos] + '</span><span>' + esc(q.o[oi]) + '</span></button>';
+      h += '<button class="' + cls + '" data-act="pick" data-pos="' + pos + '"><span class="k">' + 'ABCD'[pos] + '</span><span>' + (q.lo && !(practice && answered) ? '<span class="lo">Đáp án (' + 'ABCD'[pos] + ')</span>' : esc(q.o[oi])) + '</span></button>';
     });
     h += '</div>';
     if (practice && answered) {
@@ -1625,7 +2013,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     $('#tabbar').innerHTML = '';
     window.scrollTo(0, 0);
     if (Q.timed) { tick(); clearInterval(timerId); timerId = setInterval(tick, 1000); }
-    if (q.s && !it.auto) { it.auto = true; playAudio(); }
+    if ((q.s || q.lo) && !Q.au[gk(it)]) { Q.au[gk(it)] = 1; playAudio(); }
   }
   function tick() {
     if (!Q || !Q.timed) return clearInterval(timerId);
@@ -1633,11 +2021,17 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     if (el) { el.textContent = '⏱ ' + Math.floor(left / 60) + ':' + ('0' + left % 60).slice(-2); el.classList.toggle('low', left <= 60); }
     if (left <= 0) { clearInterval(timerId); toast('Hết giờ! Bài làm đã được nộp.'); finishQuiz(); }
   }
+  function gk(it) { return it.q.s && !it.q.lo ? it.q.s : it.q.id; }
+  function plays(it) { return Q.pl[gk(it)] || 0; }
+  function audioText(it) {
+    var q = it.q; if (!q.lo) return q.s;
+    return (q.s ? q.s + ' … ' : '') + it.order.map(function (oi, pos) { return '(' + 'ABCD'[pos] + ') ' + q.o[oi]; }).join(' … ');
+  }
   function playAudio() {
     var it = Q.items[Q.i];
-    if (Q.timed) { if (it.plays >= MAX_PLAYS_TEST) return toast('Đã hết lượt nghe cho câu này'); it.plays++; }
-    var b = $('#playBtn'); speak(it.q.s, b);
-    if (Q.timed) { var sp = b && b.parentNode.querySelector('span'); var left = MAX_PLAYS_TEST - it.plays; if (sp) sp.textContent = left > 0 ? 'Còn ' + left + ' lượt nghe' : 'Đã hết lượt nghe (đang phát)'; }
+    if (Q.timed) { if (plays(it) >= Q.maxPlays) return toast('Đã hết lượt nghe cho câu này'); Q.pl[gk(it)] = plays(it) + 1; }
+    var b = $('#playBtn'); speak(audioText(it), b);
+    if (Q.timed) { var sp = b && b.parentNode.querySelector('span'); var left = Q.maxPlays - plays(it); if (sp) sp.textContent = left > 0 ? 'Còn ' + left + ' lượt nghe' : 'Đã hết lượt nghe (đang phát)'; }
   }
   function pick(pos) {
     var it = Q.items[Q.i];
@@ -1658,6 +2052,11 @@ input[type=range]{width:100%;accent-color:var(--ink)}
       var pt = S.tests[Q.n] || {}, was = !!pt.passed, ok = score >= PASS_TEST;
       S.tests[Q.n] = { best: Math.max(pt.best || 0, score), passed: was || ok, attempts: (pt.attempts || 0) + 1, last: score, viaPlacement: pt.viaPlacement && !ok ? true : undefined };
       r.ok = ok; r.newly = !was && ok;
+    } else if (Q.mode === 'mock') {
+      var Li = items.filter(function (it) { return +it.q.p <= 4; }), Ri = items.filter(function (it) { return +it.q.p >= 5; });
+      r.ls = estSec(Li); r.rs = estSec(Ri); r.lc = Li.filter(isRight).length; r.lt = Li.length; r.rc = Ri.filter(isRight).length; r.rt = Ri.length; r.k = Q.k;
+      S.mocks = (S.mocks || []).concat([{ d: today(), k: Q.k, f: S.pf, ls: r.ls, rs: r.rs, lc: r.lc, lt: r.lt, rc: r.rc, rt: r.rt }]).slice(-20);
+    } else if (Q.mode === 'part') { r.p = Q.p;
     } else if (Q.mode === 'placement') {
       var per = LV.map(function (L) { var its = items.filter(function (it) { return it.q.lv === L.n; }); return { n: L.n, c: its.filter(isRight).length, t: its.length }; });
       var placed = 0; for (var i = 0; i < per.length; i++) { if (per[i].c >= PLACE_PASS) placed = per[i].n; else break; }
@@ -1668,6 +2067,18 @@ input[type=range]{width:100%;accent-color:var(--ink)}
     history.replaceState(null, '', '#result');
     route();
     if (r.newly || (r.mode === 'placement' && r.placed > 0)) confetti();
+  }
+
+  function estSec(arr) {
+    if (!arr.length) return 5; var w = 0, c = 0;
+    arr.forEach(function (it) { var ww = 0.6 + 0.2 * (it.q.lv || 3); w += ww; if (isRight(it)) c += ww; });
+    return Math.max(5, Math.min(495, Math.round((5 + 490 * c / w) / 5) * 5));
+  }
+  function partTable(items) {
+    var rows = '';
+    ['1', '2', '3', '4', '5', '6', '7'].forEach(function (p) { var its = items.filter(function (it) { return it.q.p === p; }); if (!its.length) return; var c = its.filter(isRight).length;
+      rows += '<tr><td>' + PART[p] + '</td><td class="n"><b>' + c + '/' + its.length + '</b> · ' + pct(c / its.length) + '</td></tr>'; });
+    return '<table class="fmt"><tr><th>Phần</th><th style="text-align:right">Đúng</th></tr>' + rows + '</table>';
   }
 
   /* ---------- màn hình: kết quả ---------- */
@@ -1687,6 +2098,13 @@ input[type=range]{width:100%;accent-color:var(--ink)}
       if (r.testNowReady) h += '<div class="unlock">🎯 Bạn đã xong 4/4 bài — bài kiểm tra Bậc ' + r.n + ' đã mở!</div>';
       h += '</div><div class="btn-row"><button class="btn" data-act="practice" data-n="' + r.n + '" data-u="' + r.u + '">Luyện lại</button>' +
         (r.u < 4 && r.score >= PASS_UNIT ? '<button class="btn dark" data-act="go" data-h="#unit-' + r.n + '-' + (r.u + 1) + '-grammar">Bài ' + (r.u + 1) + ' →</button>' : '<button class="btn dark" data-act="go" data-h="#level-' + r.n + '">Về Bậc ' + r.n + '</button>') + '</div>';
+    } else if (r.mode === 'mock') {
+      h += '<h2>Điểm ước tính ≈ ' + (r.ls + r.rs) + ' / 990</h2><p>Nghe ' + r.ls + ' (đúng ' + r.lc + '/' + r.lt + ') · Đọc ' + r.rs + ' (đúng ' + r.rc + '/' + r.rt + ')</p>' +
+        '<p class="small muted" style="margin-top:6px">Ước tính sơ bộ theo tỷ lệ đúng và độ khó câu hỏi, không thay thế điểm thi thật.</p>' + partTable(r.items) + '</div>' +
+        '<div class="btn-row"><button class="btn primary" data-act="mock" data-k="' + r.k + '">Làm đề khác</button><button class="btn" data-act="go" data-h="#luyende">Về Luyện đề</button></div>';
+    } else if (r.mode === 'part') {
+      h += '<h2>Xong lượt luyện ' + PART[r.p].split(' · ')[0] + '</h2><p>' + PART[r.p] + ' · câu sai đã được lưu vào Sổ lỗi sai.</p></div>' +
+        '<div class="btn-row"><button class="btn primary" data-act="part" data-p="' + r.p + '">Luyện tiếp</button><button class="btn" data-act="go" data-h="#luyende">Về Luyện đề</button></div>';
     } else if (r.mode === 'placement') {
       h += '<h2>' + (r.placed ? 'Bạn vững đến Bậc ' + r.placed : 'Bắt đầu từ Bậc 1') + '</h2><p>' + (r.placed >= 6 ? 'Toàn bộ lộ trình đã được mở.' : r.placed ? 'Đã mở khóa đến Bậc ' + (r.placed + 1) + '. Bạn vẫn có thể ôn lại các bậc dưới.' : 'Mỗi bậc cần đúng ≥' + PLACE_PASS + '/' + PLACE_PER_LV + ' câu. Học từ nền tảng sẽ chắc hơn!') + '</p>';
       h += '<table class="pl-table">' + r.per.map(function (p) { return '<tr><td style="text-align:left">Bậc ' + p.n + ' · ' + lv(p.n).name + '</td><td style="text-align:right"><b>' + p.c + '/' + p.t + '</b> ' + (p.c >= PLACE_PASS ? '✅' : '—') + '</td></tr>'; }).join('') + '</table></div>';
@@ -1700,11 +2118,68 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   }
   function reviewCard(q, yours, ok, num) {
     return '<div class="card rv ' + (ok ? '' : 'no') + '"><div class="muted small">' + (num ? 'Câu ' + num + ' · ' : '') + (PART[q.p] || '') + ' · ' + q.src + '</div>' +
-      '<div class="q">' + (q.q ? fmtText(q.q) : '🎧 “' + esc(q.s) + '”') + '</div>' +
+      '<div class="q">' + (q.img ? '<div class="photo sm">' + q.img + '</div>' : '') + (q.q ? fmtText(q.q) : q.s ? '🎧 “' + esc(q.s) + '”' : 'Chọn câu mô tả đúng bức tranh') + '</div>' +
       (yours !== undefined ? '<div class="a">' + (ok ? '✅' : '❌') + ' Bạn chọn: <b>' + (yours === null ? '(bỏ trống)' : esc(yours)) + '</b></div>' : '') +
       (!ok ? '<div class="a">✔️ Đáp án đúng: <b>' + esc(q.o[0]) + '</b></div>' : '') +
       '<div class="a muted">' + esc(q.e) + '</div>' +
       ((q.s || q.r) ? '<details><summary>' + (q.s ? 'Lời thoại' : 'Đoạn văn') + '</summary>' + (q.s ? '<button class="btn sm" data-act="say" data-t="' + esc(q.s) + '" style="display:inline-flex;margin:8px 0">' + IC.vol.replace('<svg', '<svg width="16" height="16"') + ' Nghe lại</button><div>' + fmtTr(q.s) + '</div>' : '<div style="margin-top:6px">' + fmtText(q.r) + '</div>') + '</details>' : '') + '</div>';
+  }
+
+  /* ---------- màn hình: luyện đề ---------- */
+  var FILT = { all: [1, 6, 'Tất cả', 'Bậc 1–6'], easy: [1, 2, 'Dễ', 'Bậc 1–2'], mid: [3, 4, 'Vừa', 'Bậc 3–4'], hard: [5, 6, 'Khó', 'Bậc 5–6'] };
+  var PINFO = {
+    '1': ['Mô tả tranh', 'Nhìn tranh, nghe 4 câu, chọn câu đúng', 6],
+    '2': ['Hỏi – đáp', 'Nghe câu hỏi và 3 câu đáp, đáp án không in', 25],
+    '3': ['Hội thoại', 'Nghe 2–3 người nói, trả lời 3 câu / bài', 39],
+    '4': ['Bài nói ngắn', 'Thông báo, tin nhắn thoại, 3 câu / bài', 30],
+    '5': ['Hoàn thành câu', 'Ngữ pháp và từ vựng, 4 lựa chọn', 30],
+    '6': ['Hoàn thành đoạn văn', 'Email, thông báo có 4 chỗ trống, gồm chèn câu', 16],
+    '7': ['Đọc hiểu', 'Email, quảng cáo, tin nhắn, bài báo', 54]
+  };
+  var MOCKS = {
+    full: { t: 'Đề rút gọn', n: '≈50 câu · 30 phút', secs: 1800, plan: [['1', 3], ['2', 9], ['3', 3, 1], ['4', 3, 1], ['5', 14], ['6', 1, 1], ['7', 3, 1]] },
+    quick: { t: 'Đề nhanh', n: '≈20 câu · 12 phút', secs: 720, plan: [['1', 2], ['2', 4], ['3', 1, 1], ['4', 1, 1], ['5', 7], ['7', 1, 1]] }
+  };
+  function inF(q) { var f = FILT[S.pf] || FILT.all; return q.lv >= f[0] && q.lv <= f[1]; }
+  function groupsOf(p) {
+    var g = [], idx = {};
+    ALLQ.forEach(function (q) { if (q.p !== p || !inF(q)) return; var k = q.r || q.s || q.id; if (idx[k] == null) { idx[k] = g.length; g.push([]); } g[idx[k]].push(q); });
+    return g;
+  }
+  function takeQ(p, n, sets) {
+    var g = shuffle(groupsOf(p)), out = [];
+    if (sets) g.slice(0, n).forEach(function (x) { out = out.concat(x); });
+    else { for (var i = 0; i < g.length && out.length < n; i++) out = out.concat(g[i]); }
+    return out;
+  }
+  function vDrill() {
+    var h = topBar('Luyện đề TOEIC', ''), m = lastMock();
+    h += '<section class="score-hero"><div class="eyebrow">Điểm ước tính từ đề thi thử gần nhất</div>';
+    if (m) {
+      h += '<div class="score-big"><b>' + (m.ls + m.rs) + '</b><span>/ 990 · ' + esc(m.d) + '</span></div>' +
+        '<div class="lr"><div><small>Nghe (Listening)</small><b>' + m.ls + '</b><i style="--w:' + (m.ls / 495 * 100) + '%"></i></div><div><small>Đọc (Reading)</small><b>' + m.rs + '</b><i style="--w:' + (m.rs / 495 * 100) + '%"></i></div></div>';
+    } else h += '<div class="score-big"><b>—</b><span>Làm một đề thi thử bên dưới để có điểm ước tính</span></div>';
+    h += '</section>';
+    h += '<div class="sec-title">Độ khó</div><div class="seg">' + Object.keys(FILT).map(function (k) { return '<button class="' + (S.pf === k ? 'on' : '') + '" data-act="pf" data-k="' + k + '">' + FILT[k][2] + '<small>' + FILT[k][3] + '</small></button>'; }).join('') + '</div>';
+    h += '<div class="sec-title">Thi thử có giờ, nghe 1 lần như thi thật</div>';
+    Object.keys(MOCKS).forEach(function (k, i) { var M = MOCKS[k];
+      h += '<div class="card mock ' + (i ? '' : 'big') + '" data-act="mock" data-k="' + k + '" role="button"><div class="mi">' + (i ? '20' : '50') + '</div><div style="flex:1"><b>' + M.t + ' · ' + M.n + '</b><div class="muted small">Đủ ' + (k === 'full' ? '7' : '6') + ' Part theo đúng thứ tự đề thật, chấm điểm Nghe / Đọc riêng</div></div><div class="chev">›</div></div>'; });
+    h += '<div class="sec-title">Luyện từng Part · có giải thích từng câu</div><div class="parts">';
+    ['1', '2', '3', '4', '5', '6', '7'].forEach(function (p) {
+      var I = PINFO[p], n = groupsOf(p).reduce(function (a, g) { return a + g.length; }, 0), st = (S.ps || {})[p];
+      h += '<button class="pt' + (p === '7' ? ' wide' : '') + '" data-act="part" data-p="' + p + '"><span class="pn">PART ' + p + (+p <= 4 ? ' · NGHE' : ' · ĐỌC') + '</span><b>' + I[0] + '</b><span>' + I[1] + '</span>' +
+        '<span>' + n + ' câu trong ngân hàng · ' + (st && st.a ? 'đúng ' + pct(st.c / st.a) + ' (' + st.a + ' câu)' : 'chưa luyện') + '</span>' +
+        '<div class="bar"><i style="width:' + (st && st.a ? st.c / st.a * 100 : 0) + '%"></i></div></button>';
+    });
+    h += '</div>';
+    if (S.mocks && S.mocks.length) {
+      h += '<div class="sec-title">Lịch sử thi thử</div><div class="card"><table class="fmt hist"><tr><th>Ngày</th><th>Đề</th><th style="text-align:right">Nghe</th><th style="text-align:right">Đọc</th><th style="text-align:right">Tổng</th></tr>' +
+        S.mocks.slice(-6).reverse().map(function (x) { return '<tr><td>' + esc(x.d) + '</td><td>' + (MOCKS[x.k] ? MOCKS[x.k].t : '') + ' · ' + (FILT[x.f] ? FILT[x.f][2] : '') + '</td><td class="n">' + x.ls + '</td><td class="n">' + x.rs + '</td><td class="n"><b>' + (x.ls + x.rs) + '</b></td></tr>'; }).join('') + '</table></div>';
+    }
+    h += '<div class="sec-title">Cấu trúc đề TOEIC Listening & Reading thật</div><div class="card"><table class="fmt"><tr><th>Part</th><th>Nội dung</th><th style="text-align:right">Số câu</th></tr>' +
+      ['1', '2', '3', '4', '5', '6', '7'].map(function (p) { return '<tr><td>' + p + '</td><td>' + PINFO[p][0] + '</td><td class="n">' + PINFO[p][2] + '</td></tr>'; }).join('') +
+      '</table><p class="small muted" style="margin:10px 0 0">Nghe: 100 câu, khoảng 45 phút, mỗi bài chỉ phát một lần. Đọc: 100 câu trong 75 phút. Mỗi phần 5–495 điểm, tổng 10–990.</p></div>';
+    return h;
   }
 
   /* ---------- màn hình: sổ lỗi sai ---------- */
@@ -1728,7 +2203,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
       '<div class="set-row"><div class="lbl"><b>Khôi phục tiến độ</b><span>Chọn file sao lưu đã tải trước đó</span></div><label class="btn sm" style="cursor:pointer">Chọn file<input type="file" id="importF" accept=".json,application/json" hidden></label></div>' +
       '<div class="set-row"><div class="lbl"><b>Làm lại bài xếp lớp</b><span>Chỉ mở thêm bậc, không xóa kết quả cũ</span></div><button class="btn sm" data-act="placement">Làm</button></div>' +
       '<div class="set-row"><div class="lbl"><b style="color:var(--bad)">Xóa toàn bộ tiến độ</b><span>Khóa lại các bậc và bắt đầu từ đầu</span></div><button class="btn sm" data-act="reset">Xóa</button></div></div>';
-    h += '<div class="card small muted"><b style="color:var(--ink)">Quy tắc lên bậc</b><br>• Mỗi bậc có 4 bài: Ngữ pháp → Từ vựng → Luyện tập.<br>• Luyện tập đạt ≥60% thì bài được tính là hoàn thành.<br>• Xong 4 bài thì mở bài kiểm tra 15 câu / 15 phút, phần nghe chỉ được nghe tối đa 2 lần.<br>• Đạt ≥70% mới mở khóa bậc tiếp theo.<br>• Tiến độ lưu ngay trên máy này và vẫn dùng được khi không có mạng.</div>';
+    h += '<div class="card small muted"><b style="color:var(--ink)">Quy tắc lên bậc</b><br>• Mỗi bậc có 4 bài: Ngữ pháp → Từ vựng → Luyện tập.<br>• Luyện tập đạt ≥60% thì bài được tính là hoàn thành.<br>• Xong 4 bài thì mở bài kiểm tra 15 câu / 15 phút, phần nghe chỉ được nghe tối đa 2 lần.<br>• Đạt ≥70% mới mở khóa bậc tiếp theo.<br>• Tiến độ lưu ngay trên máy này và vẫn dùng được khi không có mạng.<br><br><b style="color:var(--ink)">Luyện đề</b><br>• Luyện riêng từng Part 1–7, chọn độ khó theo bậc, có giải thích sau mỗi câu.<br>• Đề thi thử có giờ, nghe một lần như thi thật, Part 1–2 không in đáp án; kết quả cho điểm Nghe / Đọc ước tính.</div>';
     return h;
   }
 
@@ -1758,6 +2233,19 @@ input[type=range]{width:100%;accent-color:var(--ink)}
       });
     },
     reviewStart: function () { var ids = shuffle(Object.keys(S.wrong).filter(function (id) { return QI[id]; })).slice(0, 10); startQuiz({ mode: 'review', title: 'Ôn lỗi sai', questions: ids.map(function (id) { return QI[id]; }) }); },
+    pf: function (b) { S.pf = b.dataset.k; save(); route(); },
+    part: function (b) {
+      var p = b.dataset.p, qs = takeQ(p, 10, false);
+      if (!qs.length) return toast('Chưa có câu Part ' + p + ' ở độ khó này, hãy chọn "Tất cả"');
+      startQuiz({ mode: 'part', p: p, title: PART[p] + ' · ' + FILT[S.pf || 'all'][2], questions: qs });
+    },
+    mock: function (b) {
+      var k = b.dataset.k, M = MOCKS[k], qs = [];
+      M.plan.forEach(function (x) { qs = qs.concat(takeQ(x[0], x[1], !!x[2])); });
+      confirmBox(M.t + ': <b>' + qs.length + ' câu</b>, ' + Math.round(M.secs / 60) + ' phút. Phần nghe chỉ phát <b>một lần</b> như thi thật, đáp án Part 1–2 không in ra. Làm xong sẽ có điểm ước tính. Bắt đầu?', 'Bắt đầu', function () {
+        startQuiz({ mode: 'mock', k: k, timed: true, secs: M.secs, maxPlays: 1, title: M.t + ' · ' + FILT[S.pf || 'all'][2], questions: qs });
+      });
+    },
     pick: function (b) { pick(+b.dataset.pos); },
     play: function () { playAudio(); },
     next: function () { stopSpeech(); Q.i++; renderQuiz(); },
@@ -1768,7 +2256,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
       var blank = Q.items.filter(function (it) { return it.chosen === null; }).length;
       if (blank) confirmBox('Còn <b>' + blank + '</b> câu chưa trả lời. Vẫn nộp bài?', 'Nộp bài', finishQuiz); else finishQuiz();
     },
-    quitQuiz: function () { confirmBox('Thoát bài đang làm? Kết quả bài này sẽ không được lưu.', 'Thoát', function () { clearInterval(timerId); stopSpeech(); var m = Q.mode, n = Q.n, u = Q.u; Q = null; history.replaceState(null, '', m === 'unit' ? '#unit-' + n + '-' + u + '-practice' : m === 'test' ? '#level-' + n : m === 'review' ? '#review' : location.pathname + location.search); route(); }); },
+    quitQuiz: function () { confirmBox('Thoát bài đang làm? Kết quả bài này sẽ không được lưu.', 'Thoát', function () { clearInterval(timerId); stopSpeech(); var m = Q.mode, n = Q.n, u = Q.u; Q = null; history.replaceState(null, '', m === 'unit' ? '#unit-' + n + '-' + u + '-practice' : m === 'test' ? '#level-' + n : m === 'review' ? '#review' : (m === 'mock' || m === 'part') ? '#luyende' : location.pathname + location.search); route(); }); },
     export: function () {
       var name = 'bac-thang-toeic-' + today() + '.json', json = JSON.stringify(S, null, 1);
       if (DL) { DL.save({ filename: name, data: json }).then(function () { toast('Đã lưu file sao lưu'); }, function () { toast('Không lưu được file'); }); return; }
